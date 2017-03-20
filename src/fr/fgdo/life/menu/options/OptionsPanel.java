@@ -31,8 +31,11 @@ public class OptionsPanel extends JPanel{
         gbc.insets = new Insets(3, 3, 3, 3);
         
         fullscreenCheckBox = new JCheckBox("Fullscreen");
+        fullscreenCheckBox.addActionListener(optionController);
         musicCheckBox = new JCheckBox("Music");
+        musicCheckBox.addActionListener(optionController);
         JButton returnButton = new JButton("Return");
+        returnButton.addActionListener(optionController);
         add(fullscreenCheckBox, gbc);
         add(musicCheckBox, gbc);
         add(returnButton, gbc);
