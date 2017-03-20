@@ -77,7 +77,7 @@ public class Life extends JFrame{
             case OPTIONS:
                 
                 this.getContentPane().removeAll();
-                this.add(new OptionsPanel(new OptionsController()));
+                this.add(new OptionsPanel(options, new OptionsController()));
                 revalidate();
                 repaint();
                 break;

@@ -23,7 +23,7 @@ public class OptionsPanel extends JPanel{
     private JCheckBox fullscreenCheckBox;
     private JCheckBox musicCheckBox;
     
-    public OptionsPanel(OptionsController optionController) {
+    public OptionsPanel(Options options,OptionsController optionController) {
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridwidth = GridBagConstraints.REMAINDER;
@@ -32,8 +32,10 @@ public class OptionsPanel extends JPanel{
         
         fullscreenCheckBox = new JCheckBox("Fullscreen");
         fullscreenCheckBox.addActionListener(optionController);
+        fullscreenCheckBox.setSelected(options.isFullscreenMode());
         musicCheckBox = new JCheckBox("Music");
         musicCheckBox.addActionListener(optionController);
+        musicCheckBox.setSelected(options.isMusic());
         JButton returnButton = new JButton("Return");
         returnButton.addActionListener(optionController);
         add(fullscreenCheckBox, gbc);
