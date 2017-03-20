@@ -14,9 +14,26 @@ import java.awt.event.ActionListener;
  */
 public class OptionsController implements ActionListener{
 
+    private Options model;
+
+    public OptionsController(Options model) {
+        this.model = model;
+    }
+    
     @Override
     public void actionPerformed(ActionEvent e) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        switch(e.getActionCommand()) {
+            case "Fullscreen":
+                model.switchFullscreenMode();
+                break;
+            case "Music":
+                model.switchMusic();
+                break;
+            case "Return":
+                break;
+            default:
+                break;
+        }
     }
     
 }

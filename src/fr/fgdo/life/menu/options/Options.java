@@ -37,10 +37,12 @@ public class Options implements Serializable{
     
     public void switchFullscreenMode() {
         fullscreenMode = !fullscreenMode;
+        save();
     }
 
     public void switchMusic() {
         music = !music;
+        save();
     }
     
     public void save() {
