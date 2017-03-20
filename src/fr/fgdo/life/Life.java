@@ -8,6 +8,7 @@ package fr.fgdo.life;
 import fr.fgdo.life.menu.MenuPanel;
 import fr.fgdo.life.menu.MenuPanelController;
 import fr.fgdo.life.menu.options.Options;
+import fr.fgdo.life.menu.options.OptionsController;
 import fr.fgdo.life.menu.options.OptionsPanel;
 import java.awt.Dimension;
 import java.awt.HeadlessException;
@@ -74,8 +75,9 @@ public class Life extends JFrame{
     public void switchState(GameState gameState) {
         switch (gameState) {
             case OPTIONS:
+                
                 this.getContentPane().removeAll();
-                this.add(new OptionsPanel());
+                this.add(new OptionsPanel(new OptionsController()));
                 revalidate();
                 repaint();
                 break;

@@ -23,7 +23,7 @@ public class OptionsPanel extends JPanel{
     private JCheckBox fullscreenCheckBox;
     private JCheckBox musicCheckBox;
     
-    public OptionsPanel() {
+    public OptionsPanel(OptionsController optionController) {
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridwidth = GridBagConstraints.REMAINDER;
