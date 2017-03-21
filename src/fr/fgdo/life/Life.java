@@ -26,6 +26,7 @@ public class Life extends JFrame{
     private static final int DEFAULT_HEIGHT = 600;
     private static final int DEFAULT_WIDTH = 600;
     private MenuPanel menuPanel;
+    private OptionsPanel optionsPanel;
     private Options options;
     
     public Life() throws HeadlessException {
@@ -34,6 +35,7 @@ public class Life extends JFrame{
         setUpOption();
         setUpFrame();
         setUpMenuPanel();
+        setUpOptionsPanel();
     }
     
     private void setUpOption() {
@@ -72,32 +74,30 @@ public class Life extends JFrame{
         this.add(menuPanel);
     }
     
+    private void setUpOptionsPanel() {
+        optionsPanel = new OptionsPanel(options, new OptionsController(options,this));
+    }
     public void switchState(GameState gameState) {
+        this.getContentPane().removeAll();
         switch (gameState) {
             case MENU:
-                this.getContentPane().removeAll();
                 this.add(menuPanel);
-                revalidate();
-                repaint();
                 break;
             case OPTIONS:
-                this.getContentPane().removeAll();
-                this.add(new OptionsPanel(options, new OptionsController(options,this)));
-                revalidate();
-                repaint();
+                this.add(optionsPanel);
                 break;
         }
+        revalidate();
+        repaint();
     }
     
     public void setFullscreen() {
         setExtendedState(JFrame.MAXIMIZED_BOTH); 
-        setUndecorated(true);
         setVisible(true);
     }
     
     public void removeFullscreen() {
         setExtendedState(JFrame.NORMAL); 
-        setUndecorated(false);
         setVisible(true);
     }
 }
