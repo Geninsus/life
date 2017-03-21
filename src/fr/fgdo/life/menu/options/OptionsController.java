@@ -5,6 +5,8 @@
  */
 package fr.fgdo.life.menu.options;
 
+import fr.fgdo.life.GameState;
+import fr.fgdo.life.Life;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -15,9 +17,10 @@ import java.awt.event.ActionListener;
 public class OptionsController implements ActionListener{
 
     private Options model;
-
-    public OptionsController(Options model) {
+    private Life lifeGame;
+    public OptionsController(Options model, Life lifeGame) {
         this.model = model;
+        this.lifeGame = lifeGame;
     }
     
     @Override
@@ -30,6 +33,7 @@ public class OptionsController implements ActionListener{
                 model.switchMusic();
                 break;
             case "Return":
+                lifeGame.switchState(GameState.MENU);
                 break;
             default:
                 break;

@@ -3,9 +3,13 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/E:/Work/Java/life/src/fr/fgdo/life/run.java</file>
-            <file>file:/E:/Work/Java/life/src/fr/fgdo/life/menuPanel/MenuPanel.java</file>
+            <file>file:/E:/Work/Java/life/src/fr/fgdo/life/menu/MenuPanel.java</file>
+            <file>file:/E:/Work/Java/life/src/fr/fgdo/life/menu/options/OptionsPanel.java</file>
+            <file>file:/E:/Work/Java/life/src/fr/fgdo/life/menu/MenuPanelController.java</file>
+            <file>file:/E:/Work/Java/life/src/fr/fgdo/life/menu/options/Options.java</file>
             <file>file:/E:/Work/Java/life/src/fr/fgdo/life/Life.java</file>
+            <file>file:/E:/Work/Java/life/src/fr/fgdo/life/menu/options/OptionsController.java</file>
+            <file>file:/E:/Work/Java/life/src/fr/fgdo/life/GameState.java</file>
         </group>
     </open-files>
 </project-private>
