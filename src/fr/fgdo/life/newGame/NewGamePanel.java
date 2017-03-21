@@ -9,14 +9,11 @@ import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.text.Format;
 import java.text.NumberFormat;
 import javax.swing.JButton;
 import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JSlider;
-import javax.swing.JTextField;
 
 /**
  *
@@ -44,6 +41,7 @@ public class NewGamePanel extends JPanel{
         gbc.gridy = 0;
         gbc.gridwidth = 1;
         JFormattedTextField mapWidthTextField = new JFormattedTextField(numF);
+        mapWidthTextField.setValue(100);
         mapWidthTextField.setPreferredSize(new Dimension(50, 20));
         mapWidthTextField.setMinimumSize(new Dimension(50, 20));
         add(mapWidthTextField,gbc);
@@ -59,6 +57,7 @@ public class NewGamePanel extends JPanel{
         gbc.gridy = 1;
         gbc.gridwidth = 1;
         JFormattedTextField mapHeightTextField = new JFormattedTextField(numF);
+        mapHeightTextField.setValue(100);
         mapHeightTextField.setPreferredSize(new Dimension(50, 20));
         mapHeightTextField.setMinimumSize(new Dimension(50, 20));
         add(mapHeightTextField,gbc);
