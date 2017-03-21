@@ -10,8 +10,8 @@ import fr.fgdo.life.game.models.CellType;
 import java.awt.Color;
 import java.util.Observable;
 import java.util.Observer;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.border.LineBorder;
 
 /**
  *
@@ -21,12 +21,13 @@ public class CellView extends JPanel implements Observer{
 
     public CellView() {
         super();
+        setBorder(new LineBorder(Color.black, 1));
     }
 
     @Override
     public void update(Observable o, Object arg) {
         Cell cell = (Cell)o;
-        if (cell.type == CellType.GRASS) setBackground(Color.green);
+        if (cell.type == CellType.GRASS) setBackground(new Color(140,255,120));
     }
     
 }
