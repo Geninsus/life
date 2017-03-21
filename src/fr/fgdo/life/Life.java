@@ -130,7 +130,7 @@ public class Life extends JFrame{
     
     public void startGame() {
         game = new Game(newGame);
-        gameView = new GameView();
+        gameView = new GameView(game);
         game.addObserver(gameView);
         game.updateView();
         this.add(gameView);

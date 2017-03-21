@@ -5,6 +5,7 @@
  */
 package fr.fgdo.life.game.models;
 
+import fr.fgdo.math.Point;
 import java.util.ArrayList;
 import java.util.Observable;
 
@@ -13,19 +14,20 @@ import java.util.Observable;
  * @author Olivier
  */
 public class Grid extends Observable {
-    private int width;
-    private int height;
+    private int rows;
+    private int cols;
     private ArrayList<Being> beings;
     private Cell board[][];
     public Grid() {
     }
 
-    public Grid(int width, int height) {
-        this.width = width;
-        this.height = height;
-        board = new Cell[height][height];
-        for (int i = 0; i < height; i++) {
-            for (int j = 0; j < width; j++) {
+    public Grid(int rows, int cols) {
+        this.rows = rows;
+        this.cols = cols;
+        System.out.println(rows);
+        board = new Cell[rows][cols];
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
                 board[i][j] = new Cell(CellType.GRASS);
             }
         }
@@ -42,11 +44,15 @@ public class Grid extends Observable {
     }
 
     public int getWidth() {
-        return width;
+        return rows;
     }
 
     public int getHeight() {
-        return height;
+        return cols;
+    }
+    
+    public void addBeing(Being being, Point coord) {
+        board[coord.y][coord.x].addBeing(being);
     }
     
 }

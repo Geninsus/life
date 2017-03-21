@@ -3,25 +3,22 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package fr.fgdo.life.game.models;
+package fr.fgdo.life.game.views;
 
-import fr.fgdo.life.game.views.BeingView;
+import fr.fgdo.life.game.models.Being;
 import java.awt.Color;
 import java.util.Observable;
+import java.util.Observer;
+import javax.swing.JPanel;
 
 /**
  *
  * @author Olivier
  */
-public class Being {
-    private Color color;
+public class BeingView extends JPanel {
 
-    public Being(Color color) {
-        this.color = color;
+    public BeingView(Being being) {
+        setBackground(being.getColor());
     }
 
-    public Color getColor() {
-        return color;
-    }
-    
 }

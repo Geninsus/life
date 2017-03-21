@@ -6,6 +6,7 @@
 package fr.fgdo.life.game.views;
 
 import fr.fgdo.life.game.models.Game;
+import fr.fgdo.life.game.models.LeftPanelController;
 import java.awt.BorderLayout;
 import java.util.Observable;
 import java.util.Observer;
@@ -19,11 +20,13 @@ import javax.swing.JPanel;
 public class GameView extends JPanel implements Observer{
     
     private GridView gridView;
+    private LeftPanelView leftPanelView;
     
-    public GameView() {
+    public GameView(Game game) {
         super();
         setLayout(new BorderLayout(3, 3));
-        add(new JButton("LEFT GAME View"), BorderLayout.WEST);
+        leftPanelView = new LeftPanelView(new LeftPanelController(game));
+        add(leftPanelView, BorderLayout.WEST);
     }
 
     @Override

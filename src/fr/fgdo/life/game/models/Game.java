@@ -6,31 +6,33 @@
 package fr.fgdo.life.game.models;
 
 import fr.fgdo.life.newGame.NewGame;
+import fr.fgdo.math.Point;
 import java.io.Serializable;
 import java.util.Observable;
+import java.util.Observer;
 
 /**
  *
  * @author Olivier
  */
-public class Game extends Observable implements Serializable{
+public class Game extends Observable implements Serializable,Observer{
     private String name;
-    private int width;
-    private int height;
+    private int cols;
+    private int rows;
     private Grid grid;
 
     public Game(NewGame newGame) {
         name = newGame.getMapName();
-        width = newGame.getMapWidth();
-        height = newGame.getMapHeight();
-        grid = new  Grid(width,height);
+        cols = newGame.getMapWidth();
+        rows = newGame.getMapHeight();
+        grid = new  Grid(rows,cols);
     }
     
     public Game() {
         name = "New Game";
-        width = 10;
-        height = 10;
-        grid = new  Grid(width,height);
+        cols = 10;
+        rows = 10;
+        grid = new  Grid(cols,rows);
     }
     
     public void updateView() {
@@ -42,5 +44,13 @@ public class Game extends Observable implements Serializable{
     public Grid getGrid() {
         return grid;
     }
+
+    @Override
+    public void update(Observable o, Object arg) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     
+    public void addBeing(Being being, Point coord) {
+        grid.addBeing(being, coord);
+    }
 }
