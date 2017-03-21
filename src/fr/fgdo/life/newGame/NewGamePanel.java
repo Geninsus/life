@@ -59,7 +59,7 @@ public class NewGamePanel extends JPanel{
         gbc.gridy = 1;
         gbc.gridwidth = 1;
         mapWidthTextField = new JFormattedTextField(numF);
-        mapWidthTextField.setValue(100);
+        mapWidthTextField.setValue(10);
         mapWidthTextField.setPreferredSize(new Dimension(50, 20));
         mapWidthTextField.setMinimumSize(new Dimension(50, 20));
         add(mapWidthTextField,gbc);
@@ -75,7 +75,7 @@ public class NewGamePanel extends JPanel{
         gbc.gridy = 2;
         gbc.gridwidth = 1;
         mapHeightTextField = new JFormattedTextField(numF);
-        mapHeightTextField.setValue(100);
+        mapHeightTextField.setValue(10);
         mapHeightTextField.setPreferredSize(new Dimension(50, 20));
         mapHeightTextField.setMinimumSize(new Dimension(50, 20));
         add(mapHeightTextField,gbc);

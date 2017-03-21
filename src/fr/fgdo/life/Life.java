@@ -5,6 +5,8 @@
  */
 package fr.fgdo.life;
 
+import fr.fgdo.life.game.models.Game;
+import fr.fgdo.life.game.views.GameView;
 import fr.fgdo.life.menu.MenuPanel;
 import fr.fgdo.life.menu.MenuPanelController;
 import fr.fgdo.life.menu.options.Options;
@@ -30,9 +32,12 @@ public class Life extends JFrame{
     private static final int DEFAULT_HEIGHT = 600;
     private static final int DEFAULT_WIDTH = 600;
     private MenuPanel menuPanel;
+    private NewGame newGame;
     private NewGamePanel newGamePanel;
     private OptionsPanel optionsPanel;
     private Options options;
+    private Game game;
+    private GameView gameView;
     
     public Life() throws HeadlessException {
         super();
@@ -87,8 +92,8 @@ public class Life extends JFrame{
     }
     
     private void setUpNewGamePanel() {
-        NewGame newGame = new NewGame();
-        NewGameController newGameController = new NewGameController(newGame);
+        newGame = new NewGame();
+        NewGameController newGameController = new NewGameController(newGame, this);
         newGamePanel = new NewGamePanel(newGameController);
         newGameController.setView(newGamePanel);
     }
@@ -101,6 +106,9 @@ public class Life extends JFrame{
                 break;
             case NEW_GAME:
                 this.add(newGamePanel);
+                break;
+            case GAME:
+                this.startGame();
                 break;
             case OPTIONS:
                 this.add(optionsPanel);
@@ -118,5 +126,13 @@ public class Life extends JFrame{
     public void removeFullscreen() {
         setExtendedState(JFrame.NORMAL); 
         setVisible(true);
+    }
+    
+    public void startGame() {
+        game = new Game(newGame);
+        gameView = new GameView();
+        game.addObserver(gameView);
+        game.updateView();
+        this.add(gameView);
     }
 }

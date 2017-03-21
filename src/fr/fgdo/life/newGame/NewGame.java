@@ -25,4 +25,18 @@ public class NewGame {
     public void setMapName(String mapName) {
         this.mapName = mapName;
     }
+
+    public int getMapWidth() {
+        return mapWidth;
+    }
+
+    public int getMapHeight() {
+        return mapHeight;
+    }
+
+    public String getMapName() {
+        return mapName;
+    }
+    
+    
 }

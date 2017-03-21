@@ -5,10 +5,22 @@
  */
 package fr.fgdo.life.game.models;
 
+import fr.fgdo.math.Point;
+import java.awt.Color;
+
 /**
  *
  * @author Olivier
  */
-public class BoardGame {
+public class Being {
+    private Color color;
+    private Point position;
+
+    public Being(Color color, Point position) {
+        this.color = color;
+        this.position = position;
+    }
+    
+    
     
 }

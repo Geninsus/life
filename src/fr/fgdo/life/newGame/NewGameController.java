@@ -5,6 +5,8 @@
  */
 package fr.fgdo.life.newGame;
 
+import fr.fgdo.life.GameState;
+import fr.fgdo.life.Life;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -14,10 +16,12 @@ import java.awt.event.MouseEvent;
  */
 public class NewGameController extends MouseAdapter{
 
+    private Life lifeGame;
     private NewGamePanel view;
     private NewGame model;
 
-    public NewGameController(NewGame model) {
+    public NewGameController(NewGame model, Life lifeGame) {
+        this.lifeGame = lifeGame;
         this.model = model;
     }
 
@@ -30,6 +34,7 @@ public class NewGameController extends MouseAdapter{
         model.setMapName(view.getMapName());
         model.setMapWidth(view.getMapWidth());
         model.setMapHeight(view.getMapHeight());
+        lifeGame.switchState(GameState.GAME);
     }
     
     

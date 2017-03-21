@@ -11,15 +11,15 @@ import java.io.Serializable;
  *
  * @author Olivier
  */
-public class Vector2 implements Serializable{
+public class Point implements Serializable{
     
     public int x;
     public int y;
 
-    public Vector2() {
+    public Point() {
     }
 
-    public Vector2(int x, int y) {
+    public Point(int x, int y) {
         this.x = x;
         this.y = y;
     }
