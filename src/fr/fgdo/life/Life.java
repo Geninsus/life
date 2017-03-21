@@ -36,6 +36,7 @@ public class Life extends JFrame{
         setUpFrame();
         setUpMenuPanel();
         setUpOptionsPanel();
+        switchState(GameState.MENU);
     }
     
     private void setUpOption() {
@@ -65,13 +66,14 @@ public class Life extends JFrame{
         this.setSize(new Dimension(DEFAULT_WIDTH, DEFAULT_HEIGHT));
         this.setLocationRelativeTo(null);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        if (options.isFullscreenMode()) setFullscreen();
+        else removeFullscreen();
         this.setVisible(true);
     }
     
     private void setUpMenuPanel() {
         MenuPanelController menuPanelController = new MenuPanelController(this);
         menuPanel = new MenuPanel(menuPanelController);
-        this.add(menuPanel);
     }
     
     private void setUpOptionsPanel() {
