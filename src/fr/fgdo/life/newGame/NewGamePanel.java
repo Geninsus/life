@@ -14,6 +14,7 @@ import javax.swing.JButton;
 import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 
 /**
  *
@@ -21,7 +22,11 @@ import javax.swing.JPanel;
  */
 public class NewGamePanel extends JPanel{
 
-    public NewGamePanel() {
+    private JFormattedTextField mapHeightTextField;
+    private JFormattedTextField mapWidthTextField;
+    private JTextField mapNameTextField;
+    
+    public NewGamePanel(NewGameController controller) {
         super();
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
@@ -35,12 +40,25 @@ public class NewGamePanel extends JPanel{
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.gridwidth = 1;
-        add(new JLabel("Map Width : "),gbc);
+        add(new JLabel("Map name : "),gbc);
         
         gbc.gridx = 1;
         gbc.gridy = 0;
         gbc.gridwidth = 1;
-        JFormattedTextField mapWidthTextField = new JFormattedTextField(numF);
+        mapNameTextField = new JTextField("New Map");
+        mapNameTextField.setPreferredSize(new Dimension(150, 20));
+        mapNameTextField.setMinimumSize(new Dimension(150, 20));
+        add(mapNameTextField,gbc);
+        
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        gbc.gridwidth = 1;
+        add(new JLabel("Map Width : "),gbc);
+        
+        gbc.gridx = 1;
+        gbc.gridy = 1;
+        gbc.gridwidth = 1;
+        mapWidthTextField = new JFormattedTextField(numF);
         mapWidthTextField.setValue(100);
         mapWidthTextField.setPreferredSize(new Dimension(50, 20));
         mapWidthTextField.setMinimumSize(new Dimension(50, 20));
@@ -48,25 +66,52 @@ public class NewGamePanel extends JPanel{
         
         
         gbc.gridx = 0;
-        gbc.gridy = 1;
+        gbc.gridy = 2;
         gbc.gridwidth = 1;
         add(new JLabel("Map Height : "),gbc);
         
         
         gbc.gridx = 1;
-        gbc.gridy = 1;
+        gbc.gridy = 2;
         gbc.gridwidth = 1;
-        JFormattedTextField mapHeightTextField = new JFormattedTextField(numF);
+        mapHeightTextField = new JFormattedTextField(numF);
         mapHeightTextField.setValue(100);
         mapHeightTextField.setPreferredSize(new Dimension(50, 20));
         mapHeightTextField.setMinimumSize(new Dimension(50, 20));
         add(mapHeightTextField,gbc);
         
         gbc.gridx = 0;
-        gbc.gridy = 2;
+        gbc.gridy = 3;
         gbc.gridwidth = 2;
         JButton confirmButton = new JButton("Confirm");
+        confirmButton.addMouseListener(controller);
         add(confirmButton,gbc);
     }
     
+    public int getMapWidth() {
+        int width;
+        try {
+            width  = Integer.valueOf(mapWidthTextField.getText());
+        } catch (NumberFormatException e) {
+            width = 1;
+        }
+        return width;
+    }
+    
+    public int getMapHeight() {
+        int height;
+        try {
+            height  = Integer.valueOf(mapHeightTextField.getText());
+        } catch (NumberFormatException e) {
+            height = 1;
+        }
+        return height;
+    }
+    
+    public String getMapName() {
+        String name;
+        name = mapNameTextField.getText();
+        if (name.isEmpty()) name = "NewMap";
+        return name;
+    }
 }

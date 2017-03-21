@@ -10,6 +10,8 @@ import fr.fgdo.life.menu.MenuPanelController;
 import fr.fgdo.life.menu.options.Options;
 import fr.fgdo.life.menu.options.OptionsController;
 import fr.fgdo.life.menu.options.OptionsPanel;
+import fr.fgdo.life.newGame.NewGame;
+import fr.fgdo.life.newGame.NewGameController;
 import fr.fgdo.life.newGame.NewGamePanel;
 import java.awt.Dimension;
 import java.awt.HeadlessException;
@@ -85,7 +87,10 @@ public class Life extends JFrame{
     }
     
     private void setUpNewGamePanel() {
-        newGamePanel = new NewGamePanel();
+        NewGame newGame = new NewGame();
+        NewGameController newGameController = new NewGameController(newGame);
+        newGamePanel = new NewGamePanel(newGameController);
+        newGameController.setView(newGamePanel);
     }
     
     public final void switchState(GameState gameState) {
