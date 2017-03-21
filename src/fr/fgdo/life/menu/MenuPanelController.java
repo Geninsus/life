@@ -32,6 +32,7 @@ public final class MenuPanelController implements ActionListener{
     public void actionPerformed(ActionEvent e) {
         switch (e.getActionCommand()) {
             case "New":
+                lifeGame.switchState(GameState.NEW_GAME);
                 break;
             case "Import":
                 break;

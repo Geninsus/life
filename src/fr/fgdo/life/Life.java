@@ -10,6 +10,7 @@ import fr.fgdo.life.menu.MenuPanelController;
 import fr.fgdo.life.menu.options.Options;
 import fr.fgdo.life.menu.options.OptionsController;
 import fr.fgdo.life.menu.options.OptionsPanel;
+import fr.fgdo.life.newGame.NewGamePanel;
 import java.awt.Dimension;
 import java.awt.HeadlessException;
 import java.io.File;
@@ -27,6 +28,7 @@ public class Life extends JFrame{
     private static final int DEFAULT_HEIGHT = 600;
     private static final int DEFAULT_WIDTH = 600;
     private MenuPanel menuPanel;
+    private NewGamePanel newGamePanel;
     private OptionsPanel optionsPanel;
     private Options options;
     
@@ -37,6 +39,7 @@ public class Life extends JFrame{
         setUpFrame();
         setUpMenuPanel();
         setUpOptionsPanel();
+        setUpNewGamePanel();
         switchState(GameState.MENU);
     }
     
@@ -81,11 +84,18 @@ public class Life extends JFrame{
         optionsPanel = new OptionsPanel(options, new OptionsController(options,this));
     }
     
+    private void setUpNewGamePanel() {
+        newGamePanel = new NewGamePanel();
+    }
+    
     public final void switchState(GameState gameState) {
         this.getContentPane().removeAll();
         switch (gameState) {
             case MENU:
                 this.add(menuPanel);
+                break;
+            case NEW_GAME:
+                this.add(newGamePanel);
                 break;
             case OPTIONS:
                 this.add(optionsPanel);
