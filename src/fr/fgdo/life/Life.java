@@ -76,6 +76,7 @@ public class Life extends JFrame{
         switch (gameState) {
             case MENU:
                 this.getContentPane().removeAll();
+                this.add(menuPanel);
                 revalidate();
                 repaint();
                 break;
