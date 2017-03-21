@@ -20,8 +20,8 @@ import javax.swing.JPanel;
  */
 public class OptionsPanel extends JPanel{
 
-    private JCheckBox fullscreenCheckBox;
-    private JCheckBox musicCheckBox;
+    private final JCheckBox fullscreenCheckBox;
+    private final JCheckBox musicCheckBox;
     
     public OptionsPanel(Options options,OptionsController optionController) {
         setLayout(new GridBagLayout());

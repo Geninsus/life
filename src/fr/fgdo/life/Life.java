@@ -14,6 +14,7 @@ import java.awt.Dimension;
 import java.awt.HeadlessException;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.ObjectInputStream;
 import javax.swing.JFrame;
 
@@ -51,7 +52,7 @@ public class Life extends JFrame{
                     FileInputStream fis = new FileInputStream(file);
                     ObjectInputStream ois = new ObjectInputStream(fis);
                     options = (Options)ois.readObject();
-                } catch (Exception e) {
+                } catch (IOException | ClassNotFoundException e) {
                     options = new Options();
                     options.save();
                     
@@ -79,7 +80,8 @@ public class Life extends JFrame{
     private void setUpOptionsPanel() {
         optionsPanel = new OptionsPanel(options, new OptionsController(options,this));
     }
-    public void switchState(GameState gameState) {
+    
+    public final void switchState(GameState gameState) {
         this.getContentPane().removeAll();
         switch (gameState) {
             case MENU:

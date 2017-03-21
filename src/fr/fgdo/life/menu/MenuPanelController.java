@@ -16,7 +16,7 @@ import java.awt.event.ActionListener;
  */
 public final class MenuPanelController implements ActionListener{
 
-    private Life lifeGame;
+    private final Life lifeGame;
     public MenuPanelController(Life lifeGame) {
         this.lifeGame = lifeGame;
     }

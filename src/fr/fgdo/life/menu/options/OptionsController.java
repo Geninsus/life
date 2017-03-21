@@ -16,8 +16,8 @@ import java.awt.event.ActionListener;
  */
 public class OptionsController implements ActionListener{
 
-    private Options model;
-    private Life lifeGame;
+    private final Options model;
+    private final Life lifeGame;
     public OptionsController(Options model, Life lifeGame) {
         this.model = model;
         this.lifeGame = lifeGame;
