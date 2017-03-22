@@ -29,6 +29,8 @@ public class GameState extends State{
     public void start() {
         super.start(); //To change body of generated methods, choose Tools | Templates.
         board = new Board(getLifeGame().getGridParams());
+        boardView = new BoardView();
+        add(boardView);
     }
 
     

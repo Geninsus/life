@@ -5,12 +5,18 @@
  */
 package fr.fgdo.life.GameState.Board;
 
-import javax.swing.JFrame;
+import java.awt.HeadlessException;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 
 /**
  *
  * @author Olivier
  */
-public class BoardView extends JFrame{
+public class BoardView extends JPanel{
+
+    public BoardView() throws HeadlessException {
+        add(new JLabel("BOARD VEIW"));
+    }
     
 }
