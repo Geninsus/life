@@ -6,6 +6,7 @@
 package neuralNetwork;
 
 import java.util.ArrayList;
+import neuralNetwork.exceptions.InputsSizeException;
 import neuralNetwork.exceptions.TopologySizeException;
 
 /**
@@ -15,21 +16,65 @@ import neuralNetwork.exceptions.TopologySizeException;
 public class Net {
     private int[] topology;
     private int numLayer;
-    private ArrayList<ArrayList<Neuron>> layers;
+    private ArrayList<Layer> layers;
     private double fitness;
+
+    /**
+     *
+     * @param topology
+     * @throws TopologySizeException
+     */
     public Net(int[] topology) throws TopologySizeException {
         if(topology.length < 2){
            throw new TopologySizeException("Net must contain at least 2 layers.");
         }
         this.topology = topology;
         this.numLayer = topology.length;
-        this.layers = new ArrayList<ArrayList<Neuron>>();
-        for (int layerIndex : topology) {
-            this.layers.add(new ArrayList<Neuron>());
-            for (int neuronIndex = 0; neuronIndex<topology[layerIndex]; neuronIndex++) {
-                //this.layers.get(layerIndex).add(new Neuron());
-                
+        this.layers = new ArrayList<Layer>();
+        for (int layerIndex = 0; layerIndex < topology.length; layerIndex++) {
+            this.layers.add(new Layer());
+            for (int neuronIndex = 0; neuronIndex<topology[layerIndex]+1; neuronIndex++) {
+                if(layerIndex+1 == numLayer){
+                    this.layers.get(layerIndex).add(new Neuron(0, neuronIndex));
+                }else{
+                    this.layers.get(layerIndex).add(new Neuron(topology[layerIndex+1], neuronIndex));
+                }
+            }
+            this.layers.get(layerIndex).get(topology[layerIndex]).setValue(1.0);
+        }
+        
+    }
+    
+    /**
+     *
+     * @param inputs
+     * @return
+     * @throws InputsSizeException
+     */
+    public Double[] feedForward(Double[] inputs) throws InputsSizeException{
+        if(inputs.length != layers.get(0).size()-1){
+            throw new InputsSizeException(inputs.length,layers.get(0).size()-1);
+        }
+        //normalize
+        Double[] outputs = new Double[topology[numLayer-1]];
+        Layer previousLayer;
+        for (int layerIndex = 1; layerIndex < layers.size(); layerIndex++)  {
+            previousLayer = layers.get(layerIndex-1);
+            for (int neuronIndex = 0; neuronIndex < topology[layerIndex]; neuronIndex++) {
+                layers.get(layerIndex).get(neuronIndex).feedForward(previousLayer);
+                if(layerIndex == layers.size()-1){
+                    outputs[neuronIndex] = layers.get(layerIndex).get(neuronIndex).getValue();
+                }
             }
         }
+        return outputs;
     }
+    
+    /*public double normalizeInputs() {
+        return ;
+    }
+    
+    public double normalizeOutputs() {
+        return ;
+    }*/
 }

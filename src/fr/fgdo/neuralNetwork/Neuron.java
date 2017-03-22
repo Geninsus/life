@@ -14,13 +14,41 @@ import java.util.Random;
  */
 public class Neuron {
     private int index;
-    private int value;
+    private double value;
     private ArrayList<Double> outputWeights;
+    
+    /**
+     *
+     * @param numOutputs
+     * @param index
+     */
     public Neuron(int numOutputs, int index) {
         this.outputWeights = new ArrayList<Double>();
+        this.index = index;
         for (int outputIndex = 0; outputIndex < numOutputs; outputIndex++) {
             this.outputWeights.add(randomizeWeight());
         }
+    }
+    
+    /**
+     *
+     * @param previousLayer
+     */
+    public void feedForward(Layer previousLayer){
+        double sum = 0;
+        for (Neuron neuron : previousLayer) {
+            sum += neuron.getValue()*neuron.getOutputWeights().get(this.index);
+        }
+        this.value = this.activationFunction(sum);
+    }
+    
+    /**
+     *
+     * @param value
+     * @return
+     */
+    public Double activationFunction(Double value) {
+        return Math.tanh(value);
     }
     
     private double randomizeWeight() {
@@ -32,5 +60,19 @@ public class Neuron {
      */
     public ArrayList<Double> getOutputWeights() {
         return outputWeights;
+    }
+
+    /**
+     * @return the value
+     */
+    public Double getValue() {
+        return value;
+    }
+
+    /**
+     * @param value the value to set
+     */
+    public void setValue(Double value) {
+        this.value = value;
     }
 }
