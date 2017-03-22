@@ -56,6 +56,7 @@ public class Life extends JFrame{
     public void enterState(int id) {
         if (currentStateId > -1) remove(gameStates.get(currentStateId));
         add(gameStates.get(id));
+        gameStates.get(id).start();
         currentStateId = id;
         revalidate();
         repaint();

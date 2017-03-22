@@ -24,4 +24,8 @@ public abstract class State extends JPanel{
         return lifeGame;
     }
     
+    /**
+     *
+     */
+    public void start(){};
 }

@@ -22,8 +22,14 @@ public class GameState extends State{
     
     public GameState(Life lifeGame) {
         super(lifeGame);
-        add(new JButton("GAME"));
         
     }
+
+    @Override
+    public void start() {
+        super.start(); //To change body of generated methods, choose Tools | Templates.
+        board = new Board(getLifeGame().getGridParams());
+    }
+
     
 }
