@@ -15,6 +15,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.Random;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 
@@ -26,6 +27,7 @@ public class GameState extends State implements MouseListener{
 
     private Board board;
     private BoardView boardView;
+    Random rand = new Random();
     
     public GameState(Life lifeGame) {
         super(lifeGame);
@@ -46,7 +48,7 @@ public class GameState extends State implements MouseListener{
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        board.addCreature(new Creature( 10, Color.yellow, new Point<Integer>(10,10)));
+        board.addCreature(new Creature( rand.nextInt(30)+30, new Color(rand.nextFloat(),rand.nextFloat(),rand.nextFloat()), new Point<Integer>(10,10)));
     }
 
     @Override

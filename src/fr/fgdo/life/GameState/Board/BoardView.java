@@ -36,7 +36,8 @@ public class BoardView extends JPanel implements Observer{
     protected void paintComponent(Graphics g) {
         super.paintComponent(g); //To change body of generated methods, choose Tools | Templates.
         for (Creature creature : board.getCreatures()) {
-            g.drawOval((int) creature.getCenter().x, (int) creature.getCenter().y,10,10);
+            g.setColor(creature.getColor());
+            g.fillOval(creature.getCenter().x, creature.getCenter().y,creature.getRadius(),creature.getRadius());
         }
         
     }
