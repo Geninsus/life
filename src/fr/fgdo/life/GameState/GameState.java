@@ -9,7 +9,9 @@ import fr.fgdo.life.GameState.Board.Board;
 import fr.fgdo.life.GameState.Board.BoardView;
 import fr.fgdo.life.Life;
 import fr.fgdo.life.State.State;
+import java.awt.BorderLayout;
 import javax.swing.JButton;
+import javax.swing.JLabel;
 
 /**
  *
@@ -22,7 +24,8 @@ public class GameState extends State{
     
     public GameState(Life lifeGame) {
         super(lifeGame);
-        
+        setLayout(new BorderLayout());
+        add(new JButton("GameState"), BorderLayout.WEST);
     }
 
     @Override
@@ -30,7 +33,7 @@ public class GameState extends State{
         super.start(); //To change body of generated methods, choose Tools | Templates.
         board = new Board(getLifeGame().getGridParams());
         boardView = new BoardView();
-        add(boardView);
+        add(boardView, BorderLayout.CENTER);
     }
 
     
