@@ -5,6 +5,7 @@
  */
 package fr.fgdo.life.GameState.Board;
 
+import fr.fgdo.life.Creature.Creature;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.HeadlessException;
@@ -20,19 +21,24 @@ import javax.swing.JPanel;
  */
 public class BoardView extends JPanel implements Observer{
 
-    public BoardView() throws HeadlessException {
-        add(new JLabel("BOARD VEIW"));
+    private final Board board;
+    
+    public BoardView(Board board) throws HeadlessException {
+        this.board = board;
     }
 
     @Override
     public void update(Observable o, Object arg) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        repaint();
     }
 
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g); //To change body of generated methods, choose Tools | Templates.
-        g.drawString("ssd", 10, 10);
+        for (Creature creature : board.getCreatures()) {
+            g.drawOval((int) creature.getCenter().x, (int) creature.getCenter().y,10,10);
+        }
+        
     }
     
     

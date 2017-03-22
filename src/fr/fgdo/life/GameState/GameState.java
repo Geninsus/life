@@ -5,11 +5,16 @@
  */
 package fr.fgdo.life.GameState;
 
+import fr.fgdo.life.Creature.Creature;
 import fr.fgdo.life.GameState.Board.Board;
 import fr.fgdo.life.GameState.Board.BoardView;
 import fr.fgdo.life.Life;
 import fr.fgdo.life.State.State;
+import fr.fgdo.math.Point;
 import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 
@@ -17,7 +22,7 @@ import javax.swing.JLabel;
  *
  * @author olivbau
  */
-public class GameState extends State{
+public class GameState extends State implements MouseListener{
 
     private Board board;
     private BoardView boardView;
@@ -25,15 +30,39 @@ public class GameState extends State{
     public GameState(Life lifeGame) {
         super(lifeGame);
         setLayout(new BorderLayout());
-        add(new JButton("GameState"), BorderLayout.WEST);
+        JButton button = new JButton("Add Creature");
+        button.addMouseListener(this);
+        add(button, BorderLayout.WEST);
     }
 
     @Override
     public void start() {
         super.start(); //To change body of generated methods, choose Tools | Templates.
         board = new Board(getLifeGame().getGridParams());
-        boardView = new BoardView();
+        boardView = new BoardView(board);
+        board.addObserver(boardView);
         add(boardView, BorderLayout.CENTER);
+    }
+
+    @Override
+    public void mouseClicked(MouseEvent e) {
+        board.addCreature(new Creature( 10, Color.yellow, new Point<Integer>(10,10)));
+    }
+
+    @Override
+    public void mousePressed(MouseEvent e) {
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent e) {
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e) {
     }
 
     
