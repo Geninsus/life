@@ -42,6 +42,5 @@ public class Creature {
             center.x++;
         else 
             center.y++;
-        
     }
 }
