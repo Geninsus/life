@@ -3,15 +3,12 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/E:/Work/Java/life/src/fr/fgdo/life/menu/MenuPanel.java</file>
-            <file>file:/E:/Work/Java/life/src/fr/fgdo/life/menu/options/OptionsPanel.java</file>
-            <file>file:/E:/Work/Java/life/src/fr/fgdo/life/menu/MenuPanelController.java</file>
-            <file>file:/E:/Work/Java/life/src/fr/fgdo/life/menu/options/Options.java</file>
-            <file>file:/E:/Work/Java/life/src/fr/fgdo/life/Life.java</file>
-            <file>file:/E:/Work/Java/life/src/fr/fgdo/life/newGame/NewGamePanel.java</file>
-            <file>file:/E:/Work/Java/life/src/fr/fgdo/life/menu/options/OptionsController.java</file>
-            <file>file:/E:/Work/Java/life/src/fr/fgdo/life/GameState.java</file>
-            <file>file:/E:/Work/Java/life/src/fr/fgdo/life/game/models/BoardGame.java</file>
+            <file>file:/home/olivbau/Documents/Java/life/src/fr/fgdo/life/NewGameState/NewGameState.java</file>
+            <file>file:/home/olivbau/Documents/Java/life/src/fr/fgdo/life/Game/Game.java</file>
+            <file>file:/home/olivbau/Documents/Java/life/src/fr/fgdo/life/MainMenuState/MainMenuState.java</file>
+            <file>file:/home/olivbau/Documents/Java/life/src/fr/fgdo/life/GameState/GameState.java</file>
+            <file>file:/home/olivbau/Documents/Java/life/src/fr/fgdo/life/State/State.java</file>
+            <file>file:/home/olivbau/Documents/Java/life/src/fr/fgdo/life/Life.java</file>
         </group>
     </open-files>
 </project-private>
