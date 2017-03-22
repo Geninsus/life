@@ -5,8 +5,10 @@
  */
 package fr.fgdo.life.NewGameState;
 
+import fr.fgdo.life.GameState.Board.BoardParams;
 import fr.fgdo.life.Life;
 import fr.fgdo.life.State.State;
+import fr.fgdo.math.Vector2;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -95,6 +97,11 @@ public class NewGameState extends State implements MouseListener{
     @Override
     public void mouseClicked(MouseEvent me) {
         System.out.println("fr.fgdo.life.NewGameState.NewGameState.mouseClicked()");
+        BoardParams params = new BoardParams();
+        params.size = new Vector2<>(Integer.parseInt(mapWidthTextField.getText()), Integer.parseInt(mapHeightTextField.getText()));
+        params.name = mapNameTextField.getText();
+        getLifeGame().setGridParams(params);
+        getLifeGame().enterState(2);
     }
 
     @Override

@@ -3,12 +3,15 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package fr.fgdo.life.Game;
+package fr.fgdo.life.GameState.Board;
+
+import fr.fgdo.math.Vector2;
 
 /**
  *
- * @author olivbau
+ * @author Olivier
  */
-public class Game {
-    
+public class BoardParams {
+    public Vector2<Integer> size;
+    public String name;
 }

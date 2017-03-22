@@ -5,6 +5,8 @@
  */
 package fr.fgdo.life.GameState;
 
+import fr.fgdo.life.GameState.Board.Board;
+import fr.fgdo.life.GameState.Board.BoardView;
 import fr.fgdo.life.Life;
 import fr.fgdo.life.State.State;
 import javax.swing.JButton;
@@ -15,9 +17,13 @@ import javax.swing.JButton;
  */
 public class GameState extends State{
 
+    private Board board;
+    private BoardView boardView;
+    
     public GameState(Life lifeGame) {
         super(lifeGame);
         add(new JButton("GAME"));
+        
     }
     
 }
