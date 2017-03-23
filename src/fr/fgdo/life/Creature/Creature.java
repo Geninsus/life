@@ -23,6 +23,7 @@ public class Creature {
     private int radius;
     private Color color;
     private Point<Integer> center;
+    private double life = 100;
     
     public Creature(int radius, Color color, Point<Integer> center, Net net) {
         this.radius = radius;
@@ -35,7 +36,7 @@ public class Creature {
         this.radius = Life.rand.nextInt(30)+20;
         this.color = new Color(Life.rand.nextFloat(), Life.rand.nextFloat(), Life.rand.nextFloat());
         this.center = new Point<>(Life.rand.nextInt(Board.width), Life.rand.nextInt(Board.height));
-        int topology[] = {2, 3, 2};
+        int topology[] = {3, 3, 2};
         this.net = new Net(topology);
     }
 
@@ -54,8 +55,8 @@ public class Creature {
     }
     
     public void update() throws InputsSizeException {
-        
-        Double netInputs[] = {Life.rand.nextDouble()*4-2, Life.rand.nextDouble()*4-2};
+        this.life -= 0.1;
+        Double netInputs[] = {this.life, Life.rand.nextDouble()*4-2, Life.rand.nextDouble()*4-2};
         Double netOutputs[] = net.feedForward(netInputs);
         Double varX = netOutputs[0] * 10;
         Double varY = netOutputs[1] * 10;
