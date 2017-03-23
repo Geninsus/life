@@ -29,6 +29,8 @@ public class Creature {
         this.net = net;
     }
 
+    
+    
     public Point<Integer> getCenter() {
         return center;
     }

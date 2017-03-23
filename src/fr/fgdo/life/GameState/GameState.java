@@ -8,6 +8,8 @@ package fr.fgdo.life.GameState;
 import fr.fgdo.life.Creature.Creature;
 import fr.fgdo.life.GameState.Board.Board;
 import fr.fgdo.life.GameState.Board.BoardView;
+import fr.fgdo.life.GameState.TabPan.AddTab;
+import fr.fgdo.life.GameState.TabPan.OptionTab;
 import fr.fgdo.life.Life;
 import fr.fgdo.life.State.State;
 import fr.fgdo.life.neuralNetwork.Net;
@@ -22,6 +24,7 @@ import java.util.logging.Logger;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import fr.fgdo.life.neuralNetwork.exceptions.TopologySizeException;
+import javax.swing.JTabbedPane;
 
 /**
  *
@@ -32,13 +35,17 @@ public class GameState extends State implements MouseListener{
     private Board board;
     private BoardView boardView;
     Random rand = new Random();
+    private final JTabbedPane tabbedPane = new JTabbedPane();
     
     public GameState(Life lifeGame) {
         super(lifeGame);
         setLayout(new BorderLayout());
         JButton button = new JButton("Add Creature");
         button.addMouseListener(this);
-        add(button, BorderLayout.WEST);
+        add(button, BorderLayout.NORTH);
+        add(tabbedPane, BorderLayout.WEST);
+        tabbedPane.addTab("Options", new OptionTab());
+        tabbedPane.addTab("Add", new AddTab());
     }
 
     @Override
