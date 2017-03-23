@@ -17,6 +17,9 @@ import java.awt.event.MouseListener;
 import java.util.Random;
 import javax.swing.JButton;
 import fr.fgdo.life.neuralNetwork.exceptions.TopologySizeException;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import javax.swing.JCheckBox;
 import javax.swing.JSlider;
 import javax.swing.JTabbedPane;
 import javax.swing.event.ChangeEvent;
@@ -26,7 +29,7 @@ import javax.swing.event.ChangeListener;
  *
  * @author olivbau
  */
-public class GameState extends State implements MouseListener,ChangeListener{
+public class GameState extends State implements MouseListener,ChangeListener, ItemListener{
 
     private Board board;
     private BoardView boardView;
@@ -103,6 +106,24 @@ public class GameState extends State implements MouseListener,ChangeListener{
     public void stateChanged(ChangeEvent e) {
         JSlider source = (JSlider)e.getSource();
         board.setSpeed(source.getValue());
+    }
+
+    @Override
+    public void itemStateChanged(ItemEvent e) {
+        JCheckBox checkbox = (JCheckBox)e.getSource();
+        switch (checkbox.getName()) {
+            case "showCreaturesNames":
+                boardView.showingCreaturesNames(checkbox.isSelected());
+                break;
+            case "showCreaturesVision":
+                boardView.showingCreaturesVisions(checkbox.isSelected());
+                break;
+            case "showIterations":
+                boardView.showingIterations(checkbox.isSelected());
+                break;
+            default:
+                break;
+        }
     }
 
 }

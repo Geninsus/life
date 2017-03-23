@@ -7,13 +7,22 @@ package fr.fgdo.life.GameState.Board;
 
 import fr.fgdo.life.GameState.GameState;
 import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.text.NumberFormat;
 import java.util.Observable;
 import java.util.Observer;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JFormattedTextField;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
 import javax.swing.JTabbedPane;
+import javax.swing.JTextField;
 
 /**
  *
@@ -46,6 +55,7 @@ public class BoardTabbedView extends JTabbedPane implements Observer{
         
         
         /*Option Tab*/
+        /*NORTH*/
         optionsTab = new JPanel();
         optionsTab.setLayout(new BorderLayout());
         JPanel controlPanel = new JPanel();
@@ -69,6 +79,44 @@ public class BoardTabbedView extends JTabbedPane implements Observer{
         controlPanel.add(pauseButton);
         
         optionsTab.add(controlPanel, BorderLayout.NORTH);
+        
+        
+        /*CENTER*/
+        JPanel centerPanel = new JPanel();
+        centerPanel.setLayout(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridwidth = GridBagConstraints.REMAINDER;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.insets = new Insets(3, 3, 3, 3);
+        
+        
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.gridwidth = 1;
+        JCheckBox showCreaturesNamesCheckBox = new JCheckBox("Show creatures names");
+        showCreaturesNamesCheckBox.setName("showCreaturesNames");
+        showCreaturesNamesCheckBox.addItemListener(gameState);
+        centerPanel.add(showCreaturesNamesCheckBox,gbc);
+        
+        
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        JCheckBox showCreaturesVisionCheckBox = new JCheckBox("Show creatures visions");
+        showCreaturesVisionCheckBox.setName("showCreaturesVision");
+        showCreaturesVisionCheckBox.addItemListener(gameState);
+        centerPanel.add(showCreaturesVisionCheckBox,gbc);
+        
+        
+        
+        gbc.gridx = 0;
+        gbc.gridy = 2;
+        JCheckBox showIterationsCheckBox = new JCheckBox("Show iterations");
+        showIterationsCheckBox.setName("showIterations");
+        showIterationsCheckBox.addItemListener(gameState);
+        centerPanel.add(showIterationsCheckBox,gbc);
+        
+        
+        optionsTab.add(centerPanel,BorderLayout.CENTER);
         this.addTab("Options", optionsTab);
     }
 
