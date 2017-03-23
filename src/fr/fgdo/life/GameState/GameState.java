@@ -66,7 +66,7 @@ public class GameState extends State implements MouseListener,ChangeListener, It
                 case "addCreature":
                     try {
                         board.addCreature(new Creature());
-                        MenuCreatureController menuControl = new MenuCreatureController();
+                        //MenuCreatureController menuControl = new MenuCreatureController();
                     } catch (TopologySizeException ex) {
                     }
                     break;
