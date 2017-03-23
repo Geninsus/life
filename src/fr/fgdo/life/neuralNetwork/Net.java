@@ -3,11 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package neuralNetwork;
+package fr.fgdo.life.neuralNetwork;
 
 import java.util.ArrayList;
-import neuralNetwork.exceptions.InputsSizeException;
-import neuralNetwork.exceptions.TopologySizeException;
+import fr.fgdo.life.neuralNetwork.exceptions.InputsSizeException;
+import fr.fgdo.life.neuralNetwork.exceptions.TopologySizeException;
 
 /**
  *
@@ -54,6 +54,9 @@ public class Net {
     public Double[] feedForward(Double[] inputs) throws InputsSizeException{
         if(inputs.length != layers.get(0).size()-1){
             throw new InputsSizeException(inputs.length,layers.get(0).size()-1);
+        }
+        for (int inputIndex = 0; inputIndex < topology[0]; inputIndex++) {
+            layers.get(0).get(inputIndex).setValue(inputs[inputIndex]);
         }
         //normalize
         Double[] outputs = new Double[topology[numLayer-1]];

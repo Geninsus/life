@@ -6,6 +6,7 @@
 package fr.fgdo.life.GameState.Board;
 
 import fr.fgdo.life.Creature.Creature;
+import fr.fgdo.life.neuralNetwork.exceptions.InputsSizeException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -42,7 +43,11 @@ public class Board extends Observable implements ActionListener{
     
     public void update() {
         creatures.forEach((creature) -> {
-            creature.update();
+            try {
+                creature.update();
+            } catch (InputsSizeException ex) {
+                Logger.getLogger(Board.class.getName()).log(Level.SEVERE, null, ex);
+            }
         });
     }
     
