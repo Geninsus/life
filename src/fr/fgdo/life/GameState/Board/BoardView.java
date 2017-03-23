@@ -46,19 +46,18 @@ public class BoardView extends JPanel implements Observer{
         
         for (Creature creature : board.getCreatures()) {
             int creatureRadius = getLocalX(creature.getRadius(),XMaxScreen);
-            int xCenterScreen = getLocalX(creature.getCenter().x,XMaxScreen) - creature.getRadius()/2;
-            int yCenterScreen = getLocalY(creature.getCenter().y,YMaxScreen) - creature.getRadius()/2;
+            int xCenterScreen = getLocalX(creature.getCenter().x,XMaxScreen);
+            int yCenterScreen = getLocalY(creature.getCenter().y,YMaxScreen);
             
             g.setColor(creature.getColor());
-            if (showingCreaturesVisions) g.drawLine(xCenterScreen, yCenterScreen, getLocalX(creature.getCenter().x,XMaxScreen) + (int) (Math.cos(Math.toRadians(creature.getDirection())) * 100), getLocalY(creature.getCenter().y,YMaxScreen) + (int) (Math.sin(Math.toRadians(creature.getDirection())) * 100));
-            g.fillOval(xCenterScreen-creatureRadius/2, yCenterScreen-creatureRadius/2,creatureRadius,creatureRadius);
+            if (showingCreaturesVisions) g.drawLine(xCenterScreen, yCenterScreen, xCenterScreen + (int) (Math.cos(Math.toRadians(creature.getDirection())) * 100), yCenterScreen + (int) (Math.sin(Math.toRadians(creature.getDirection())) * 100));
+            g.fillOval(xCenterScreen - creatureRadius, yCenterScreen - creatureRadius,getLocalX(creature.getRadius()*2, XMaxScreen),getLocalX(creature.getRadius()*2, XMaxScreen));
             g.setColor(Color.BLACK);
             if (showingCreaturesNames) g.drawString(creature.getName(), xCenterScreen, yCenterScreen);
         }
         if(showingIterations) g.drawString(Long.toString(board.iteration), 0, 10);
-        g.drawRect(0, 0, XMaxScreen, YMaxScreen);
+        g.drawRect(0, 0, getLocalX(board.getWidth(), XMaxScreen), getLocalY(0, YMaxScreen));
         
-        System.out.println(getLocalX(0, XMaxScreen));
     }
     
     public int getLocalX(int x, int maxScreenX) {
