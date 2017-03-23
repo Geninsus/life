@@ -109,7 +109,6 @@ public class Board extends Observable implements ActionListener{
         if (this.speed != speed) {
             this.speed = speed;
             timerUpdate.setDelay((int) (20.0/speed));
-            System.out.println(timerUpdate.getDelay());
         }
         
     }
