@@ -22,7 +22,8 @@ import javax.swing.Timer;
 public class Board extends Observable implements ActionListener{
     
     private float speed = 1;
-    private Timer timer = new Timer((int) (20.0/speed), this);
+    private Timer timerUpdate;
+    private long lastUpdate;
     private boolean runningGame = false;
     public static int width;
     public static int height;
@@ -33,11 +34,12 @@ public class Board extends Observable implements ActionListener{
     
     
     public Board(BoardParams params) {
+        this.timerUpdate = new Timer(20, this);
         this.creatures = new ArrayList<>();
-        this.width = params.size.x;
-        this.height = params.size.y;
+        Board.width = params.size.x;
+        Board.height = params.size.y;
         this.name = params.name;
-        timer.start();
+        timerUpdate.start();
     }
     
     public void updateView(String arg) {
@@ -75,10 +77,14 @@ public class Board extends Observable implements ActionListener{
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if(runningGame && e.getSource()==timer){
+        if(runningGame && e.getSource() == timerUpdate){
             update();
-            updateView("View:update");
+            if (System.nanoTime()- lastUpdate > 20000000) {
+                updateView("View:update");
+                lastUpdate = System.nanoTime();
+            }
         }
+        
     }
 
     public void run() {
@@ -102,8 +108,8 @@ public class Board extends Observable implements ActionListener{
     public void setSpeed(float speed) {
         if (this.speed != speed) {
             this.speed = speed;
-            timer.setDelay((int) (20.0/speed));
-            System.out.println(timer.getDelay());
+            timerUpdate.setDelay((int) (20.0/speed));
+            System.out.println(timerUpdate.getDelay());
         }
         
     }
