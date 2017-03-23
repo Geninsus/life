@@ -41,7 +41,7 @@ public class NewGameState extends State implements MouseListener{
         gbc.insets = new Insets(3, 3, 3, 3);
         
         NumberFormat numF = NumberFormat.getNumberInstance(); 
-        numF.setMaximumIntegerDigits(4);
+        numF.setMaximumIntegerDigits(7);
         
         gbc.gridx = 0;
         gbc.gridy = 0;
@@ -65,7 +65,7 @@ public class NewGameState extends State implements MouseListener{
         gbc.gridy = 1;
         gbc.gridwidth = 1;
         mapWidthTextField = new JFormattedTextField(numF);
-        mapWidthTextField.setValue(1000);
+        mapWidthTextField.setValue(10000);
         mapWidthTextField.setPreferredSize(new Dimension(50, 20));
         mapWidthTextField.setMinimumSize(new Dimension(50, 20));
         add(mapWidthTextField,gbc);
@@ -81,7 +81,7 @@ public class NewGameState extends State implements MouseListener{
         gbc.gridy = 2;
         gbc.gridwidth = 1;
         mapHeightTextField = new JFormattedTextField(numF);
-        mapHeightTextField.setValue(1000);
+        mapHeightTextField.setValue(10000);
         mapHeightTextField.setPreferredSize(new Dimension(50, 20));
         mapHeightTextField.setMinimumSize(new Dimension(50, 20));
         add(mapHeightTextField,gbc);

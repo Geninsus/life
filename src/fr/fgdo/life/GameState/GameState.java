@@ -40,12 +40,9 @@ public class GameState extends State implements MouseListener{
     public GameState(Life lifeGame) {
         super(lifeGame);
         setLayout(new BorderLayout());
-        JButton button = new JButton("Add Creature");
-        button.addMouseListener(this);
-        add(button, BorderLayout.NORTH);
         add(tabbedPane, BorderLayout.WEST);
         tabbedPane.addTab("Options", new OptionTab());
-        tabbedPane.addTab("Add", new AddTab());
+        tabbedPane.addTab("Add", new AddTab(this));
     }
 
     @Override
@@ -59,9 +56,20 @@ public class GameState extends State implements MouseListener{
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        try {
-            board.addCreature(new Creature());
-        } catch (TopologySizeException ex) {
+        
+        if (e.getSource().getClass() == JButton.class) {
+            JButton button = (JButton)e.getSource();
+            switch(button.getText()) {
+                case "Add Creature":
+                    try {
+                        board.addCreature(new Creature());
+                    } catch (TopologySizeException ex) {
+                    }
+                    break;
+                case "Add Food":
+                    System.out.println("Need to implaement : Add FooD");
+                    break;
+            }
         }
     }
 

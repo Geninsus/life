@@ -15,7 +15,7 @@ import javax.swing.JPanel;
 public class OptionTab extends JPanel{
 
     public OptionTab() {
-        add(new JButton("ICI c'est optionsdfsdfsdfsfsdfdf"));
+        add(new JButton("OPTIONS"));
     }
     
 }

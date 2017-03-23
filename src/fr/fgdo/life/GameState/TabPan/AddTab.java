@@ -5,6 +5,7 @@
  */
 package fr.fgdo.life.GameState.TabPan;
 
+import fr.fgdo.life.GameState.GameState;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
@@ -14,9 +15,15 @@ import javax.swing.JPanel;
  */
 public class AddTab extends JPanel{
 
-    public AddTab() {
-        add(new JButton("Add Creature"));
-        add(new JButton("Add Food"));
+    public AddTab(GameState gameState) {
+        JButton addCreatureButton = new JButton("Add Creature");
+        JButton addFoodButton = new JButton("Add Food");
+        
+        addCreatureButton.addMouseListener(gameState);
+        addFoodButton.addMouseListener(gameState);
+        
+        add(addCreatureButton);
+        add(addFoodButton);
     }
     
 }
