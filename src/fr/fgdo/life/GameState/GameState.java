@@ -8,8 +8,7 @@ package fr.fgdo.life.GameState;
 import fr.fgdo.life.Creature.Creature;
 import fr.fgdo.life.GameState.Board.Board;
 import fr.fgdo.life.GameState.Board.BoardView;
-import fr.fgdo.life.GameState.TabPan.AddTab;
-import fr.fgdo.life.GameState.TabPan.OptionTab;
+import fr.fgdo.life.GameState.Board.BoardTabbedView;
 import fr.fgdo.life.Life;
 import fr.fgdo.life.State.State;
 import fr.fgdo.life.neuralNetwork.Net;
@@ -35,14 +34,14 @@ public class GameState extends State implements MouseListener{
     private Board board;
     private BoardView boardView;
     Random rand = new Random();
+    private BoardTabbedView boardTabbedPane;
     private final JTabbedPane tabbedPane = new JTabbedPane();
     
     public GameState(Life lifeGame) {
         super(lifeGame);
         setLayout(new BorderLayout());
-        add(tabbedPane, BorderLayout.WEST);
-        tabbedPane.addTab("Options", new OptionTab(this));
-        tabbedPane.addTab("Add", new AddTab(this));
+        boardTabbedPane = new BoardTabbedView(this);
+        add(boardTabbedPane, BorderLayout.WEST);
     }
 
     @Override
@@ -52,6 +51,8 @@ public class GameState extends State implements MouseListener{
         boardView = new BoardView(board);
         board.addObserver(boardView);
         add(boardView, BorderLayout.CENTER);
+        board.addObserver(boardTabbedPane);
+        board.run();
     }
 
     @Override
@@ -97,5 +98,8 @@ public class GameState extends State implements MouseListener{
     public void mouseExited(MouseEvent e) {
     }
 
-    
+    public Board getBoard() {
+        return board;
+    }
+
 }

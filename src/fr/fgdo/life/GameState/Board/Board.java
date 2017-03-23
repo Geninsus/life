@@ -11,6 +11,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Observable;
+import java.util.Observer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.Timer;
@@ -27,6 +28,8 @@ public class Board extends Observable implements ActionListener{
     public static int height;
     private final String name;
     ArrayList<Creature> creatures;
+    public long iteration = 0;
+    
     
     public Board(BoardParams params) {
         this.creatures = new ArrayList<>();
@@ -36,9 +39,9 @@ public class Board extends Observable implements ActionListener{
         timer.start();
     }
     
-    public void updateView() {
+    public void updateView(String arg) {
         setChanged();
-        notifyObservers();
+        notifyObservers(arg);
         clearChanged();
     }
     
@@ -51,6 +54,7 @@ public class Board extends Observable implements ActionListener{
                 Logger.getLogger(Board.class.getName()).log(Level.SEVERE, null, ex);
             }
         });
+        iteration++;
     }
     
     public void checkCreature(Creature creature) {
@@ -72,16 +76,18 @@ public class Board extends Observable implements ActionListener{
     public void actionPerformed(ActionEvent e) {
         if(runningGame && e.getSource()==timer){
             update();
-            updateView();
+            updateView("View:update");
         }
     }
 
     public void run() {
         runningGame = true;
+        updateView("TabbedView:run");
     }
     
     public void pause() {
         runningGame =false;
+        updateView("TabbedView:pause");
     }
     
     public int getWidth() {
@@ -91,6 +97,5 @@ public class Board extends Observable implements ActionListener{
     public int getHeight() {
         return height;
     }
-    
-    
+
 }
