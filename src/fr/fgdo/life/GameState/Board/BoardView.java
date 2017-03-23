@@ -57,6 +57,7 @@ public class BoardView extends JPanel implements Observer{
         }
         if(showingIterations) g.drawString(Long.toString(board.iteration), 0, 10);
         g.drawRect(0, 0, XMaxScreen, YMaxScreen);
+
     }
     
     public int getLocalX(int x, int maxScreenX) {
@@ -92,6 +93,6 @@ public class BoardView extends JPanel implements Observer{
             maxScreenY = (int) (maxScreenX/mapAspectRatio);
 
         }
-        return new Vector2<>(maxScreenX, maxScreenY);
+        return new Vector2<>(maxScreenX-1, maxScreenY-1);
     }
 }
