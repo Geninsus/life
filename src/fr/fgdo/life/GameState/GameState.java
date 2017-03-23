@@ -8,41 +8,37 @@ package fr.fgdo.life.GameState;
 import fr.fgdo.life.Creature.Creature;
 import fr.fgdo.life.GameState.Board.Board;
 import fr.fgdo.life.GameState.Board.BoardView;
-import fr.fgdo.life.GameState.TabPan.AddTab;
-import fr.fgdo.life.GameState.TabPan.OptionTab;
+import fr.fgdo.life.GameState.Board.BoardTabbedView;
 import fr.fgdo.life.Life;
 import fr.fgdo.life.State.State;
-import fr.fgdo.life.neuralNetwork.Net;
-import fr.fgdo.math.Point;
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.Random;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JButton;
-import javax.swing.JLabel;
 import fr.fgdo.life.neuralNetwork.exceptions.TopologySizeException;
+import javax.swing.JSlider;
 import javax.swing.JTabbedPane;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 /**
  *
  * @author olivbau
  */
-public class GameState extends State implements MouseListener{
+public class GameState extends State implements MouseListener,ChangeListener{
 
     private Board board;
     private BoardView boardView;
     Random rand = new Random();
+    private final BoardTabbedView boardTabbedPane;
     private final JTabbedPane tabbedPane = new JTabbedPane();
     
     public GameState(Life lifeGame) {
         super(lifeGame);
         setLayout(new BorderLayout());
-        add(tabbedPane, BorderLayout.WEST);
-        tabbedPane.addTab("Options", new OptionTab(this));
-        tabbedPane.addTab("Add", new AddTab(this));
+        boardTabbedPane = new BoardTabbedView(this);
+        add(boardTabbedPane, BorderLayout.WEST);
     }
 
     @Override
@@ -52,6 +48,8 @@ public class GameState extends State implements MouseListener{
         boardView = new BoardView(board);
         board.addObserver(boardView);
         add(boardView, BorderLayout.CENTER);
+        board.addObserver(boardTabbedPane);
+        board.run();
     }
 
     @Override
@@ -97,5 +95,14 @@ public class GameState extends State implements MouseListener{
     public void mouseExited(MouseEvent e) {
     }
 
-    
+    public Board getBoard() {
+        return board;
+    }
+
+    @Override
+    public void stateChanged(ChangeEvent e) {
+        JSlider source = (JSlider)e.getSource();
+        board.setSpeed(source.getValue());
+    }
+
 }

@@ -8,12 +8,9 @@ package fr.fgdo.life.GameState.Board;
 import fr.fgdo.life.Creature.Creature;
 import fr.fgdo.math.Point;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.HeadlessException;
-import java.awt.geom.Ellipse2D;
 import java.util.Observable;
 import java.util.Observer;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 /**
@@ -38,6 +35,7 @@ public class BoardView extends JPanel implements Observer{
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g); //To change body of generated methods, choose Tools | Templates.
+        g.drawString(Long.toString(board.iteration), 0, 10);
         for (Creature creature : board.getCreatures()) {
             g.setColor(creature.getColor());
             g.fillOval( getLocalX(creature.getCenter().x) - creature.getRadius()/2, getLocalY(creature.getCenter().y) - creature.getRadius()/2,creature.getRadius(),creature.getRadius());
