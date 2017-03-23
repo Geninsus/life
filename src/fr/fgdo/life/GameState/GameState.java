@@ -65,7 +65,7 @@ public class GameState extends State implements MouseListener,ChangeListener{
                     }
                     break;
                 case "addFood":
-                    System.out.println("Need to implaement : Add FooD");
+                    System.out.println("Need to implement : Add Food");
                     break;
                 case "play":
                     board.run();
