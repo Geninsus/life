@@ -3,18 +3,16 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package geneticNet;
+package fr.fgdo.life.neuralNetwork;
 
 import java.util.ArrayList;
-import neuralNetwork.Net;
 
 /**
  *
  * @author guillaume
  */
-public class GeneticNet {
-    private ArrayList<Net> nets;
-    public GeneticNet() {
-        
+public class Layer extends ArrayList<Neuron>{
+    public Layer() {
+        super();
     }
 }

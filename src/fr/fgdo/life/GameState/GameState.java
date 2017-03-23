@@ -10,14 +10,18 @@ import fr.fgdo.life.GameState.Board.Board;
 import fr.fgdo.life.GameState.Board.BoardView;
 import fr.fgdo.life.Life;
 import fr.fgdo.life.State.State;
+import fr.fgdo.life.neuralNetwork.Net;
 import fr.fgdo.math.Point;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import fr.fgdo.life.neuralNetwork.exceptions.TopologySizeException;
 
 /**
  *
@@ -48,7 +52,12 @@ public class GameState extends State implements MouseListener{
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        board.addCreature(new Creature( rand.nextInt(30)+30, new Color(rand.nextFloat(),rand.nextFloat(),rand.nextFloat()), new Point<Integer>(10,10)));
+        int topology[] = {2, 3, 2};
+        try {
+            board.addCreature(new Creature( rand.nextInt(30)+30, new Color(rand.nextFloat(),rand.nextFloat(),rand.nextFloat()), new Point<Integer>(10,10), new Net(topology)));
+        } catch (TopologySizeException ex) {
+            Logger.getLogger(GameState.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     @Override
