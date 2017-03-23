@@ -21,13 +21,15 @@ import javax.swing.Timer;
  */
 public class Board extends Observable implements ActionListener{
     
-    private Timer timer = new Timer(20, this);
+    public float speed = 1;
+    private Timer timer = new Timer((int) (20.0/speed), this);
     private boolean runningGame = false;
     public static int width;
     public static int height;
     private final String name;
     ArrayList<Creature> creatures;
     public long iteration = 0;
+    
     
     
     public Board(BoardParams params) {
