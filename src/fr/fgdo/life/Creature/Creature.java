@@ -64,10 +64,12 @@ public class Creature {
         this.life -= 0.1;
         Double netInputs[] = {this.life, Life.rand.nextDouble()*4-2, Life.rand.nextDouble()*4-2};
         Double netOutputs[] = net.feedForward(netInputs);
-        Double varX = netOutputs[0] * 10;
-        Double varY = netOutputs[1] * 10;
-        center.x += varX.intValue();
-        center.y += varY.intValue();
+        Double varDirection = netOutputs[0] * 10;
+        Double varSpeed = Math.abs(netOutputs[1] * 10);
+        setDirection(direction + varDirection);
+        center.x += (int)(Math.cos(Math.toRadians(direction)) * varSpeed);
+        center.y += (int)(Math.cos(Math.toRadians(direction)) * varSpeed);
+        //center.y += varY.intValue();
     }
 
     /**
