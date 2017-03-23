@@ -8,12 +8,9 @@ package fr.fgdo.life.GameState.Board;
 import fr.fgdo.life.Creature.Creature;
 import fr.fgdo.math.Point;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.HeadlessException;
-import java.awt.geom.Ellipse2D;
 import java.util.Observable;
 import java.util.Observer;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 /**

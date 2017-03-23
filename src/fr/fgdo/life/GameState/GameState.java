@@ -11,17 +11,11 @@ import fr.fgdo.life.GameState.Board.BoardView;
 import fr.fgdo.life.GameState.Board.BoardTabbedView;
 import fr.fgdo.life.Life;
 import fr.fgdo.life.State.State;
-import fr.fgdo.life.neuralNetwork.Net;
-import fr.fgdo.math.Point;
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.Random;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JButton;
-import javax.swing.JLabel;
 import fr.fgdo.life.neuralNetwork.exceptions.TopologySizeException;
 import javax.swing.JTabbedPane;
 
@@ -34,7 +28,7 @@ public class GameState extends State implements MouseListener{
     private Board board;
     private BoardView boardView;
     Random rand = new Random();
-    private BoardTabbedView boardTabbedPane;
+    private final BoardTabbedView boardTabbedPane;
     private final JTabbedPane tabbedPane = new JTabbedPane();
     
     public GameState(Life lifeGame) {
