@@ -21,7 +21,8 @@ import javax.swing.Timer;
  */
 public class Board extends Observable implements ActionListener{
     
-    Timer timer = new Timer(20, this);
+    private Timer timer = new Timer(20, this);
+    private boolean runningGame = false;
     public static int width;
     public static int height;
     private final String name;
@@ -59,10 +60,6 @@ public class Board extends Observable implements ActionListener{
         if (creature.getCenter().y < 0) creature.getCenter().y = 0;
     }
     
-    public void gameLoop() {
-        
-    }
-
     public ArrayList<Creature> getCreatures() {
         return creatures;
     }
@@ -73,12 +70,20 @@ public class Board extends Observable implements ActionListener{
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if(e.getSource()==timer){
+        if(runningGame && e.getSource()==timer){
             update();
             updateView();
         }
     }
 
+    public void run() {
+        runningGame = true;
+    }
+    
+    public void pause() {
+        runningGame =false;
+    }
+    
     public int getWidth() {
         return width;
     }
