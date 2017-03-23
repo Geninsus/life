@@ -11,6 +11,7 @@ import fr.fgdo.life.neuralNetwork.Net;
 import fr.fgdo.life.neuralNetwork.exceptions.InputsSizeException;
 import fr.fgdo.life.neuralNetwork.exceptions.TopologySizeException;
 import fr.fgdo.math.Point;
+import fr.fgdo.util.RandomNameGenerator;
 import java.awt.Color;
 import java.util.Random;
 
@@ -25,12 +26,14 @@ public class Creature {
     private Point<Integer> center;
     private double life = 100;
     private double direction;
+    private String name;
     
     public Creature(int radius, Color color, Point<Integer> center, double direction, Net net) {
         this.radius = radius;
         this.color = color;
         this.center = center;
         this.net = net;
+        this.name = RandomNameGenerator.generateName();
         setDirection(direction);
     }
 

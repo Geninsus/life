@@ -21,7 +21,7 @@ public class RandomNameGenerator {
     private static synchronized void initRNG() {
         if (randomNumberGenerator == null) randomNumberGenerator = new Random();
     }
-    public static String generateName() throws FileNotFoundException {
+    public static String generateName() {
         if (randomNumberGenerator == null) initRNG();
         return library[randomNumberGenerator.nextInt(libraryLength)];
     }
