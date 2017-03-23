@@ -21,7 +21,7 @@ import javax.swing.Timer;
  */
 public class Board extends Observable implements ActionListener{
     
-    public float speed = 1;
+    private float speed = 1;
     private Timer timer = new Timer((int) (20.0/speed), this);
     private boolean runningGame = false;
     public static int width;
@@ -99,4 +99,14 @@ public class Board extends Observable implements ActionListener{
         return height;
     }
 
+    public void setSpeed(float speed) {
+        if (this.speed != speed) {
+            this.speed = speed;
+            timer.setDelay((int) (20.0/speed));
+            System.out.println(timer.getDelay());
+        }
+        
+    }
+
+    
 }

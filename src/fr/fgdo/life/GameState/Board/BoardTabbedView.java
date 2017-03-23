@@ -12,6 +12,7 @@ import java.util.Observer;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JPanel;
+import javax.swing.JSlider;
 import javax.swing.JTabbedPane;
 
 /**
@@ -48,6 +49,13 @@ public class BoardTabbedView extends JTabbedPane implements Observer{
         optionsTab = new JPanel();
         optionsTab.setLayout(new BorderLayout());
         JPanel controlPanel = new JPanel();
+        
+        JSlider speedSlider = new JSlider(1, 3);
+        speedSlider.setMajorTickSpacing(1);
+        speedSlider.setPaintTicks(true);
+        speedSlider.setPaintLabels(true);
+        speedSlider.setValue(1);
+        speedSlider.addChangeListener(gameState);
         playButton = new JButton(new ImageIcon("assets/play.png"));
         playButton.setName("play");
         playButton.addMouseListener(gameState);
@@ -56,6 +64,7 @@ public class BoardTabbedView extends JTabbedPane implements Observer{
         pauseButton.setName("pause");
         pauseButton.addMouseListener(gameState);
         
+        controlPanel.add(speedSlider);
         controlPanel.add(playButton);
         controlPanel.add(pauseButton);
         

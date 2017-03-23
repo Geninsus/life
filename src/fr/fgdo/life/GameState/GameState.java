@@ -17,13 +17,16 @@ import java.awt.event.MouseListener;
 import java.util.Random;
 import javax.swing.JButton;
 import fr.fgdo.life.neuralNetwork.exceptions.TopologySizeException;
+import javax.swing.JSlider;
 import javax.swing.JTabbedPane;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 /**
  *
  * @author olivbau
  */
-public class GameState extends State implements MouseListener{
+public class GameState extends State implements MouseListener,ChangeListener{
 
     private Board board;
     private BoardView boardView;
@@ -94,6 +97,12 @@ public class GameState extends State implements MouseListener{
 
     public Board getBoard() {
         return board;
+    }
+
+    @Override
+    public void stateChanged(ChangeEvent e) {
+        JSlider source = (JSlider)e.getSource();
+        board.setSpeed(source.getValue());
     }
 
 }
