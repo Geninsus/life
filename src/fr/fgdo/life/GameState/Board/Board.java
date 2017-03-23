@@ -65,5 +65,14 @@ public class Board extends Observable implements ActionListener{
             updateView();
         }
     }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+    
     
 }

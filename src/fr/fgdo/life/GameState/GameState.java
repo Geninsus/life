@@ -48,7 +48,7 @@ public class GameState extends State implements MouseListener{
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        board.addCreature(new Creature( rand.nextInt(30)+30, new Color(rand.nextFloat(),rand.nextFloat(),rand.nextFloat()), new Point<Integer>(10,10)));
+        board.addCreature(new Creature( rand.nextInt(30)+30, new Color(rand.nextFloat(),rand.nextFloat(),rand.nextFloat()), new Point<Integer>(10,10),board));
     }
 
     @Override

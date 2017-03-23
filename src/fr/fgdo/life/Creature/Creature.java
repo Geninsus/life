@@ -5,6 +5,7 @@
  */
 package fr.fgdo.life.Creature;
 
+import fr.fgdo.life.GameState.Board.Board;
 import fr.fgdo.math.Point;
 import java.awt.Color;
 import java.util.Random;
@@ -18,11 +19,13 @@ public class Creature {
     Color color;
     Point<Integer> center;
     Random rand = new Random();
+    Board board;
     
-    public Creature(int radius, Color color, Point<Integer> center) {
+    public Creature(int radius, Color color, Point<Integer> center, Board board) {
         this.radius = radius;
         this.color = color;
         this.center = center;
+        this.board = board;
     }
 
     public Point<Integer> getCenter() {
@@ -38,9 +41,14 @@ public class Creature {
     }
     
     public void update() {
-        if (rand.nextBoolean()) 
-            center.x++;
-        else 
+        if (rand.nextBoolean()) {
+            if(board.getWidth()>center.x) {
+                center.x++;
+            }
+        }
+        else {
             center.y++;
+        }
+            
     }
 }

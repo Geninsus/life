@@ -6,6 +6,7 @@
 package fr.fgdo.life.GameState.Board;
 
 import fr.fgdo.life.Creature.Creature;
+import fr.fgdo.math.Point;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.HeadlessException;
@@ -22,6 +23,8 @@ import javax.swing.JPanel;
 public class BoardView extends JPanel implements Observer{
 
     private final Board board;
+    private int scale = 1;
+    private Point<Integer> center = new Point<Integer>(0,0);
     
     public BoardView(Board board) throws HeadlessException {
         this.board = board;
@@ -37,9 +40,13 @@ public class BoardView extends JPanel implements Observer{
         super.paintComponent(g); //To change body of generated methods, choose Tools | Templates.
         for (Creature creature : board.getCreatures()) {
             g.setColor(creature.getColor());
-            g.fillOval(creature.getCenter().x, creature.getCenter().y,creature.getRadius(),creature.getRadius());
+            g.fillOval( getLocalX(creature.getCenter().x), creature.getCenter().y,creature.getRadius(),creature.getRadius());
         }
         
+    }
+    
+    public int getLocalX(int x) {
+        return (int)(x*(float)getWidth()/board.getWidth());
     }
     
     
