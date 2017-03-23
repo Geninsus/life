@@ -31,7 +31,7 @@ public class BoardView extends JPanel implements Observer{
     public BoardView(Board board) throws HeadlessException {
         this.board = board;
     }
-
+    
     @Override
     public void update(Observable o, Object arg) {
         repaint();
