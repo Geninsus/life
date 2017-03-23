@@ -12,6 +12,7 @@ import fr.fgdo.life.MainMenuState.MainMenuState;
 import fr.fgdo.life.NewGameState.NewGameState;
 import java.awt.HeadlessException;
 import java.util.ArrayList;
+import java.util.Random;
 import javax.swing.JFrame;
 
 /**
@@ -22,10 +23,11 @@ public class Life extends JFrame{
 
     private static final int DEFAULT_HEIGHT = 600;
     private static final int DEFAULT_WIDTH = 600;
-    
     private ArrayList<State> gameStates = new ArrayList<>();
     private int currentStateId = -1;
     private BoardParams boardParams;
+    
+    public static final Random rand = new Random();
     
     public Life() throws HeadlessException {
         super();

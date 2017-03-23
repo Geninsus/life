@@ -5,8 +5,11 @@
  */
 package fr.fgdo.life.Creature;
 
+import fr.fgdo.life.GameState.Board.Board;
+import fr.fgdo.life.Life;
 import fr.fgdo.life.neuralNetwork.Net;
 import fr.fgdo.life.neuralNetwork.exceptions.InputsSizeException;
+import fr.fgdo.life.neuralNetwork.exceptions.TopologySizeException;
 import fr.fgdo.math.Point;
 import java.awt.Color;
 import java.util.Random;
@@ -20,13 +23,20 @@ public class Creature {
     int radius;
     Color color;
     Point<Integer> center;
-    Random rand = new Random();
     
     public Creature(int radius, Color color, Point<Integer> center, Net net) {
         this.radius = radius;
         this.color = color;
         this.center = center;
         this.net = net;
+    }
+
+    public Creature() throws TopologySizeException {
+        this.radius = Life.rand.nextInt(30)+20;
+        this.color = new Color(Life.rand.nextFloat(), Life.rand.nextFloat(), Life.rand.nextFloat());
+        this.center = new Point<>(Life.rand.nextInt(Board.width), Life.rand.nextInt(Board.height));
+        int topology[] = {2, 3, 2};
+        this.net = new Net(topology);
     }
 
     
@@ -45,7 +55,7 @@ public class Creature {
     
     public void update() throws InputsSizeException {
         
-        Double netInputs[] = {rand.nextDouble(), rand.nextDouble()};
+        Double netInputs[] = {Life.rand.nextDouble(), Life.rand.nextDouble()};
         Double netOutputs[] = net.feedForward(netInputs);
         Double varX = netOutputs[0] * 5;
         Double varY = netOutputs[1] * 5;

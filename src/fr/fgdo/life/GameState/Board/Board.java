@@ -22,8 +22,8 @@ import javax.swing.Timer;
 public class Board extends Observable implements ActionListener{
     
     Timer timer = new Timer(20, this);
-    private final int width;
-    private final int height;
+    public static int width;
+    public static int height;
     private final String name;
     ArrayList<Creature> creatures;
     
