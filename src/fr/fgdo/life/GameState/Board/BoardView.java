@@ -56,6 +56,7 @@ public class BoardView extends JPanel implements Observer{
             if (showingCreaturesNames) g.drawString(creature.getName(), xCenterScreen, yCenterScreen);
         }
         if(showingIterations) g.drawString(Long.toString(board.iteration), 0, 10);
+        g.drawRect(0, 0, XMaxScreen, YMaxScreen);
     }
     
     public int getLocalX(int x, int maxScreenX) {
