@@ -45,15 +45,15 @@ public class BoardView extends JPanel implements Observer{
         int YMaxScreen = getXYMaxScreen().y;
         
         for (Creature creature : board.getCreatures()) {
-            g.setColor(creature.getColor());
             int creatureRadius = getLocalX(creature.getRadius(),XMaxScreen);
-            int screenX = getLocalX(creature.getCenter().x,XMaxScreen) - creature.getRadius()/2;
-            int screenY = getLocalY(creature.getCenter().y,YMaxScreen) - creature.getRadius()/2;
-            if (showingCreaturesVisions) g.drawLine(screenX, screenY, getLocalX(creature.getCenter().x,XMaxScreen) + (int) (Math.cos(Math.toRadians(creature.getDirection())) * 100), getLocalY(creature.getCenter().y,YMaxScreen) + (int) (Math.sin(Math.toRadians(creature.getDirection())) * 100));
-            g.fillOval( screenX-creatureRadius/2, screenY-creatureRadius/2,creatureRadius,creatureRadius);
+            int xCenterScreen = getLocalX(creature.getCenter().x,XMaxScreen) - creature.getRadius()/2;
+            int yCenterScreen = getLocalY(creature.getCenter().y,YMaxScreen) - creature.getRadius()/2;
+            
+            g.setColor(creature.getColor());
+            if (showingCreaturesVisions) g.drawLine(xCenterScreen, yCenterScreen, getLocalX(creature.getCenter().x,XMaxScreen) + (int) (Math.cos(Math.toRadians(creature.getDirection())) * 100), getLocalY(creature.getCenter().y,YMaxScreen) + (int) (Math.sin(Math.toRadians(creature.getDirection())) * 100));
+            g.fillOval(xCenterScreen-creatureRadius/2, yCenterScreen-creatureRadius/2,creatureRadius,creatureRadius);
             g.setColor(Color.BLACK);
-            if (showingCreaturesNames) g.drawString(creature.getName(), screenX, screenY);
-            g.drawOval(-200, -200, 200, 200);
+            if (showingCreaturesNames) g.drawString(creature.getName(), xCenterScreen, yCenterScreen);
         }
         if(showingIterations) g.drawString(Long.toString(board.iteration), 0, 10);
     }
