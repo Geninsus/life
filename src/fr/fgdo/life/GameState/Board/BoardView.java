@@ -23,9 +23,9 @@ public class BoardView extends JPanel implements Observer{
     private final Board board;
     private int scale = 1;
     private Point<Integer> center = new Point<Integer>(0,0);
-    private boolean showingCreaturesNames = false;
-    private boolean showingCreaturesVisions = false;
-    private boolean showingIterations = false;
+    private boolean showingCreaturesNames = true;
+    private boolean showingCreaturesVisions = true;
+    private boolean showingIterations = true;
             
     public BoardView(Board board) throws HeadlessException {
         this.board = board;
