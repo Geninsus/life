@@ -55,12 +55,12 @@ public class Creature {
     
     public void update() throws InputsSizeException {
         
-        Double netInputs[] = {Life.rand.nextDouble(), Life.rand.nextDouble()};
+        Double netInputs[] = {Life.rand.nextDouble()*4-2, Life.rand.nextDouble()*4-2};
         Double netOutputs[] = net.feedForward(netInputs);
-        Double varX = netOutputs[0] * 5;
-        Double varY = netOutputs[1] * 5;
-        center.x += Math.abs(varX.intValue());
-        center.y += Math.abs(varY.intValue());
+        Double varX = netOutputs[0] * 10;
+        Double varY = netOutputs[1] * 10;
+        center.x += varX.intValue();
+        center.y += varY.intValue();
     }
         
 }
