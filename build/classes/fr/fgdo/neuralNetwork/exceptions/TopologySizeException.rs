@@ -1,1 +1,0 @@
-neuralNetwork.exceptions.TopologySizeException

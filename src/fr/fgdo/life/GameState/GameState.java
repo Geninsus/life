@@ -10,6 +10,8 @@ import fr.fgdo.life.GameState.Board.Board;
 import fr.fgdo.life.GameState.Board.BoardView;
 import fr.fgdo.life.GameState.Board.BoardTabbedView;
 import fr.fgdo.life.Life;
+import fr.fgdo.life.MenuCreature.MenuCreatureController;
+import fr.fgdo.life.MenuCreature.MenuCreatureView;
 import fr.fgdo.life.State.State;
 import java.awt.BorderLayout;
 import java.awt.event.MouseEvent;
@@ -64,6 +66,7 @@ public class GameState extends State implements MouseListener,ChangeListener, It
                 case "addCreature":
                     try {
                         board.addCreature(new Creature());
+                        MenuCreatureController menuControl = new MenuCreatureController();
                     } catch (TopologySizeException ex) {
                     }
                     break;
