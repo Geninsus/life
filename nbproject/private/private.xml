@@ -3,14 +3,16 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/E:/Work/Java/life/src/fr/fgdo/life/GameState/TabPan/OptionTab.java</file>
-            <file>file:/E:/Work/Java/life/src/fr/fgdo/life/GameState/TabPan/AddTab.java</file>
+            <file>file:/E:/Work/Java/life/src/fr/fgdo/life/GameState/Board/BoardParams.java</file>
+            <file>file:/E:/Work/Java/life/src/fr/fgdo/life/MainMenuState/MainMenuState.java</file>
             <file>file:/E:/Work/Java/life/src/fr/fgdo/life/GameState/GameState.java</file>
             <file>file:/E:/Work/Java/life/src/fr/fgdo/life/Creature/Creature.java</file>
             <file>file:/E:/Work/Java/life/src/fr/fgdo/life/NewGameState/NewGameState.java</file>
             <file>file:/E:/Work/Java/life/src/fr/fgdo/math/Vector2.java</file>
             <file>file:/E:/Work/Java/life/src/fr/fgdo/life/Life.java</file>
             <file>file:/E:/Work/Java/life/src/fr/fgdo/life/GameState/Board/BoardView.java</file>
+            <file>file:/E:/Work/Java/life/src/fr/fgdo/life/GameState/Board/BoardTabbedView.java</file>
+            <file>file:/E:/Work/Java/life/src/fr/fgdo/util/RandomNameGenerator.java</file>
             <file>file:/E:/Work/Java/life/src/fr/fgdo/life/GameState/Board/Board.java</file>
         </group>
     </open-files>

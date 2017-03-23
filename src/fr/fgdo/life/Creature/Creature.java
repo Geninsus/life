@@ -43,11 +43,14 @@ public class Creature {
         this.center = new Point<>(Life.rand.nextInt(Board.width), Life.rand.nextInt(Board.height));
         int topology[] = {3, 3, 2};
         this.net = new Net(topology);
+        this.name = RandomNameGenerator.generateName();
         setDirection((double)Life.rand.nextInt(360));
     }
 
-    
-    
+    public String getName() {
+        return name;
+    }
+
     public Point<Integer> getCenter() {
         return center;
     }
