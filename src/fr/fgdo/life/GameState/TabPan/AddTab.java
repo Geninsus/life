@@ -16,10 +16,13 @@ import javax.swing.JPanel;
 public class AddTab extends JPanel{
 
     public AddTab(GameState gameState) {
-        JButton addCreatureButton = new JButton("Add Creature");
-        JButton addFoodButton = new JButton("Add Food");
         
+        JButton addCreatureButton = new JButton("Add Creature");
+        addCreatureButton.setName("addCreature");
         addCreatureButton.addMouseListener(gameState);
+        
+        JButton addFoodButton = new JButton("Add Food");
+        addFoodButton.setName("addFood");
         addFoodButton.addMouseListener(gameState);
         
         add(addCreatureButton);

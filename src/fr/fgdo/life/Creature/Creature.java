@@ -20,9 +20,9 @@ import java.util.Random;
  */
 public class Creature {
     private Net net;
-    int radius;
-    Color color;
-    Point<Integer> center;
+    private int radius;
+    private Color color;
+    private Point<Integer> center;
     
     public Creature(int radius, Color color, Point<Integer> center, Net net) {
         this.radius = radius;

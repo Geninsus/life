@@ -41,7 +41,7 @@ public class GameState extends State implements MouseListener{
         super(lifeGame);
         setLayout(new BorderLayout());
         add(tabbedPane, BorderLayout.WEST);
-        tabbedPane.addTab("Options", new OptionTab());
+        tabbedPane.addTab("Options", new OptionTab(this));
         tabbedPane.addTab("Add", new AddTab(this));
     }
 
@@ -59,14 +59,14 @@ public class GameState extends State implements MouseListener{
         
         if (e.getSource().getClass() == JButton.class) {
             JButton button = (JButton)e.getSource();
-            switch(button.getText()) {
-                case "Add Creature":
+            switch(button.getName()) {
+                case "addCreature":
                     try {
                         board.addCreature(new Creature());
                     } catch (TopologySizeException ex) {
                     }
                     break;
-                case "Add Food":
+                case "addFood":
                     System.out.println("Need to implaement : Add FooD");
                     break;
             }
