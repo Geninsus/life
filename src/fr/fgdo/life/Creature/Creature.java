@@ -24,12 +24,14 @@ public class Creature {
     private Color color;
     private Point<Integer> center;
     private double life = 100;
+    private double direction;
     
-    public Creature(int radius, Color color, Point<Integer> center, Net net) {
+    public Creature(int radius, Color color, Point<Integer> center, double direction, Net net) {
         this.radius = radius;
         this.color = color;
         this.center = center;
         this.net = net;
+        setDirection(direction);
     }
 
     public Creature() throws TopologySizeException {
@@ -38,6 +40,7 @@ public class Creature {
         this.center = new Point<>(Life.rand.nextInt(Board.width), Life.rand.nextInt(Board.height));
         int topology[] = {3, 3, 2};
         this.net = new Net(topology);
+        setDirection((double)Life.rand.nextInt(360));
     }
 
     
@@ -62,6 +65,22 @@ public class Creature {
         Double varY = netOutputs[1] * 10;
         center.x += varX.intValue();
         center.y += varY.intValue();
+    }
+
+    /**
+     * @return the direction
+     */
+    public double getDirection() {
+        return direction;
+    }
+
+    /**
+     * @param direction the direction to set
+     */
+    public void setDirection(double direction) {
+        direction = direction % 360;
+        if(direction < 0) direction += 360;
+        this.direction = direction;
     }
         
 }
