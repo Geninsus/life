@@ -62,9 +62,9 @@ public class Board extends Observable implements ActionListener{
     
     public void checkCreature(Creature creature) {
         if (creature.getCenter().x + creature.getRadius() > width) creature.getCenter().x = width-creature.getRadius();
-        if (creature.getCenter().x - creature.getRadius() < 0) creature.getCenter().x = 0+creature.getRadius();
+        if (creature.getCenter().x - creature.getRadius() < 0) creature.getCenter().x = creature.getRadius();
         if (creature.getCenter().y + creature.getRadius() > height) creature.getCenter().y = height-creature.getRadius();
-        if (creature.getCenter().y - creature.getRadius() < 0) creature.getCenter().y = 0+creature.getRadius();
+        if (creature.getCenter().y - creature.getRadius() < 0) creature.getCenter().y = creature.getRadius();
     }
     
     public ArrayList<Creature> getCreatures() {

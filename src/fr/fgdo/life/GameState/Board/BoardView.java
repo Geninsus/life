@@ -57,7 +57,8 @@ public class BoardView extends JPanel implements Observer{
         }
         if(showingIterations) g.drawString(Long.toString(board.iteration), 0, 10);
         g.drawRect(0, 0, XMaxScreen, YMaxScreen);
-
+        
+        System.out.println(getLocalX(0, XMaxScreen));
     }
     
     public int getLocalX(int x, int maxScreenX) {
