@@ -65,7 +65,7 @@ public class NewGameState extends State implements MouseListener{
         gbc.gridy = 1;
         gbc.gridwidth = 1;
         mapWidthTextField = new JFormattedTextField(numF);
-        mapWidthTextField.setValue(10000);
+        mapWidthTextField.setValue(1000);
         mapWidthTextField.setPreferredSize(new Dimension(50, 20));
         mapWidthTextField.setMinimumSize(new Dimension(50, 20));
         add(mapWidthTextField,gbc);
@@ -81,7 +81,7 @@ public class NewGameState extends State implements MouseListener{
         gbc.gridy = 2;
         gbc.gridwidth = 1;
         mapHeightTextField = new JFormattedTextField(numF);
-        mapHeightTextField.setValue(10000);
+        mapHeightTextField.setValue(1000);
         mapHeightTextField.setPreferredSize(new Dimension(50, 20));
         mapHeightTextField.setMinimumSize(new Dimension(50, 20));
         add(mapHeightTextField,gbc);
@@ -96,7 +96,6 @@ public class NewGameState extends State implements MouseListener{
 
     @Override
     public void mouseClicked(MouseEvent me) {
-        System.out.println("fr.fgdo.life.NewGameState.NewGameState.mouseClicked()");
         BoardParams params = new BoardParams();
         params.size = new Vector2<>(Integer.parseInt(mapWidthTextField.getText().replace("\u00A0","")), Integer.parseInt(mapHeightTextField.getText().replace("\u00A0","")));
         params.name = mapNameTextField.getText();

@@ -61,10 +61,10 @@ public class Board extends Observable implements ActionListener{
     }
     
     public void checkCreature(Creature creature) {
-        if (creature.getCenter().x > width) creature.getCenter().x = width-1;
-        if (creature.getCenter().x < 0) creature.getCenter().x = 0;
-        if (creature.getCenter().y > height) creature.getCenter().y = height;
-        if (creature.getCenter().y < 0) creature.getCenter().y = 0;
+        if (creature.getCenter().x + creature.getRadius() > width) creature.getCenter().x = width-creature.getRadius();
+        if (creature.getCenter().x - creature.getRadius() < 0) creature.getCenter().x = creature.getRadius();
+        if (creature.getCenter().y + creature.getRadius() > height) creature.getCenter().y = height-creature.getRadius();
+        if (creature.getCenter().y - creature.getRadius() < 0) creature.getCenter().y = creature.getRadius();
     }
     
     public ArrayList<Creature> getCreatures() {
@@ -109,7 +109,6 @@ public class Board extends Observable implements ActionListener{
         if (this.speed != speed) {
             this.speed = speed;
             timerUpdate.setDelay((int) (20.0/speed));
-            System.out.println(timerUpdate.getDelay());
         }
         
     }

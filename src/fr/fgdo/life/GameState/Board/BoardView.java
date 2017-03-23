@@ -7,6 +7,7 @@ package fr.fgdo.life.GameState.Board;
 
 import fr.fgdo.life.Creature.Creature;
 import fr.fgdo.math.Point;
+import fr.fgdo.math.Vector2;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.HeadlessException;
@@ -30,7 +31,7 @@ public class BoardView extends JPanel implements Observer{
     public BoardView(Board board) throws HeadlessException {
         this.board = board;
     }
-
+    
     @Override
     public void update(Observable o, Object arg) {
         repaint();
@@ -38,25 +39,33 @@ public class BoardView extends JPanel implements Observer{
 
     @Override
     protected void paintComponent(Graphics g) {
-        super.paintComponent(g); //To change body of generated methods, choose Tools | Templates.
+        super.paintComponent(g);
+        
+        int XMaxScreen = getXYMaxScreen().x;
+        int YMaxScreen = getXYMaxScreen().y;
+        
         for (Creature creature : board.getCreatures()) {
+            int creatureRadius = getLocalX(creature.getRadius(),XMaxScreen);
+            int xCenterScreen = getLocalX(creature.getCenter().x,XMaxScreen);
+            int yCenterScreen = getLocalY(creature.getCenter().y,YMaxScreen);
+            
             g.setColor(creature.getColor());
-            if (showingCreaturesVisions) g.drawLine(getLocalX(creature.getCenter().x), getLocalY(creature.getCenter().y), getLocalX(creature.getCenter().x) + (int) (Math.cos(Math.toRadians(creature.getDirection())) * 100), getLocalY(creature.getCenter().y) + (int) (Math.sin(Math.toRadians(creature.getDirection())) * 100));
-            int screenX = getLocalX(creature.getCenter().x) - creature.getRadius()/2;
-            int screenY = getLocalY(creature.getCenter().y) - creature.getRadius()/2;
-            g.fillOval( screenX, screenY,creature.getRadius(),creature.getRadius());
+            if (showingCreaturesVisions) g.drawLine(xCenterScreen, yCenterScreen, xCenterScreen + (int) (Math.cos(Math.toRadians(creature.getDirection())) * 100), yCenterScreen + (int) (Math.sin(Math.toRadians(creature.getDirection())) * 100));
+            g.fillOval(xCenterScreen - creatureRadius, yCenterScreen - creatureRadius,getLocalX(creature.getRadius()*2, XMaxScreen),getLocalX(creature.getRadius()*2, XMaxScreen));
             g.setColor(Color.BLACK);
-            if (showingCreaturesNames) g.drawString(creature.getName(), screenX, screenY);
+            if (showingCreaturesNames) g.drawString(creature.getName(), xCenterScreen, yCenterScreen);
         }
         if(showingIterations) g.drawString(Long.toString(board.iteration), 0, 10);
+        g.drawRect(0, 0, getLocalX(board.getWidth(), XMaxScreen), getLocalY(0, YMaxScreen));
+        
     }
     
-    public int getLocalX(int x) {
-        return (int)(x*(float)getWidth()/board.getWidth());
+    public int getLocalX(int x, int maxScreenX) {
+        return (int)(x*(float)maxScreenX/board.getWidth());
     }
     
-    public int getLocalY(int y) {
-        return (int)((y-board.getHeight())*-1*(float)getHeight()/board.getHeight());
+    public int getLocalY(int y,int maxScreenY) {
+        return (int)((y-board.getHeight())*-1*(float)maxScreenY/board.getHeight());
     }
 
     public void showingCreaturesNames(boolean showingCreaturesNames) {
@@ -71,4 +80,19 @@ public class BoardView extends JPanel implements Observer{
         this.showingIterations = showingIterations;
     }
     
+    public Vector2<Integer> getXYMaxScreen() {
+        float mapAspectRatio = (float) board.getWidth()/board.getHeight();
+        int maxScreenX;
+        int maxScreenY;
+        if (getWidth()/mapAspectRatio > getHeight()) {
+            maxScreenY = getHeight();
+            maxScreenX = (int) (maxScreenY*mapAspectRatio);
+        }
+        else {
+            maxScreenX = getWidth();
+            maxScreenY = (int) (maxScreenX/mapAspectRatio);
+
+        }
+        return new Vector2<>(maxScreenX-1, maxScreenY-1);
+    }
 }
