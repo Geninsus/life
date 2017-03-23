@@ -38,7 +38,7 @@ public class BoardView extends JPanel implements Observer{
         g.drawString(Long.toString(board.iteration), 0, 10);
         for (Creature creature : board.getCreatures()) {
             g.setColor(creature.getColor());
-            g.drawLine(getLocalX(creature.getCenter().x), getLocalY(creature.getCenter().y), 0, 0);
+            g.drawLine(getLocalX(creature.getCenter().x), getLocalY(creature.getCenter().y), getLocalX(creature.getCenter().x) + (int) (Math.cos(Math.toRadians(creature.getDirection())) * 100), getLocalY(creature.getCenter().y) + (int) (Math.sin(Math.toRadians(creature.getDirection())) * 100));
             g.fillOval( getLocalX(creature.getCenter().x) - creature.getRadius()/2, getLocalY(creature.getCenter().y) - creature.getRadius()/2,creature.getRadius(),creature.getRadius());
         }
         
