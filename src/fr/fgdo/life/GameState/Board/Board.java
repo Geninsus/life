@@ -45,10 +45,18 @@ public class Board extends Observable implements ActionListener{
         creatures.forEach((creature) -> {
             try {
                 creature.update();
+                checkCreature(creature);
             } catch (InputsSizeException ex) {
                 Logger.getLogger(Board.class.getName()).log(Level.SEVERE, null, ex);
             }
         });
+    }
+    
+    public void checkCreature(Creature creature) {
+        if (creature.getCenter().x > width) creature.getCenter().x = width-1;
+        if (creature.getCenter().x < 0) creature.getCenter().x = 0;
+        if (creature.getCenter().y > height) creature.getCenter().y = height;
+        if (creature.getCenter().y < 0) creature.getCenter().y = 0;
     }
     
     public void gameLoop() {

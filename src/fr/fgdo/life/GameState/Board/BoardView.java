@@ -40,7 +40,7 @@ public class BoardView extends JPanel implements Observer{
         super.paintComponent(g); //To change body of generated methods, choose Tools | Templates.
         for (Creature creature : board.getCreatures()) {
             g.setColor(creature.getColor());
-            g.fillOval( getLocalX(creature.getCenter().x), creature.getCenter().y,creature.getRadius(),creature.getRadius());
+            g.fillOval( getLocalX(creature.getCenter().x) - creature.getRadius()/2, getLocalY(creature.getCenter().y) - creature.getRadius()/2,creature.getRadius(),creature.getRadius());
         }
         
     }
@@ -49,6 +49,8 @@ public class BoardView extends JPanel implements Observer{
         return (int)(x*(float)getWidth()/board.getWidth());
     }
     
-    
+    public int getLocalY(int y) {
+        return (int)((y-board.getHeight())*-1*(float)getHeight()/board.getHeight());
+    }
     
 }
