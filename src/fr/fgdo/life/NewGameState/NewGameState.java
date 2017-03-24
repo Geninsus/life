@@ -97,10 +97,11 @@ public class NewGameState extends State implements MouseListener{
     @Override
     public void mouseClicked(MouseEvent me) {
         BoardParams params = new BoardParams();
-        params.size = new Vector2<>(Integer.parseInt(mapWidthTextField.getText().replace("\u00A0","")), Integer.parseInt(mapHeightTextField.getText().replace("\u00A0","")));
+        params.size = new Vector2<>(Integer.parseInt(mapWidthTextField.getText().replace("\u00A0","").replaceAll(",", "")), Integer.parseInt(mapHeightTextField.getText().replace("\u00A0","").replaceAll(",", "")));
         params.name = mapNameTextField.getText();
         getLifeGame().setGridParams(params);
         getLifeGame().enterState(2);
+        
     }
 
     @Override
