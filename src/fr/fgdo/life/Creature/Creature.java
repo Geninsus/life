@@ -41,7 +41,7 @@ public class Creature {
         this.radius = Life.rand.nextInt(30)+20;
         this.color = new Color(Life.rand.nextFloat(), Life.rand.nextFloat(), Life.rand.nextFloat());
         this.center = new Point<>(Life.rand.nextInt(Board.width), Life.rand.nextInt(Board.height));
-        int topology[] = {3, 3, 2};
+        int topology[] = {3, 1, 2};
         this.net = new Net(topology);
         this.name = RandomNameGenerator.generateName();
         setDirection((double)Life.rand.nextInt(360));
