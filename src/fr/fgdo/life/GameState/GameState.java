@@ -64,11 +64,7 @@ public class GameState extends State implements MouseListener,ChangeListener, It
             JButton button = (JButton)e.getSource();
             switch(button.getName()) {
                 case "addCreature":
-                    try {
-                        board.addCreature(new Creature());
-                        //MenuCreatureController menuControl = new MenuCreatureController();
-                    } catch (TopologySizeException ex) {
-                    }
+                        MenuCreatureController menuControl = new MenuCreatureController(board);
                     break;
                 case "addFood":
                     System.out.println("Need to implement : Add Food");
