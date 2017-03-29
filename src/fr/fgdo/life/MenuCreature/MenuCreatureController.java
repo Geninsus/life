@@ -81,6 +81,8 @@ public class MenuCreatureController implements MouseListener, ActionListener{
                 }
             }
                     this.close();
+                case "neuronbutton":
+                    menuView.addNeuron();
                 default:
                     break;
             }

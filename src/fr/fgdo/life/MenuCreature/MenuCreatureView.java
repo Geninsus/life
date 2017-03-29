@@ -7,6 +7,7 @@ package fr.fgdo.life.MenuCreature;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.GridLayout;
 import java.util.Observer;
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
@@ -21,7 +22,8 @@ import javax.swing.JRadioButton;
  */
 public class MenuCreatureView extends JFrame implements Observer{
     
-    private JPanel pan;
+    private JPanel globalPan;
+    private JPanel neuronPan;
     private MenuCreatureController menuController;
     private static final int DEFAULT_HEIGHT = 600;
     private static final int DEFAULT_WIDTH = 600;
@@ -29,47 +31,66 @@ public class MenuCreatureView extends JFrame implements Observer{
     public MenuCreatureView(MenuCreatureController menuController)  {
         super();
         this.menuController = menuController;
-        this.SetupFrame();
         this.SetupPanel();
-        this.setupAll();
+        this.SetupFrame();
+        this.setupButton();
+        this.SetupNeuron();
+    }
+    
+    private void SetupPanel() {
+        this.globalPan = new JPanel(new BorderLayout());
+        this.add(globalPan);
     }
     
     private void SetupFrame() {
         this.setTitle("Menu Creature");
         setSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
         setLocationRelativeTo(null);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true);
         setLayout(new BorderLayout());
     }
+
     
-    private void SetupPanel(){
-        this.pan = new JPanel();
-        this.add(pan);
-    }
-    
-    private void setupAll(){
-        JRadioButton neural = new JRadioButton("Neural");
-        this.pan.add(neural);
+    private void setupButton(){
         
-        
-        JRadioButton neural2 = new JRadioButton("Neural2");
-        this.pan.add(neural2);
+        JPanel buttonPanel = new JPanel(new GridLayout(1,2,10,50));
         
         /* Cancel Button */
         JButton cancelButton = new JButton("Cancel");
         cancelButton.setName("cancel");
         cancelButton.addMouseListener(this.menuController);
-        this.pan.add(cancelButton);
+        buttonPanel.add(cancelButton);
         
         /* Create Button */
         JButton createButton = new JButton("Create");
         createButton.setName("create");
         createButton.addMouseListener(this.menuController);
-        createButton.addActionListener(menuController);
-        this.pan.add(createButton);
+        createButton.addActionListener(this.menuController);
+        buttonPanel.add(createButton);
+        
+        /* Add to global Panel */
+        this.globalPan.add(buttonPanel,BorderLayout.SOUTH);
     }
 
+    
+    private void SetupNeuron() {
+        
+        this.neuronPan = new JPanel(new GridLayout(0,3));
+        
+        JButton neuronButton = new JButton("Neuron");
+        neuronButton.setName("neuronbutton");
+        neuronButton.addActionListener(this.menuController);
+        this.neuronPan.add(neuronButton);
+        this.globalPan.add(neuronPan,BorderLayout.CENTER);
+           
+    }
+    
+    public void addNeuron() {
+        System.err.println("addNeuron");
+        this.neuronPan.add(new JButton("neuron"));
+        this.globalPan.updateUI();
+        
+    }
     @Override
     public void update(java.util.Observable o, Object o1) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.

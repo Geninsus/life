@@ -21,6 +21,8 @@ import javax.swing.JButton;
 import fr.fgdo.life.neuralNetwork.exceptions.TopologySizeException;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JCheckBox;
 import javax.swing.JSlider;
 import javax.swing.JTabbedPane;
@@ -64,11 +66,20 @@ public class GameState extends State implements MouseListener,ChangeListener, It
             JButton button = (JButton)e.getSource();
             switch(button.getName()) {
                 case "addCreature":
-                        MenuCreatureController menuControl = new MenuCreatureController(board);
+            {
+                try {
+                    this.board.addCreature(new Creature());
+                } catch (TopologySizeException ex) {
+                    Logger.getLogger(MenuCreatureController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+                    
                     break;
                 case "addFood":
                     System.out.println("Need to implement : Add Food");
                     break;
+                case "implementCreature":
+                    MenuCreatureController menuControl = new MenuCreatureController(board);
                 case "play":
                     board.run();
                     break;
