@@ -44,6 +44,11 @@ public class BoardTabbedView extends JTabbedPane implements Observer{
         addFoodButton.setName("addFood");
         addFoodButton.addMouseListener(gameState);
         
+        JButton implementCreatureButton = new JButton("Implement Creature");
+        implementCreatureButton.setName("implementCreature");
+        implementCreatureButton.addMouseListener(gameState);
+        
+        addTab.add(implementCreatureButton);
         addTab.add(addCreatureButton);
         addTab.add(addFoodButton);
         this.addTab("Add", addTab);

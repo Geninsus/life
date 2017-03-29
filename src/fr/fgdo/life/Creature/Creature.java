@@ -5,6 +5,8 @@
  */
 package fr.fgdo.life.Creature;
 
+import fr.fgdo.life.Creature.exceptions.FieldOfViewOutOfRangeException;
+import fr.fgdo.life.GameObject.GameObject;
 import fr.fgdo.life.GameState.Board.Board;
 import fr.fgdo.life.Life;
 import fr.fgdo.life.neuralNetwork.Net;
@@ -13,20 +15,24 @@ import fr.fgdo.life.neuralNetwork.exceptions.TopologySizeException;
 import fr.fgdo.math.Point;
 import fr.fgdo.util.RandomNameGenerator;
 import java.awt.Color;
-import java.util.Random;
+import java.util.ArrayList;
 
 /**
  *
  * @author Olivier
  */
-public class Creature {
+public class Creature extends GameObject {
+    
+    private static final int MIN_FIELD_OF_VIEW = 15;
+    private static final int MAX_FIELD_OF_VIEW = 50;
+    
     private Net net;
-    private int radius;
     private Color color;
-    private Point<Integer> center;
     private double life = 100;
     private double direction;
+    private double fieldOfView = 25;
     private String name;
+    public ArrayList<GameObject> vision;
     
     public Creature(int radius, Color color, Point<Integer> center, double direction, Net net) {
         this.radius = radius;
@@ -45,6 +51,7 @@ public class Creature {
         this.net = new Net(topology);
         this.name = RandomNameGenerator.generateName();
         setDirection((double)Life.rand.nextInt(360));
+        this.fieldOfView = (double)(MIN_FIELD_OF_VIEW + (int)(Math.random() * ((MAX_FIELD_OF_VIEW - MIN_FIELD_OF_VIEW) + 1)));
     }
 
     public String getName() {
@@ -57,10 +64,6 @@ public class Creature {
 
     public Color getColor() {
         return color;
-    }
-
-    public int getRadius() {
-        return radius;
     }
     
     public void update() throws InputsSizeException {
@@ -93,4 +96,23 @@ public class Creature {
     public void removeLife(int lifePoint) {
         life -= lifePoint;
     }
+
+    /**
+     * @return the fieldOfView
+     */
+    public double getFieldOfView() {
+        return fieldOfView;
+    }
+
+    /**
+     * @param fieldOfView the fieldOfView to set
+     */
+    public void setFieldOfView(double fieldOfView) throws FieldOfViewOutOfRangeException {
+        if(fieldOfView < MIN_FIELD_OF_VIEW || fieldOfView > MAX_FIELD_OF_VIEW) {
+            throw new FieldOfViewOutOfRangeException("Field of view out of range");
+        }
+        this.fieldOfView = fieldOfView;
+    }
+ 
+        
 }

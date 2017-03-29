@@ -59,7 +59,11 @@ public class BoardView extends JPanel implements Observer{
             int yCenterScreen = getLocalY(creature.getCenter().y,YMaxScreen);
             
             g.setColor(creature.getColor());
-            if (showingCreaturesVisions) g.drawLine(xCenterScreen, yCenterScreen, xCenterScreen + (int) (Math.cos(Math.toRadians(creature.getDirection())) * 100), yCenterScreen + (int) (Math.sin(Math.toRadians(creature.getDirection())) * 100));
+            if (showingCreaturesVisions) {
+                g.drawLine(xCenterScreen, yCenterScreen, xCenterScreen + (int) (Math.cos(Math.toRadians(creature.getDirection())) * 100), yCenterScreen + (int) (Math.sin(Math.toRadians(creature.getDirection())) * 100));
+                g.drawLine(xCenterScreen, yCenterScreen, xCenterScreen + (int) (Math.cos(Math.toRadians(creature.getDirection() + creature.getFieldOfView())) * 100), yCenterScreen + (int) (Math.sin(Math.toRadians(creature.getDirection() + creature.getFieldOfView())) * 100));
+                g.drawLine(xCenterScreen, yCenterScreen, xCenterScreen + (int) (Math.cos(Math.toRadians(creature.getDirection() - creature.getFieldOfView())) * 100), yCenterScreen + (int) (Math.sin(Math.toRadians(creature.getDirection() - creature.getFieldOfView())) * 100));
+            }
             g.fillOval(xCenterScreen - creatureRadius, yCenterScreen - creatureRadius,getLocalX(creature.getRadius()*2, XMaxScreen),getLocalX(creature.getRadius()*2, XMaxScreen));
             g.setColor(Color.BLACK);
             if (showingCreaturesNames) g.drawString(creature.getName(), xCenterScreen, yCenterScreen);
