@@ -5,6 +5,7 @@
  */
 package fr.fgdo.life.MenuCreature;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.util.Observer;
 import javafx.beans.InvalidationListener;
@@ -12,6 +13,7 @@ import javafx.beans.Observable;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 
 /**
  *
@@ -38,6 +40,7 @@ public class MenuCreatureView extends JFrame implements Observer{
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true);
+        setLayout(new BorderLayout());
     }
     
     private void SetupPanel(){
@@ -46,10 +49,25 @@ public class MenuCreatureView extends JFrame implements Observer{
     }
     
     private void setupAll(){
-        JButton exitButton = new JButton("Quit");
-        exitButton.setName("quit");
-        exitButton.addMouseListener(this.menuController);
-        this.pan.add(exitButton);
+        JRadioButton neural = new JRadioButton("Neural");
+        this.pan.add(neural);
+        
+        
+        JRadioButton neural2 = new JRadioButton("Neural2");
+        this.pan.add(neural2);
+        
+        /* Cancel Button */
+        JButton cancelButton = new JButton("Cancel");
+        cancelButton.setName("cancel");
+        cancelButton.addMouseListener(this.menuController);
+        this.pan.add(cancelButton);
+        
+        /* Create Button */
+        JButton createButton = new JButton("Create");
+        createButton.setName("create");
+        createButton.addMouseListener(this.menuController);
+        createButton.addActionListener(menuController);
+        this.pan.add(createButton);
     }
 
     @Override
