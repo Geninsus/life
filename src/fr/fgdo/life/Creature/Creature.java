@@ -8,6 +8,7 @@ package fr.fgdo.life.Creature;
 import fr.fgdo.life.Creature.exceptions.FieldOfViewOutOfRangeException;
 import fr.fgdo.life.GameObject.GameObject;
 import fr.fgdo.life.GameState.Board.Board;
+import fr.fgdo.life.GameState.Board.BoardView;
 import fr.fgdo.life.Life;
 import fr.fgdo.life.neuralNetwork.Net;
 import fr.fgdo.life.neuralNetwork.exceptions.InputsSizeException;
@@ -15,6 +16,7 @@ import fr.fgdo.life.neuralNetwork.exceptions.TopologySizeException;
 import fr.fgdo.math.Point;
 import fr.fgdo.util.RandomNameGenerator;
 import java.awt.Color;
+import java.awt.Graphics;
 import java.util.ArrayList;
 
 /**
@@ -27,11 +29,10 @@ public class Creature extends GameObject {
     private static final int MAX_FIELD_OF_VIEW = 50;
     
     private Net net;
-    private Color color;
     private double life = 100;
     private double direction;
     private double fieldOfView = 25;
-    private String name;
+    private final String name;
     public ArrayList<GameObject> vision;
     
     public Creature(int radius, Color color, Point<Integer> center, double direction, Net net) {
@@ -113,6 +114,20 @@ public class Creature extends GameObject {
         }
         this.fieldOfView = fieldOfView;
     }
+
+    @Override
+    public void draw(Graphics g, int screenWidth, int screenHeight, int boardWidth, int boardHeight) {
+        super.draw(g, screenWidth, screenHeight, boardWidth, boardHeight); //To change body of generated methods, choose Tools | Templates.
+        int xCenterScreen = BoardView.getLocalX(getCenter().x,screenWidth,boardWidth);
+        int yCenterScreen = BoardView.getLocalY(getCenter().y,screenHeight,boardHeight);
+        g.drawLine(xCenterScreen, yCenterScreen, xCenterScreen + (int) (Math.cos(Math.toRadians(getDirection())) * 100), yCenterScreen + (int) (Math.sin(Math.toRadians(getDirection())) * 100));
+        g.drawLine(xCenterScreen, yCenterScreen, xCenterScreen + (int) (Math.cos(Math.toRadians(getDirection() + getFieldOfView())) * 100), yCenterScreen + (int) (Math.sin(Math.toRadians(getDirection() + getFieldOfView())) * 100));
+        g.drawLine(xCenterScreen, yCenterScreen, xCenterScreen + (int) (Math.cos(Math.toRadians(getDirection() - getFieldOfView())) * 100), yCenterScreen + (int) (Math.sin(Math.toRadians(getDirection() - getFieldOfView())) * 100));
+        g.setColor(Color.BLACK);
+        g.drawString(getName(), xCenterScreen, yCenterScreen);
+    }
  
+    
+    
         
 }
