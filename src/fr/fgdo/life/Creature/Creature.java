@@ -5,6 +5,7 @@
  */
 package fr.fgdo.life.Creature;
 
+import fr.fgdo.life.Creature.exceptions.FieldOfViewOutOfRangeException;
 import fr.fgdo.life.GameState.Board.Board;
 import fr.fgdo.life.Life;
 import fr.fgdo.life.neuralNetwork.Net;
@@ -20,12 +21,17 @@ import java.util.Random;
  * @author Olivier
  */
 public class Creature {
+    
+    private static final int MIN_FIELD_OF_VIEW = 15;
+    private static final int MAX_FIELD_OF_VIEW = 50;
+    
     private Net net;
     private int radius;
     private Color color;
     private Point<Integer> center;
     private double life = 100;
     private double direction;
+    private double fieldOfView = 25;
     private String name;
     
     public Creature(int radius, Color color, Point<Integer> center, double direction, Net net) {
@@ -41,10 +47,11 @@ public class Creature {
         this.radius = Life.rand.nextInt(30)+20;
         this.color = new Color(Life.rand.nextFloat(), Life.rand.nextFloat(), Life.rand.nextFloat());
         this.center = new Point<>(Life.rand.nextInt(Board.width), Life.rand.nextInt(Board.height));
-        int topology[] = {3, 3, 2};
+        int topology[] = {3, 1, 2};
         this.net = new Net(topology);
         this.name = RandomNameGenerator.generateName();
         setDirection((double)Life.rand.nextInt(360));
+        this.fieldOfView = (double)(MIN_FIELD_OF_VIEW + (int)(Math.random() * ((MAX_FIELD_OF_VIEW - MIN_FIELD_OF_VIEW) + 1)));
     }
 
     public String getName() {
@@ -89,5 +96,23 @@ public class Creature {
         if(direction < 0) direction += 360;
         this.direction = direction;
     }
+
+    /**
+     * @return the fieldOfView
+     */
+    public double getFieldOfView() {
+        return fieldOfView;
+    }
+
+    /**
+     * @param fieldOfView the fieldOfView to set
+     */
+    public void setFieldOfView(double fieldOfView) throws FieldOfViewOutOfRangeException {
+        if(fieldOfView < MIN_FIELD_OF_VIEW || fieldOfView > MAX_FIELD_OF_VIEW) {
+            throw new FieldOfViewOutOfRangeException("Field of view out of range");
+        }
+        this.fieldOfView = fieldOfView;
+    }
+ 
         
 }
