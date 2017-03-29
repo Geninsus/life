@@ -5,6 +5,7 @@
  */
 package fr.fgdo.life.Creature;
 
+import fr.fgdo.life.Creature.exceptions.FieldOfViewOutOfRangeException;
 import fr.fgdo.life.GameState.Board.Board;
 import fr.fgdo.life.Life;
 import fr.fgdo.life.neuralNetwork.Net;
@@ -20,6 +21,10 @@ import java.util.Random;
  * @author Olivier
  */
 public class Creature {
+    
+    private static final int MIN_FIELD_OF_VIEW = 15;
+    private static final int MAX_FIELD_OF_VIEW = 50;
+    
     private Net net;
     private int radius;
     private Color color;
@@ -46,6 +51,7 @@ public class Creature {
         this.net = new Net(topology);
         this.name = RandomNameGenerator.generateName();
         setDirection((double)Life.rand.nextInt(360));
+        this.fieldOfView = (double)(MIN_FIELD_OF_VIEW + (int)(Math.random() * ((MAX_FIELD_OF_VIEW - MIN_FIELD_OF_VIEW) + 1)));
     }
 
     public String getName() {
@@ -96,6 +102,16 @@ public class Creature {
      */
     public double getFieldOfView() {
         return fieldOfView;
+    }
+
+    /**
+     * @param fieldOfView the fieldOfView to set
+     */
+    public void setFieldOfView(double fieldOfView) throws FieldOfViewOutOfRangeException {
+        if(fieldOfView < MIN_FIELD_OF_VIEW || fieldOfView > MAX_FIELD_OF_VIEW) {
+            throw new FieldOfViewOutOfRangeException("Field of view out of range");
+        }
+        this.fieldOfView = fieldOfView;
     }
  
         
