@@ -26,6 +26,7 @@ public class Creature {
     private Point<Integer> center;
     private double life = 100;
     private double direction;
+    private double fieldOfView = 25;
     private String name;
     
     public Creature(int radius, Color color, Point<Integer> center, double direction, Net net) {
@@ -89,5 +90,13 @@ public class Creature {
         if(direction < 0) direction += 360;
         this.direction = direction;
     }
+
+    /**
+     * @return the fieldOfView
+     */
+    public double getFieldOfView() {
+        return fieldOfView;
+    }
+ 
         
 }
