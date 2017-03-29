@@ -6,6 +6,7 @@
 package fr.fgdo.life.GameState.Board;
 
 import fr.fgdo.life.Creature.Creature;
+import fr.fgdo.life.GameObject.GameObject;
 import fr.fgdo.life.neuralNetwork.exceptions.InputsSizeException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -65,6 +66,14 @@ public class Board extends Observable implements ActionListener{
         if (creature.getCenter().x - creature.getRadius() < 0) creature.getCenter().x = creature.getRadius();
         if (creature.getCenter().y + creature.getRadius() > height) creature.getCenter().y = height-creature.getRadius();
         if (creature.getCenter().y - creature.getRadius() < 0) creature.getCenter().y = creature.getRadius();
+    }
+    
+    public void updateCreaturesViews() {
+        for (Creature creature : creatures) {
+            for (GameObject otherCreature : creatures) {
+                
+            }
+        }
     }
     
     public ArrayList<Creature> getCreatures() {
