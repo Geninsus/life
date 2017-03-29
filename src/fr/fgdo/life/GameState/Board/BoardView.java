@@ -6,6 +6,7 @@
 package fr.fgdo.life.GameState.Board;
 
 import fr.fgdo.life.Creature.Creature;
+import fr.fgdo.life.GameState.Board.Events.MeteorologicalEvent;
 import fr.fgdo.math.Point;
 import fr.fgdo.math.Vector2;
 import java.awt.Color;
@@ -44,6 +45,14 @@ public class BoardView extends JPanel implements Observer{
         int XMaxScreen = getXYMaxScreen().x;
         int YMaxScreen = getXYMaxScreen().y;
         
+        for (MeteorologicalEvent meteorologicalEvent : board.getMeteorologicalEvents()) {
+            int eventRadius = getLocalX(meteorologicalEvent.getRadius(),XMaxScreen);
+            int xCenterScreen = getLocalX(meteorologicalEvent.getCenter().x,XMaxScreen);
+            int yCenterScreen = getLocalY(meteorologicalEvent.getCenter().y,YMaxScreen);
+            g.setColor(new Color(255, 0, 0, 75));
+            g.fillOval(xCenterScreen - eventRadius, yCenterScreen - eventRadius,getLocalX(meteorologicalEvent.getRadius()*2, XMaxScreen),getLocalX(meteorologicalEvent.getRadius()*2, XMaxScreen));
+        }
+        
         for (Creature creature : board.getCreatures()) {
             int creatureRadius = getLocalX(creature.getRadius(),XMaxScreen);
             int xCenterScreen = getLocalX(creature.getCenter().x,XMaxScreen);
@@ -55,6 +64,7 @@ public class BoardView extends JPanel implements Observer{
             g.setColor(Color.BLACK);
             if (showingCreaturesNames) g.drawString(creature.getName(), xCenterScreen, yCenterScreen);
         }
+        g.setColor(Color.BLACK);
         if(showingIterations) g.drawString(Long.toString(board.iteration), 0, 10);
         g.drawRect(0, 0, getLocalX(board.getWidth(), XMaxScreen), getLocalY(0, YMaxScreen));
         

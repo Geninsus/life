@@ -9,6 +9,8 @@ import fr.fgdo.life.Creature.Creature;
 import fr.fgdo.life.GameState.Board.Board;
 import fr.fgdo.life.GameState.Board.BoardView;
 import fr.fgdo.life.GameState.Board.BoardTabbedView;
+import fr.fgdo.life.GameState.Board.Events.MeteorologicalEvent;
+import fr.fgdo.life.GameState.Board.Events.MeteorologicalEventsTypes;
 import fr.fgdo.life.Life;
 import fr.fgdo.life.MenuCreature.MenuCreatureController;
 import fr.fgdo.life.MenuCreature.MenuCreatureView;
@@ -74,6 +76,9 @@ public class GameState extends State implements MouseListener,ChangeListener, It
                     break;
                 case "pause":
                     board.pause();
+                    break;
+                case "addFire":
+                    board.addEvent(new MeteorologicalEvent(MeteorologicalEventsTypes.FIRE,board.getWidth(),board.getHeight(),board));
                     break;
                 default:
                     break;

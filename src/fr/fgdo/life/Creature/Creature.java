@@ -89,5 +89,8 @@ public class Creature {
         if(direction < 0) direction += 360;
         this.direction = direction;
     }
-        
+    
+    public void removeLife(int lifePoint) {
+        life -= lifePoint;
+    }
 }
