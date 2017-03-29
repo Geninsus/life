@@ -6,6 +6,7 @@
 package fr.fgdo.life.GameState.Board;
 
 import fr.fgdo.life.Creature.Creature;
+import fr.fgdo.life.Creature.CreatureListener;
 import fr.fgdo.life.GameState.Board.Events.MeteorologicalEvent;
 import fr.fgdo.life.GameState.Board.Events.MeteorologicalEventListener;
 import fr.fgdo.life.GameObject.GameObject;
@@ -24,7 +25,7 @@ import javax.swing.event.EventListenerList;
  *
  * @author Olivier
  */
-public class Board extends Observable implements ActionListener,MeteorologicalEventListener{
+public class Board extends Observable implements ActionListener,MeteorologicalEventListener,CreatureListener{
     
     private float speed = 1;
     private Timer timerUpdate;
@@ -36,6 +37,7 @@ public class Board extends Observable implements ActionListener,MeteorologicalEv
     ArrayList<Creature> creatures;
     ArrayList<MeteorologicalEvent> meteorologicalEvents;
     ArrayList<MeteorologicalEvent> toRemoveMeteorologicalEvents;
+    ArrayList<Creature> toRemoveCreatures;
     public long iteration = 0;
     
     
@@ -45,6 +47,7 @@ public class Board extends Observable implements ActionListener,MeteorologicalEv
         this.creatures = new ArrayList<>();
         this.meteorologicalEvents = new ArrayList<>();
         this.toRemoveMeteorologicalEvents = new ArrayList<>();
+        this.toRemoveCreatures = new ArrayList<>();
         Board.width = params.size.x;
         Board.height = params.size.y;
         this.name = params.name;
@@ -62,6 +65,12 @@ public class Board extends Observable implements ActionListener,MeteorologicalEv
         for (Iterator<MeteorologicalEvent> iterator = toRemoveMeteorologicalEvents.iterator(); iterator.hasNext();) {
             MeteorologicalEvent next = iterator.next();
             meteorologicalEvents.remove(next);
+            iterator.remove();
+        }
+        
+        for (Iterator<Creature> iterator = toRemoveCreatures.iterator(); iterator.hasNext();) {
+            Creature next = iterator.next();
+            creatures.remove(next);
             iterator.remove();
         }
         
@@ -155,6 +164,11 @@ public class Board extends Observable implements ActionListener,MeteorologicalEv
     @Override
     public void meteorologicalEventOver(MeteorologicalEvent me) {
         toRemoveMeteorologicalEvents.add(me);
+    }
+
+    @Override
+    public void creatureIsDead(Creature creature) {
+        toRemoveCreatures.add(creature);
     }
 
     

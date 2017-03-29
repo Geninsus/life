@@ -20,28 +20,28 @@ import java.util.Observable;
 public class MeteorologicalEvent extends GameObject{
     private final MeteorologicalEventsTypes type;
     private int duration = Life.rand.nextInt(400)+100;
-    private MeteorologicalEventListener listener;
 
-    public MeteorologicalEvent(MeteorologicalEventsTypes type, MeteorologicalEventListener listener) {
+    public MeteorologicalEvent(MeteorologicalEventsTypes type) {
         this.type = type;
-        this.listener = listener;
         this.color = new Color((float)1.0,(float)0.0,(float)0.0,(float)0.5);
         radius = Life.rand.nextInt(100)+100;
         center = new Point<>(0,0);
     }
     
-    public MeteorologicalEvent(MeteorologicalEventsTypes type, int maxX, int maxY, MeteorologicalEventListener listener) {
+    public MeteorologicalEvent(MeteorologicalEventsTypes type, int maxX, int maxY) {
         this.type = type;
-        this.listener = listener;
         this.color = new Color((float)1.0,(float)0.0,(float)0.0,(float)0.5);
         radius = Life.rand.nextInt(30)+30;
         center = new Point<>(Life.rand.nextInt(maxX),Life.rand.nextInt(maxY));
     }
 
+    public MeteorologicalEvent(MeteorologicalEventsTypes type, int maxX, int maxY, Board board) {
+        this(type,maxX,maxY);
+        this.board = board;
+    }
 
-    public MeteorologicalEvent(int radius, Point<Integer> center, MeteorologicalEventsTypes type, MeteorologicalEventListener listener) {
+    public MeteorologicalEvent(int radius, Point<Integer> center, MeteorologicalEventsTypes type) {
         this.radius = radius;
-        this.listener = listener;
         this.color = new Color((float)1.0,(float)0.0,(float)0.0,(float)0.5);
         this.center = center;
         this.type = type;
@@ -54,7 +54,7 @@ public class MeteorologicalEvent extends GameObject{
     public void update() {
         duration--;
         if (duration == 0) {
-            listener.meteorologicalEventOver(this);
+            board.meteorologicalEventOver(this);
         }
     }
 
@@ -63,4 +63,5 @@ public class MeteorologicalEvent extends GameObject{
             creature.removeLife(1);
         }
     }
+
 }

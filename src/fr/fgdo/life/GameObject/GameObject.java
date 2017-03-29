@@ -5,12 +5,14 @@
  */
 package fr.fgdo.life.GameObject;
 
+import fr.fgdo.life.GameState.Board.Board;
 import fr.fgdo.life.GameState.Board.BoardView;
 import static fr.fgdo.life.GameState.Board.BoardView.getLocalX;
 import static fr.fgdo.life.GameState.Board.BoardView.getLocalY;
 import fr.fgdo.math.Point;
 import java.awt.Color;
 import java.awt.Graphics;
+import java.util.EventListener;
 import java.util.Observable;
 
 /**
@@ -21,6 +23,7 @@ public class GameObject extends Observable{
     protected int radius;
     protected Point<Integer> center;
     protected Color color;
+    protected Board board;
     
     public int getRadius() {
         return radius;
@@ -41,4 +44,13 @@ public class GameObject extends Observable{
         g.setColor(this.getColor());
         g.fillOval(xCenterScreen - eventRadius, yCenterScreen - eventRadius,BoardView.getLocalX(getRadius()*2, screenWidth,boardWidth),BoardView.getLocalX(getRadius()*2, screenWidth,boardWidth));
     }
+
+    public Board getBoard() {
+        return board;
+    }
+
+    public void setBoard(Board board) {
+        this.board = board;
+    }
+
 }

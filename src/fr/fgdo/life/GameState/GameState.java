@@ -68,14 +68,11 @@ public class GameState extends State implements MouseListener,ChangeListener, It
             JButton button = (JButton)e.getSource();
             switch(button.getName()) {
                 case "addCreature":
-            {
-                try {
-                    this.board.addCreature(new Creature());
-                } catch (TopologySizeException ex) {
-                    Logger.getLogger(MenuCreatureController.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-                    
+                    try {
+                        this.board.addCreature(new Creature(board));
+                    } catch (TopologySizeException ex) {
+                        Logger.getLogger(MenuCreatureController.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                     break;
                 case "addFood":
                     System.out.println("Need to implement : Add Food");
@@ -89,7 +86,7 @@ public class GameState extends State implements MouseListener,ChangeListener, It
                     board.pause();
                     break;
                 case "addFire":
-                    board.addEvent(new MeteorologicalEvent(MeteorologicalEventsTypes.FIRE,board.getWidth(),board.getHeight(),board));
+                    board.addEvent(new MeteorologicalEvent(MeteorologicalEventsTypes.FIRE,board.getWidth(),board.getHeight(), board));
                     break;
                 default:
                     break;

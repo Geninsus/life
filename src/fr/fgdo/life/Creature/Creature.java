@@ -29,7 +29,7 @@ public class Creature extends GameObject {
     private static final int MAX_FIELD_OF_VIEW = 50;
     
     private Net net;
-    private double life = 100;
+    private double life = Life.rand.nextInt(500)+500;
     private double direction;
     private double fieldOfView = 25;
     private final String name;
@@ -54,6 +54,11 @@ public class Creature extends GameObject {
         setDirection((double)Life.rand.nextInt(360));
         this.fieldOfView = (double)(MIN_FIELD_OF_VIEW + (int)(Math.random() * ((MAX_FIELD_OF_VIEW - MIN_FIELD_OF_VIEW) + 1)));
     }
+    
+    public Creature(Board board) throws TopologySizeException {
+        this();
+        this.board = board;
+    }
 
     public String getName() {
         return name;
@@ -68,7 +73,7 @@ public class Creature extends GameObject {
     }
     
     public void update() throws InputsSizeException {
-        this.life -= 0.1;
+        this.removeLife(1);
         Double netInputs[] = {this.life, Life.rand.nextDouble()*4-2, Life.rand.nextDouble()*4-2};
         Double netOutputs[] = net.feedForward(netInputs);
         Double varDirection = netOutputs[0] * 10;
@@ -94,8 +99,11 @@ public class Creature extends GameObject {
         this.direction = direction;
     }
     
-    public void removeLife(int lifePoint) {
-        life -= lifePoint;
+    public void removeLife(double lifePoint) {
+        System.out.println(life);
+        if (life <= 0) {
+            board.creatureIsDead(this);
+        }
     }
 
     /**
