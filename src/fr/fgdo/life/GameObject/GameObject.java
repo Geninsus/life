@@ -19,7 +19,7 @@ import java.util.Observable;
  *
  * @author fabien
  */
-public class GameObject extends Observable{
+public abstract class GameObject extends Observable{
     protected int radius;
     protected Point<Integer> center;
     protected Color color;

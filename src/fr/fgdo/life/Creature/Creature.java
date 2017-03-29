@@ -100,7 +100,6 @@ public class Creature extends GameObject {
     }
     
     public void removeLife(double lifePoint) {
-        System.out.println(life);
         if (life <= 0) {
             board.creatureIsDead(this);
         }
