@@ -117,7 +117,7 @@ public class Creature extends GameObject {
 
     @Override
     public void draw(Graphics g, int screenWidth, int screenHeight, int boardWidth, int boardHeight) {
-        super.draw(g, screenWidth, screenHeight, boardWidth, boardHeight); //To change body of generated methods, choose Tools | Templates.
+        super.draw(g, screenWidth, screenHeight, boardWidth, boardHeight);
         int xCenterScreen = BoardView.getLocalX(getCenter().x,screenWidth,boardWidth);
         int yCenterScreen = BoardView.getLocalY(getCenter().y,screenHeight,boardHeight);
         g.drawLine(xCenterScreen, yCenterScreen, xCenterScreen + (int) (Math.cos(Math.toRadians(getDirection())) * 100), yCenterScreen + (int) (Math.sin(Math.toRadians(getDirection())) * 100));
