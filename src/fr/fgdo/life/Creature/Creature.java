@@ -5,7 +5,10 @@
  */
 package fr.fgdo.life.Creature;
 
+import com.sun.javafx.geom.Area;
+import com.sun.javafx.geom.Ellipse2D;
 import fr.fgdo.life.Creature.exceptions.FieldOfViewOutOfRangeException;
+import fr.fgdo.life.Food.Food;
 import fr.fgdo.life.GameObject.GameObject;
 import fr.fgdo.life.GameState.Board.Board;
 import fr.fgdo.life.GameState.Board.BoardView;
@@ -18,6 +21,7 @@ import fr.fgdo.util.RandomNameGenerator;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.util.ArrayList;
+import javafx.scene.shape.Circle;
 
 /**
  *
@@ -35,7 +39,13 @@ public class Creature extends GameObject {
     private final String name;
     public ArrayList<GameObject> vision;
     
-    public Creature(int radius, Color color, Point<Integer> center, double direction, Net net) {
+    private boolean[] visibleCreatures = new boolean[3];
+    private boolean[] visibleFoods = new boolean[3];
+    private boolean[] visibleMeteorologicalEvents = new boolean[3];
+    private boolean overCreature;
+    private boolean overMeteorologicalEvent;
+    
+    public Creature(int radius, Color color, Point center, double direction, Net net) {
         this.radius = radius;
         this.color = color;
         this.center = center;
@@ -47,7 +57,7 @@ public class Creature extends GameObject {
     public Creature() throws TopologySizeException {
         this.radius = Life.rand.nextInt(30)+20;
         this.color = new Color(Life.rand.nextFloat(), Life.rand.nextFloat(), Life.rand.nextFloat());
-        this.center = new Point<>(Life.rand.nextInt(Board.width), Life.rand.nextInt(Board.height));
+        this.center = new Point(Life.rand.nextInt(Board.width), Life.rand.nextInt(Board.height));
         int topology[] = {3, 1, 2};
         this.net = new Net(topology);
         this.name = RandomNameGenerator.generateName();
@@ -64,10 +74,6 @@ public class Creature extends GameObject {
         return name;
     }
 
-    public Point<Integer> getCenter() {
-        return center;
-    }
-
     public Color getColor() {
         return color;
     }
@@ -79,8 +85,8 @@ public class Creature extends GameObject {
         Double varDirection = netOutputs[0] * 10;
         Double varSpeed = Math.abs(netOutputs[1] * 10);
         setDirection(direction + varDirection);
-        center.x += (int)(Math.cos(Math.toRadians(direction)) * varSpeed);
-        center.y += (int)(Math.cos(Math.toRadians(direction)) * varSpeed);
+        center.x += (long)(Math.cos(Math.toRadians(direction)) * varSpeed);
+        center.y += (long)(Math.cos(Math.toRadians(direction)) * varSpeed);
     }
 
     /**
@@ -100,6 +106,7 @@ public class Creature extends GameObject {
     }
     
     public void removeLife(double lifePoint) {
+        life -= lifePoint;
         if (life <= 0) {
             board.creatureIsDead(this);
         }
@@ -134,7 +141,40 @@ public class Creature extends GameObject {
         g.drawString(getName(), xCenterScreen, yCenterScreen);
     }
  
+    public void eat(Food food) {
+        life += food.getValue();
+    }
+
+    public boolean[] getVisibleCreatures() {
+        return visibleCreatures;
+    }
+
+    public void setVisibleCreatures(boolean[] visibleCreatures) {
+        this.visibleCreatures = visibleCreatures;
+    }
+
+    public boolean[] getVisibleFoods() {
+        return visibleFoods;
+    }
+
+    public void setVisibleFoods(boolean[] visibleFoods) {
+        this.visibleFoods = visibleFoods;
+    }
+
+    public boolean[] getVisibleMeteorologicalEvents() {
+        return visibleMeteorologicalEvents;
+    }
+
+    public void setVisibleMeteorologicalEvents(boolean[] visibleMeteorologicalEvents) {
+        this.visibleMeteorologicalEvents = visibleMeteorologicalEvents;
+    }
+
+    public void setOverCreature(boolean overCreature) {
+        this.overCreature = overCreature;
+    }
+
+    public void setOverMeteorologicalEvent(boolean overMeteorologicalEvent) {
+        this.overMeteorologicalEvent = overMeteorologicalEvent;
+    }
     
-    
-        
 }

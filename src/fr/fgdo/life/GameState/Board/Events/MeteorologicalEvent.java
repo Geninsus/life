@@ -25,14 +25,14 @@ public class MeteorologicalEvent extends GameObject{
         this.type = type;
         this.color = new Color((float)1.0,(float)0.0,(float)0.0,(float)0.5);
         radius = Life.rand.nextInt(100)+100;
-        center = new Point<>(0,0);
+        center = new Point(0,0);
     }
     
     public MeteorologicalEvent(MeteorologicalEventsTypes type, int maxX, int maxY) {
         this.type = type;
         this.color = new Color((float)1.0,(float)0.0,(float)0.0,(float)0.5);
         radius = Life.rand.nextInt(30)+30;
-        center = new Point<>(Life.rand.nextInt(maxX),Life.rand.nextInt(maxY));
+        center = new Point(Life.rand.nextInt(maxX),Life.rand.nextInt(maxY));
     }
 
     public MeteorologicalEvent(MeteorologicalEventsTypes type, int maxX, int maxY, Board board) {
@@ -40,7 +40,7 @@ public class MeteorologicalEvent extends GameObject{
         this.board = board;
     }
 
-    public MeteorologicalEvent(int radius, Point<Integer> center, MeteorologicalEventsTypes type) {
+    public MeteorologicalEvent(int radius, Point center, MeteorologicalEventsTypes type) {
         this.radius = radius;
         this.color = new Color((float)1.0,(float)0.0,(float)0.0,(float)0.5);
         this.center = center;

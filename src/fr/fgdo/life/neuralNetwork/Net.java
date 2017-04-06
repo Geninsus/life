@@ -5,10 +5,15 @@
  */
 package fr.fgdo.life.neuralNetwork;
 
+import fr.fgdo.life.neuralNetwork.exceptions.ArraySizeException;
 import java.util.ArrayList;
 import fr.fgdo.life.neuralNetwork.exceptions.InputsSizeException;
 import fr.fgdo.life.neuralNetwork.exceptions.TopologySizeException;
+<<<<<<< HEAD
 import java.util.Observable;
+=======
+import java.util.Arrays;
+>>>>>>> 76b227ae0f63367801e98232ab322ddb13c12803
 
 /**
  *
@@ -18,8 +23,12 @@ public class Net extends Observable{
     private int[] topology;
     private int numLayer;
     private ArrayList<Layer> layers;
+<<<<<<< HEAD
     private double fitness;
     private NetView netView;
+=======
+    private double mutationRate = 0.05;
+>>>>>>> 76b227ae0f63367801e98232ab322ddb13c12803
 
     /**
      *
@@ -32,7 +41,7 @@ public class Net extends Observable{
         }
         this.topology = topology;
         this.numLayer = topology.length;
-        this.layers = new ArrayList<Layer>();
+        this.layers = new ArrayList<>();
         for (int layerIndex = 0; layerIndex < topology.length; layerIndex++) {
             this.layers.add(new Layer());
             for (int neuronIndex = 0; neuronIndex<topology[layerIndex]+1; neuronIndex++) {
@@ -44,7 +53,48 @@ public class Net extends Observable{
             }
             this.layers.get(layerIndex).get(topology[layerIndex]).setValue(1.0);
         }
+<<<<<<< HEAD
         this.createView();
+=======
+    }
+    
+    /**
+     *
+     * @param topology
+     * @throws TopologySizeException
+     */
+    public Net(Net... parentNets) throws TopologySizeException, ArraySizeException {
+        if(parentNets.length == 0) {
+            throw new ArraySizeException(parentNets.length);
+        }
+        for (int parentNetIndex = 1; parentNetIndex < parentNets.length; parentNetIndex++) {
+            if(!Arrays.equals(parentNets[0].topology, parentNets[parentNetIndex].topology)) {
+                throw new TopologySizeException("Topology don't match.");
+            }
+        }
+        
+        this.topology = Arrays.copyOf(parentNets[0].topology, parentNets[0].topology.length);
+        this.numLayer = topology.length;
+        this.layers = new ArrayList<>();
+        for (int layerIndex = 0; layerIndex < topology.length; layerIndex++) {
+            this.layers.add(new Layer());
+            for (int neuronIndex = 0; neuronIndex<topology[layerIndex]+1; neuronIndex++) {
+                
+                // Get parents neurons
+                Neuron[] parentNeurons = new Neuron[parentNets.length];
+                for(int parentNetIndex = 0; parentNetIndex < parentNets.length; parentNetIndex++) {
+                    parentNeurons[parentNetIndex] = parentNets[parentNetIndex].layers.get(layerIndex).get(neuronIndex);
+                }
+                
+                if(layerIndex+1 == numLayer){
+                    this.layers.get(layerIndex).add(new Neuron(0, neuronIndex, parentNeurons, mutationRate));
+                }else{
+                    this.layers.get(layerIndex).add(new Neuron(topology[layerIndex+1], neuronIndex, parentNeurons, mutationRate));
+                }
+            }
+            this.layers.get(layerIndex).get(topology[layerIndex]).setValue(1.0);
+        }
+>>>>>>> 76b227ae0f63367801e98232ab322ddb13c12803
     }
     
     /**
@@ -90,6 +140,7 @@ public class Net extends Observable{
     public double normalizeOutputs() {
         return ;
     }*/
+<<<<<<< HEAD
 
     /**
      * @return the topology
@@ -104,4 +155,7 @@ public class Net extends Observable{
     public ArrayList<Layer> getLayers() {
         return layers;
     }
+=======
+    
+>>>>>>> 76b227ae0f63367801e98232ab322ddb13c12803
 }

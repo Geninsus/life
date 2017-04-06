@@ -8,15 +8,16 @@ package fr.fgdo.math;
 /**
  *
  * @author Olivier
- * @param <T>
  */
-public class Point<T> {
-    public T x;
-    public T y;
+public class Point {
+    public int x;
+    public int y;
 
-    public Point(T x, T y) {
+    public Point(int x, int y) {
         this.x = x;
         this.y = y;
     }
     
 }
+
+
