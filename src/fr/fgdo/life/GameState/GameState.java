@@ -13,8 +13,6 @@ import fr.fgdo.life.GameState.Board.BoardTabbedView;
 import fr.fgdo.life.GameState.Board.Events.MeteorologicalEvent;
 import fr.fgdo.life.GameState.Board.Events.MeteorologicalEventsTypes;
 import fr.fgdo.life.Life;
-import fr.fgdo.life.MenuCreature.MenuCreatureController;
-import fr.fgdo.life.MenuCreature.MenuCreatureView;
 import fr.fgdo.life.State.State;
 import java.awt.BorderLayout;
 import java.awt.event.MouseEvent;
@@ -72,14 +70,14 @@ public class GameState extends State implements MouseListener,ChangeListener, It
                     try {
                         this.board.addCreature(new Creature(board));
                     } catch (TopologySizeException ex) {
-                        Logger.getLogger(MenuCreatureController.class.getName()).log(Level.SEVERE, null, ex);
+                        
                     }
                     break;
                 case "addFood":
                     this.board.addFood(new Food());
                     break;
                 case "implementCreature":
-                    MenuCreatureController menuControl = new MenuCreatureController(board);
+                    break;
                 case "play":
                     board.run();
                     break;

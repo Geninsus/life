@@ -9,11 +9,8 @@ import fr.fgdo.life.neuralNetwork.exceptions.ArraySizeException;
 import java.util.ArrayList;
 import fr.fgdo.life.neuralNetwork.exceptions.InputsSizeException;
 import fr.fgdo.life.neuralNetwork.exceptions.TopologySizeException;
-<<<<<<< HEAD
 import java.util.Observable;
-=======
 import java.util.Arrays;
->>>>>>> 76b227ae0f63367801e98232ab322ddb13c12803
 
 /**
  *
@@ -23,12 +20,9 @@ public class Net extends Observable{
     private int[] topology;
     private int numLayer;
     private ArrayList<Layer> layers;
-<<<<<<< HEAD
     private double fitness;
     private NetView netView;
-=======
     private double mutationRate = 0.05;
->>>>>>> 76b227ae0f63367801e98232ab322ddb13c12803
 
     /**
      *
@@ -53,9 +47,7 @@ public class Net extends Observable{
             }
             this.layers.get(layerIndex).get(topology[layerIndex]).setValue(1.0);
         }
-<<<<<<< HEAD
         this.createView();
-=======
     }
     
     /**
@@ -94,7 +86,6 @@ public class Net extends Observable{
             }
             this.layers.get(layerIndex).get(topology[layerIndex]).setValue(1.0);
         }
->>>>>>> 76b227ae0f63367801e98232ab322ddb13c12803
     }
     
     /**
@@ -140,7 +131,6 @@ public class Net extends Observable{
     public double normalizeOutputs() {
         return ;
     }*/
-<<<<<<< HEAD
 
     /**
      * @return the topology
@@ -155,7 +145,4 @@ public class Net extends Observable{
     public ArrayList<Layer> getLayers() {
         return layers;
     }
-=======
-    
->>>>>>> 76b227ae0f63367801e98232ab322ddb13c12803
 }
