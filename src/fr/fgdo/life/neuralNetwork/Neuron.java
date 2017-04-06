@@ -5,6 +5,7 @@
  */
 package fr.fgdo.life.neuralNetwork;
 
+import fr.fgdo.life.neuralNetwork.exceptions.ArraySizeException;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -23,10 +24,31 @@ public class Neuron {
      * @param index
      */
     public Neuron(int numOutputs, int index) {
-        this.outputWeights = new ArrayList<Double>();
+        this.outputWeights = new ArrayList<>();
         this.index = index;
         for (int outputIndex = 0; outputIndex < numOutputs; outputIndex++) {
             this.outputWeights.add(randomizeWeight());
+        }
+    }
+    
+    /**
+     *
+     * @param numOutputs
+     * @param index
+     * @param parentNeurons
+     * @param mutationRate
+     * @throws fr.fgdo.life.neuralNetwork.exceptions.ArraySizeException
+     */
+    public Neuron(int numOutputs, int index, Neuron[] parentNeurons, double mutationRate) throws ArraySizeException {
+        this.outputWeights = new ArrayList<>();
+        this.index = index;
+        for (int outputIndex = 0; outputIndex < numOutputs; outputIndex++) {
+            if(parentNeurons.length == 0) {
+                throw new ArraySizeException(parentNeurons.length);
+            } 
+            int randIndex = (int)(Math.random() * (parentNeurons.length + 1));
+            this.outputWeights.add(parentNeurons[randIndex].outputWeights.get(outputIndex));
+            // TODO: Mutation
         }
     }
     
