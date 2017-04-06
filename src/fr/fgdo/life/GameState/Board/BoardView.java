@@ -23,7 +23,7 @@ public class BoardView extends JPanel implements Observer{
     
     private final Board board;
     private int scale = 1;
-    private Point<Integer> center = new Point<Integer>(0,0);
+    private Point center = new Point(0,0);
     private boolean showingCreaturesNames = true;
     private boolean showingCreaturesVisions = true;
     private boolean showingIterations = true;
@@ -46,8 +46,8 @@ public class BoardView extends JPanel implements Observer{
         
         for(Creature creature : board.getCreatures()) {
             int creatureRadius = getLocalX(creature.getRadius(),XMaxScreen);
-            int xCenterScreen = getLocalX(creature.getCenter().x,XMaxScreen);
-            int yCenterScreen = getLocalY(creature.getCenter().y,YMaxScreen);
+            int xCenterScreen = getLocalX((int)creature.getCenter().x,XMaxScreen);
+            int yCenterScreen = getLocalY((int)creature.getCenter().y,YMaxScreen);
             
             g.setColor(creature.getColor());
             if (showingCreaturesVisions) {

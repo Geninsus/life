@@ -10,13 +10,15 @@ package fr.fgdo.math;
  * @author Olivier
  * @param <T>
  */
-public class Point<T> {
-    public T x;
-    public T y;
+public class Point {
+    public long x;
+    public long y;
 
-    public Point(T x, T y) {
+    public Point(long x, long y) {
         this.x = x;
         this.y = y;
     }
     
 }
+
+

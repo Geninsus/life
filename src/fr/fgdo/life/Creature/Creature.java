@@ -34,7 +34,7 @@ public class Creature extends GameObject {
     private String name;
     public ArrayList<GameObject> vision;
     
-    public Creature(int radius, Color color, Point<Integer> center, double direction, Net net) {
+    public Creature(int radius, Color color, Point center, double direction, Net net) {
         this.radius = radius;
         this.color = color;
         this.center = center;
@@ -46,7 +46,7 @@ public class Creature extends GameObject {
     public Creature() throws TopologySizeException {
         this.radius = Life.rand.nextInt(30)+20;
         this.color = new Color(Life.rand.nextFloat(), Life.rand.nextFloat(), Life.rand.nextFloat());
-        this.center = new Point<>(Life.rand.nextInt(Board.width), Life.rand.nextInt(Board.height));
+        this.center = new Point((long)Life.rand.nextInt(Board.width), (long)Life.rand.nextInt(Board.height));
         int topology[] = {3, 1, 2};
         this.net = new Net(topology);
         this.name = RandomNameGenerator.generateName();
@@ -56,10 +56,6 @@ public class Creature extends GameObject {
 
     public String getName() {
         return name;
-    }
-
-    public Point<Integer> getCenter() {
-        return center;
     }
 
     public Color getColor() {
@@ -73,8 +69,8 @@ public class Creature extends GameObject {
         Double varDirection = netOutputs[0] * 10;
         Double varSpeed = Math.abs(netOutputs[1] * 10);
         setDirection(direction + varDirection);
-        center.x += (int)(Math.cos(Math.toRadians(direction)) * varSpeed);
-        center.y += (int)(Math.cos(Math.toRadians(direction)) * varSpeed);
+        center.x += (long)(Math.cos(Math.toRadians(direction)) * varSpeed);
+        center.y += (long)(Math.cos(Math.toRadians(direction)) * varSpeed);
     }
 
     /**

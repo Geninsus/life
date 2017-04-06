@@ -13,9 +13,13 @@ import fr.fgdo.math.Point;
  */
 public class GameObject {
     protected int radius;
-    protected Point<Integer> center;
+    protected Point center;
     
     public int getRadius() {
         return radius;
+    }
+    
+    public Point getCenter() {
+        return center;
     }
 }
