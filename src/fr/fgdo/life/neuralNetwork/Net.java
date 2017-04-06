@@ -119,4 +119,5 @@ public class Net {
     public double normalizeOutputs() {
         return ;
     }*/
+    
 }

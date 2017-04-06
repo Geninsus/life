@@ -22,7 +22,6 @@ public abstract class GameObject extends Observable{
     protected Point center;
     protected Color color;
     protected Board board;
-    protected Area area;
     
     public int getRadius() {
         return radius;
@@ -52,10 +51,6 @@ public abstract class GameObject extends Observable{
         this.board = board;
     }
 
-    public Area getArea() {
-        return area;
-    }
-    
     public boolean intersect(GameObject other) {
         long distanceX = center.x - other.center.x;
         long distanceY = center.y - other.center.y;

@@ -6,6 +6,7 @@
 package fr.fgdo.life.GameState;
 
 import fr.fgdo.life.Creature.Creature;
+import fr.fgdo.life.Food.Food;
 import fr.fgdo.life.GameState.Board.Board;
 import fr.fgdo.life.GameState.Board.BoardView;
 import fr.fgdo.life.GameState.Board.BoardTabbedView;
@@ -75,7 +76,7 @@ public class GameState extends State implements MouseListener,ChangeListener, It
                     }
                     break;
                 case "addFood":
-                    System.out.println("Need to implement : Add Food");
+                    this.board.addFood(new Food());
                     break;
                 case "implementCreature":
                     MenuCreatureController menuControl = new MenuCreatureController(board);

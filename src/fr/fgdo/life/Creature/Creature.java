@@ -8,6 +8,7 @@ package fr.fgdo.life.Creature;
 import com.sun.javafx.geom.Area;
 import com.sun.javafx.geom.Ellipse2D;
 import fr.fgdo.life.Creature.exceptions.FieldOfViewOutOfRangeException;
+import fr.fgdo.life.Food.Food;
 import fr.fgdo.life.GameObject.GameObject;
 import fr.fgdo.life.GameState.Board.Board;
 import fr.fgdo.life.GameState.Board.BoardView;
@@ -38,6 +39,12 @@ public class Creature extends GameObject {
     private final String name;
     public ArrayList<GameObject> vision;
     
+    private boolean[] visibleCreatures = new boolean[3];
+    private boolean[] visibleFoods = new boolean[3];
+    private boolean[] visibleMeteorologicalEvents = new boolean[3];
+    private boolean overCreature;
+    private boolean overMeteorologicalEvent;
+    
     public Creature(int radius, Color color, Point center, double direction, Net net) {
         this.radius = radius;
         this.color = color;
@@ -56,7 +63,6 @@ public class Creature extends GameObject {
         this.name = RandomNameGenerator.generateName();
         setDirection((double)Life.rand.nextInt(360));
         this.fieldOfView = (double)(MIN_FIELD_OF_VIEW + (int)(Math.random() * ((MAX_FIELD_OF_VIEW - MIN_FIELD_OF_VIEW) + 1)));
-        this.area = new Area(new Ellipse2D(center.x-radius, center.y+radius, radius, radius));
     }
     
     public Creature(Board board) throws TopologySizeException {
@@ -135,7 +141,40 @@ public class Creature extends GameObject {
         g.drawString(getName(), xCenterScreen, yCenterScreen);
     }
  
+    public void eat(Food food) {
+        life += food.getValue();
+    }
+
+    public boolean[] getVisibleCreatures() {
+        return visibleCreatures;
+    }
+
+    public void setVisibleCreatures(boolean[] visibleCreatures) {
+        this.visibleCreatures = visibleCreatures;
+    }
+
+    public boolean[] getVisibleFoods() {
+        return visibleFoods;
+    }
+
+    public void setVisibleFoods(boolean[] visibleFoods) {
+        this.visibleFoods = visibleFoods;
+    }
+
+    public boolean[] getVisibleMeteorologicalEvents() {
+        return visibleMeteorologicalEvents;
+    }
+
+    public void setVisibleMeteorologicalEvents(boolean[] visibleMeteorologicalEvents) {
+        this.visibleMeteorologicalEvents = visibleMeteorologicalEvents;
+    }
+
+    public void setOverCreature(boolean overCreature) {
+        this.overCreature = overCreature;
+    }
+
+    public void setOverMeteorologicalEvent(boolean overMeteorologicalEvent) {
+        this.overMeteorologicalEvent = overMeteorologicalEvent;
+    }
     
-    
-        
 }
