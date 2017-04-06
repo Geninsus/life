@@ -97,6 +97,11 @@ public class Board extends Observable implements ActionListener,MeteorologicalEv
         if (creature.getCenter().x - creature.getRadius() < 0) creature.getCenter().x = creature.getRadius();
         if (creature.getCenter().y + creature.getRadius() > height) creature.getCenter().y = height-creature.getRadius();
         if (creature.getCenter().y - creature.getRadius() < 0) creature.getCenter().y = creature.getRadius();
+        for (Creature creatureToTest : creatures) {
+            if (creatureToTest != creature && creature.intersect(creatureToTest)) {
+                System.out.println(creature.getName() + " intersect " + creatureToTest.getName());
+            }
+        }
     }
     
     public void updateCreaturesViews() {

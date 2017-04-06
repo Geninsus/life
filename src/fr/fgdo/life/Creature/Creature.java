@@ -5,6 +5,8 @@
  */
 package fr.fgdo.life.Creature;
 
+import com.sun.javafx.geom.Area;
+import com.sun.javafx.geom.Ellipse2D;
 import fr.fgdo.life.Creature.exceptions.FieldOfViewOutOfRangeException;
 import fr.fgdo.life.GameObject.GameObject;
 import fr.fgdo.life.GameState.Board.Board;
@@ -18,6 +20,7 @@ import fr.fgdo.util.RandomNameGenerator;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.util.ArrayList;
+import javafx.scene.shape.Circle;
 
 /**
  *
@@ -53,6 +56,7 @@ public class Creature extends GameObject {
         this.name = RandomNameGenerator.generateName();
         setDirection((double)Life.rand.nextInt(360));
         this.fieldOfView = (double)(MIN_FIELD_OF_VIEW + (int)(Math.random() * ((MAX_FIELD_OF_VIEW - MIN_FIELD_OF_VIEW) + 1)));
+        this.area = new Area(new Ellipse2D(center.x-radius, center.y+radius, radius, radius));
     }
     
     public Creature(Board board) throws TopologySizeException {
@@ -100,6 +104,7 @@ public class Creature extends GameObject {
     }
     
     public void removeLife(double lifePoint) {
+        life -= lifePoint;
         if (life <= 0) {
             board.creatureIsDead(this);
         }

@@ -5,6 +5,7 @@
  */
 package fr.fgdo.life.GameObject;
 
+import com.sun.javafx.geom.Area;
 import fr.fgdo.life.GameState.Board.Board;
 import fr.fgdo.life.GameState.Board.BoardView;
 import static fr.fgdo.life.GameState.Board.BoardView.getLocalX;
@@ -24,6 +25,7 @@ public abstract class GameObject extends Observable{
     protected Point<Integer> center;
     protected Color color;
     protected Board board;
+    protected Area area;
     
     public int getRadius() {
         return radius;
@@ -53,4 +55,14 @@ public abstract class GameObject extends Observable{
         this.board = board;
     }
 
+    public Area getArea() {
+        return area;
+    }
+    
+    public boolean intersect(GameObject other) {
+        int distanceX = center.x - other.center.x;
+        int distanceY = center.y - other.center.y;
+        int radiusSum = radius + other.radius;
+        return distanceX * distanceX + distanceY * distanceY <= radiusSum * radiusSum;
+    }
 }
