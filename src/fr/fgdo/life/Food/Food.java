@@ -22,7 +22,7 @@ public class Food extends GameObject{
     public Food() {
         this.radius = 10;
         this.color = Color.gray;
-        this.center = new Point<>(Life.rand.nextInt(Board.width), Life.rand.nextInt(Board.height));
+        this.center = new Point(Life.rand.nextInt(Board.width), Life.rand.nextInt(Board.height));
     }
 
     public int getValue() {
