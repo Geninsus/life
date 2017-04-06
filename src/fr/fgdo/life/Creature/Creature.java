@@ -8,6 +8,7 @@ package fr.fgdo.life.Creature;
 import com.sun.javafx.geom.Area;
 import com.sun.javafx.geom.Ellipse2D;
 import fr.fgdo.life.Creature.exceptions.FieldOfViewOutOfRangeException;
+import fr.fgdo.life.Food.Food;
 import fr.fgdo.life.GameObject.GameObject;
 import fr.fgdo.life.GameState.Board.Board;
 import fr.fgdo.life.GameState.Board.BoardView;
@@ -139,7 +140,9 @@ public class Creature extends GameObject {
         g.drawString(getName(), xCenterScreen, yCenterScreen);
     }
  
-    
+    public void eat(Food food) {
+        life += food.getValue();
+    }
     
         
 }

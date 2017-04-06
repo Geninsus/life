@@ -7,9 +7,11 @@ package fr.fgdo.life.GameState.Board;
 
 import fr.fgdo.life.Creature.Creature;
 import fr.fgdo.life.Creature.CreatureListener;
+import fr.fgdo.life.Food.Food;
 import fr.fgdo.life.GameState.Board.Events.MeteorologicalEvent;
 import fr.fgdo.life.GameState.Board.Events.MeteorologicalEventListener;
 import fr.fgdo.life.GameObject.GameObject;
+import fr.fgdo.life.Life;
 import fr.fgdo.life.neuralNetwork.exceptions.InputsSizeException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -27,6 +29,7 @@ import javax.swing.event.EventListenerList;
  */
 public class Board extends Observable implements ActionListener,MeteorologicalEventListener,CreatureListener{
     
+    private boolean generateFood = true;
     private float speed = 1;
     private Timer timerUpdate;
     private long lastUpdate;
@@ -36,8 +39,10 @@ public class Board extends Observable implements ActionListener,MeteorologicalEv
     private final String name;
     ArrayList<Creature> creatures;
     ArrayList<MeteorologicalEvent> meteorologicalEvents;
+    ArrayList<Food> foods;
     ArrayList<MeteorologicalEvent> toRemoveMeteorologicalEvents;
     ArrayList<Creature> toRemoveCreatures;
+    ArrayList<Food> toRemoveFoods;
     public long iteration = 0;
     
     
@@ -46,8 +51,10 @@ public class Board extends Observable implements ActionListener,MeteorologicalEv
         this.timerUpdate = new Timer(20, this);
         this.creatures = new ArrayList<>();
         this.meteorologicalEvents = new ArrayList<>();
+        this.foods = new ArrayList<>();
         this.toRemoveMeteorologicalEvents = new ArrayList<>();
         this.toRemoveCreatures = new ArrayList<>();
+        this.toRemoveFoods = new ArrayList<>();
         Board.width = params.size.x;
         Board.height = params.size.y;
         this.name = params.name;
@@ -62,17 +69,15 @@ public class Board extends Observable implements ActionListener,MeteorologicalEv
     
     public void update() {
         
-        for (Iterator<MeteorologicalEvent> iterator = toRemoveMeteorologicalEvents.iterator(); iterator.hasNext();) {
-            MeteorologicalEvent next = iterator.next();
-            meteorologicalEvents.remove(next);
-            iterator.remove();
+        if (generateFood) {
+            if (Life.rand.nextFloat() > 0.95) {
+                addFood(new Food());
+            }
         }
         
-        for (Iterator<Creature> iterator = toRemoveCreatures.iterator(); iterator.hasNext();) {
-            Creature next = iterator.next();
-            creatures.remove(next);
-            iterator.remove();
-        }
+        updateMeteorologicalEvents();
+        updateCreatures();
+        updateFoods();
         
         for (MeteorologicalEvent meteorologicalEvent : meteorologicalEvents) {
             creatures.forEach((creature) -> {
@@ -102,6 +107,13 @@ public class Board extends Observable implements ActionListener,MeteorologicalEv
                 System.out.println(creature.getName() + " intersect " + creatureToTest.getName());
             }
         }
+        for (Food food : foods) {
+            if (creature.intersect(food)) {
+                creature.eat(food);
+                toRemoveFoods.add(food);
+            }
+        }
+        updateFoods();
     }
     
     public void updateCreaturesViews() {
@@ -119,11 +131,19 @@ public class Board extends Observable implements ActionListener,MeteorologicalEv
     public ArrayList<MeteorologicalEvent> getMeteorologicalEvents() {
         return meteorologicalEvents;
     }
+
+    public ArrayList<Food> getFoods() {
+        return foods;
+    }
     
     public void addCreature(Creature creature) {
         creatures.add(creature);
     }
 
+    public void addFood(Food food) {
+        foods.add(food);
+    }
+    
     public void addEvent(MeteorologicalEvent meteorologicalEvent) {
         meteorologicalEvents.add(meteorologicalEvent);
     }
@@ -176,5 +196,28 @@ public class Board extends Observable implements ActionListener,MeteorologicalEv
         toRemoveCreatures.add(creature);
     }
 
+    public void updateFoods() {
+        for (Iterator<Food> iterator = toRemoveFoods.iterator(); iterator.hasNext();) {
+            Food next = iterator.next();
+            foods.remove(next);
+            iterator.remove();
+        }
+    }
+    
+    public void updateMeteorologicalEvents() {
+        for (Iterator<MeteorologicalEvent> iterator = toRemoveMeteorologicalEvents.iterator(); iterator.hasNext();) {
+            MeteorologicalEvent next = iterator.next();
+            meteorologicalEvents.remove(next);
+            iterator.remove();
+        }
+    }
+    
+    public void updateCreatures() {
+        for (Iterator<Creature> iterator = toRemoveCreatures.iterator(); iterator.hasNext();) {
+            Creature next = iterator.next();
+            creatures.remove(next);
+            iterator.remove();
+        }
+    }
     
 }
