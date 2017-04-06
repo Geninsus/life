@@ -27,6 +27,7 @@ public class BoardTabbedView extends JTabbedPane implements Observer{
 
     JPanel addTab;
     JPanel optionsTab;
+    JPanel eventsTab;
     
     JButton playButton;
     JButton pauseButton;
@@ -118,6 +119,17 @@ public class BoardTabbedView extends JTabbedPane implements Observer{
         
         optionsTab.add(centerPanel,BorderLayout.CENTER);
         this.addTab("Options", optionsTab);
+        
+        
+        /* Events TAB */
+        eventsTab = new JPanel();
+        
+        
+        JButton addFireButton = new JButton("Add Fire");
+        addFireButton.setName("addFire");
+        addFireButton.addMouseListener(gameState);
+        eventsTab.add(addFireButton);
+        this.addTab("Events",eventsTab);
     }
 
     @Override

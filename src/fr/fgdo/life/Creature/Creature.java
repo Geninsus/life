@@ -5,9 +5,12 @@
  */
 package fr.fgdo.life.Creature;
 
+import com.sun.javafx.geom.Area;
+import com.sun.javafx.geom.Ellipse2D;
 import fr.fgdo.life.Creature.exceptions.FieldOfViewOutOfRangeException;
 import fr.fgdo.life.GameObject.GameObject;
 import fr.fgdo.life.GameState.Board.Board;
+import fr.fgdo.life.GameState.Board.BoardView;
 import fr.fgdo.life.Life;
 import fr.fgdo.life.neuralNetwork.Net;
 import fr.fgdo.life.neuralNetwork.exceptions.InputsSizeException;
@@ -15,7 +18,9 @@ import fr.fgdo.life.neuralNetwork.exceptions.TopologySizeException;
 import fr.fgdo.math.Point;
 import fr.fgdo.util.RandomNameGenerator;
 import java.awt.Color;
+import java.awt.Graphics;
 import java.util.ArrayList;
+import javafx.scene.shape.Circle;
 
 /**
  *
@@ -27,11 +32,10 @@ public class Creature extends GameObject {
     private static final int MAX_FIELD_OF_VIEW = 50;
     
     private Net net;
-    private Color color;
-    private double life = 100;
+    private double life = Life.rand.nextInt(500)+500;
     private double direction;
     private double fieldOfView = 25;
-    private String name;
+    private final String name;
     public ArrayList<GameObject> vision;
     
     public Creature(int radius, Color color, Point center, double direction, Net net) {
@@ -46,12 +50,18 @@ public class Creature extends GameObject {
     public Creature() throws TopologySizeException {
         this.radius = Life.rand.nextInt(30)+20;
         this.color = new Color(Life.rand.nextFloat(), Life.rand.nextFloat(), Life.rand.nextFloat());
-        this.center = new Point((long)Life.rand.nextInt(Board.width), (long)Life.rand.nextInt(Board.height));
+        this.center = new Point(Life.rand.nextInt(Board.width), Life.rand.nextInt(Board.height));
         int topology[] = {3, 1, 2};
         this.net = new Net(topology);
         this.name = RandomNameGenerator.generateName();
         setDirection((double)Life.rand.nextInt(360));
         this.fieldOfView = (double)(MIN_FIELD_OF_VIEW + (int)(Math.random() * ((MAX_FIELD_OF_VIEW - MIN_FIELD_OF_VIEW) + 1)));
+        this.area = new Area(new Ellipse2D(center.x-radius, center.y+radius, radius, radius));
+    }
+    
+    public Creature(Board board) throws TopologySizeException {
+        this();
+        this.board = board;
     }
 
     public String getName() {
@@ -63,7 +73,7 @@ public class Creature extends GameObject {
     }
     
     public void update() throws InputsSizeException {
-        this.life -= 0.1;
+        this.removeLife(1);
         Double netInputs[] = {this.life, Life.rand.nextDouble()*4-2, Life.rand.nextDouble()*4-2};
         Double netOutputs[] = net.feedForward(netInputs);
         Double varDirection = netOutputs[0] * 10;
@@ -88,6 +98,13 @@ public class Creature extends GameObject {
         if(direction < 0) direction += 360;
         this.direction = direction;
     }
+    
+    public void removeLife(double lifePoint) {
+        life -= lifePoint;
+        if (life <= 0) {
+            board.creatureIsDead(this);
+        }
+    }
 
     /**
      * @return the fieldOfView
@@ -105,6 +122,20 @@ public class Creature extends GameObject {
         }
         this.fieldOfView = fieldOfView;
     }
+
+    @Override
+    public void draw(Graphics g, int screenWidth, int screenHeight, int boardWidth, int boardHeight) {
+        super.draw(g, screenWidth, screenHeight, boardWidth, boardHeight);
+        int xCenterScreen = BoardView.getLocalX(getCenter().x,screenWidth,boardWidth);
+        int yCenterScreen = BoardView.getLocalY(getCenter().y,screenHeight,boardHeight);
+        g.drawLine(xCenterScreen, yCenterScreen, xCenterScreen + (int) (Math.cos(Math.toRadians(getDirection())) * 100), yCenterScreen + (int) (Math.sin(Math.toRadians(getDirection())) * 100));
+        g.drawLine(xCenterScreen, yCenterScreen, xCenterScreen + (int) (Math.cos(Math.toRadians(getDirection() + getFieldOfView())) * 100), yCenterScreen + (int) (Math.sin(Math.toRadians(getDirection() + getFieldOfView())) * 100));
+        g.drawLine(xCenterScreen, yCenterScreen, xCenterScreen + (int) (Math.cos(Math.toRadians(getDirection() - getFieldOfView())) * 100), yCenterScreen + (int) (Math.sin(Math.toRadians(getDirection() - getFieldOfView())) * 100));
+        g.setColor(Color.BLACK);
+        g.drawString(getName(), xCenterScreen, yCenterScreen);
+    }
  
+    
+    
         
 }

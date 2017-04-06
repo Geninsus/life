@@ -3,21 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package fr.fgdo.math;
+package fr.fgdo.life.GameState.Board.Events;
 
 /**
  *
- * @author Olivier
+ * @author olivbau
  */
-public class Point {
-    public int x;
-    public int y;
-
-    public Point(int x, int y) {
-        this.x = x;
-        this.y = y;
-    }
-    
+public enum MeteorologicalEventsTypes {
+    FIRE,
+    STORM;
 }
-
-

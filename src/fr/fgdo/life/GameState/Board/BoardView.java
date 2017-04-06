@@ -6,6 +6,7 @@
 package fr.fgdo.life.GameState.Board;
 
 import fr.fgdo.life.Creature.Creature;
+import fr.fgdo.life.GameState.Board.Events.MeteorologicalEvent;
 import fr.fgdo.math.Point;
 import fr.fgdo.math.Vector2;
 import java.awt.Color;
@@ -44,32 +45,25 @@ public class BoardView extends JPanel implements Observer{
         int XMaxScreen = getXYMaxScreen().x;
         int YMaxScreen = getXYMaxScreen().y;
         
-        for(Creature creature : board.getCreatures()) {
-            int creatureRadius = getLocalX(creature.getRadius(),XMaxScreen);
-            int xCenterScreen = getLocalX((int)creature.getCenter().x,XMaxScreen);
-            int yCenterScreen = getLocalY((int)creature.getCenter().y,YMaxScreen);
-            
-            g.setColor(creature.getColor());
-            if (showingCreaturesVisions) {
-                g.drawLine(xCenterScreen, yCenterScreen, xCenterScreen + (int) (Math.cos(Math.toRadians(creature.getDirection())) * 100), yCenterScreen + (int) (Math.sin(Math.toRadians(creature.getDirection())) * 100));
-                g.drawLine(xCenterScreen, yCenterScreen, xCenterScreen + (int) (Math.cos(Math.toRadians(creature.getDirection() + creature.getFieldOfView())) * 100), yCenterScreen + (int) (Math.sin(Math.toRadians(creature.getDirection() + creature.getFieldOfView())) * 100));
-                g.drawLine(xCenterScreen, yCenterScreen, xCenterScreen + (int) (Math.cos(Math.toRadians(creature.getDirection() - creature.getFieldOfView())) * 100), yCenterScreen + (int) (Math.sin(Math.toRadians(creature.getDirection() - creature.getFieldOfView())) * 100));
-            }
-            g.fillOval(xCenterScreen - creatureRadius, yCenterScreen - creatureRadius,getLocalX(creature.getRadius()*2, XMaxScreen),getLocalX(creature.getRadius()*2, XMaxScreen));
-            g.setColor(Color.BLACK);
-            if (showingCreaturesNames) g.drawString(creature.getName(), xCenterScreen, yCenterScreen);
+
+        for (MeteorologicalEvent meteorologicalEvent : board.getMeteorologicalEvents()) {
+            meteorologicalEvent.draw(g,XMaxScreen,YMaxScreen,board.getWidth(),board.getHeight());
         }
+        for (Creature creature : board.getCreatures()) {
+            creature.draw(g,XMaxScreen,YMaxScreen,board.getWidth(),board.getHeight());
+        }
+        g.setColor(Color.BLACK);
         if(showingIterations) g.drawString(Long.toString(board.iteration), 0, 10);
-        g.drawRect(0, 0, getLocalX(board.getWidth(), XMaxScreen), getLocalY(0, YMaxScreen));
+        g.drawRect(0, 0, getLocalX(board.getWidth(), XMaxScreen, board.getWidth()), getLocalY(0, YMaxScreen, board.getHeight()));
         
     }
     
-    public int getLocalX(int x, int maxScreenX) {
-        return (int)(x*(float)maxScreenX/board.getWidth());
+    public static int getLocalX(int x, int maxScreenX, int width) {
+        return (int)(x*(float)maxScreenX/width);
     }
     
-    public int getLocalY(int y,int maxScreenY) {
-        return (int)((y-board.getHeight())*-1*(float)maxScreenY/board.getHeight());
+    public static int getLocalY(int y,int maxScreenY, int height) {
+        return (int)((y-height)*-1*(float)maxScreenY/height);
     }
 
     public void showingCreaturesNames(boolean showingCreaturesNames) {
