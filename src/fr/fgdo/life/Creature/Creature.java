@@ -35,7 +35,8 @@ public class Creature extends GameObject {
     private static final int MAX_FIELD_OF_VIEW = 50;
     
     private Net net;
-    private double life = Life.rand.nextInt(500)+500;
+    //private double life = Life.rand.nextInt(500)+500;
+    private double life = 255;
     private double direction;
     private double fieldOfView = 25;
     private final String name;
@@ -60,7 +61,7 @@ public class Creature extends GameObject {
         this.radius = Life.rand.nextInt(30)+20;
         this.color = new Color(Life.rand.nextFloat(), Life.rand.nextFloat(), Life.rand.nextFloat());
         this.center = new Point(Life.rand.nextInt(Board.width), Life.rand.nextInt(Board.height));
-        int topology[] = {3, 1, 2};
+        int topology[] = {1, 1, 2};
         this.net = new Net(topology);
         this.name = RandomNameGenerator.generateName();
         setDirection((double)Life.rand.nextInt(360));
@@ -88,8 +89,10 @@ public class Creature extends GameObject {
     }
 
     public void update() throws InputsSizeException {
+        this.color = new Color(255-(int)life, 255, 0);
         this.removeLife(1);
-        Double netInputs[] = {this.life, Life.rand.nextDouble()*4-2, Life.rand.nextDouble()*4-2};
+        double food = (visibleFoods[1])? 1 : 0;
+        Double netInputs[] = {food};
         Double netOutputs[] = net.feedForward(netInputs);
         Double varDirection = netOutputs[0] * 10;
         Double varSpeed = Math.abs(netOutputs[1] * 10);
@@ -152,6 +155,7 @@ public class Creature extends GameObject {
  
     public void eat(Food food) {
         life += food.getValue();
+        if(life > 255) life = 255;
     }
 
     public boolean[] getVisibleCreatures() {

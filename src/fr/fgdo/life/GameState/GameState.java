@@ -68,13 +68,15 @@ public class GameState extends State implements MouseListener,ChangeListener, It
             switch(button.getName()) {
                 case "addCreature":
                     try {
-                        this.board.addCreature(new Creature(board));
+                        for (int i = 0; i < 30; i++) {
+                            this.board.addCreature(new Creature(board));
+                        }
                     } catch (TopologySizeException ex) {
                         
                     }
                     break;
                 case "addFood":
-                    for (int i = 0; i < 1000; i++) {
+                    for (int i = 0; i < 100; i++) {
                         this.board.addFood(new Food());
                     }
                     
