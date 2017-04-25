@@ -47,6 +47,9 @@ public class BoardView extends JPanel implements Observer{
         int YMaxScreen = getXYMaxScreen().y;
         
 
+        
+        
+        
         for (MeteorologicalEvent meteorologicalEvent : board.getMeteorologicalEvents()) {
             meteorologicalEvent.draw(g,XMaxScreen,YMaxScreen,board.getWidth(),board.getHeight());
         }
@@ -58,8 +61,22 @@ public class BoardView extends JPanel implements Observer{
         }
         g.setColor(Color.BLACK);
         if(showingIterations) g.drawString(Long.toString(board.iteration), 0, 10);
+        try {
+            if (getMousePosition().x <= XMaxScreen && getMousePosition().y <= YMaxScreen) {
+                g.drawString(Integer.toString(getBackX(getMousePosition().x, XMaxScreen, board.getWidth()))+ "," + getBackY(getMousePosition().y, YMaxScreen, board.getHeight()), getMousePosition().x, getMousePosition().y);
+            }
+        } catch (Exception e) {
+        }
         g.drawRect(0, 0, getLocalX(board.getWidth(), XMaxScreen, board.getWidth()), getLocalY(0, YMaxScreen, board.getHeight()));
         
+    }
+    
+    public static int getBackX(int localX, int maxScreenX, int width) {
+        return (int)(localX*(float)width/maxScreenX);
+    }
+    
+    public static int getBackY(int localY, int maxScreenY, int height) {
+        return (height+((localY+maxScreenY)*height)/(-1*maxScreenY))*-1;
     }
     
     public static int getLocalX(int x, int maxScreenX, int width) {
