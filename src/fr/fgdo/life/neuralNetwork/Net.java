@@ -9,16 +9,19 @@ import fr.fgdo.life.neuralNetwork.exceptions.ArraySizeException;
 import java.util.ArrayList;
 import fr.fgdo.life.neuralNetwork.exceptions.InputsSizeException;
 import fr.fgdo.life.neuralNetwork.exceptions.TopologySizeException;
+import java.util.Observable;
 import java.util.Arrays;
 
 /**
  *
  * @author guillaume
  */
-public class Net {
+public class Net extends Observable{
     private int[] topology;
     private int numLayer;
     private ArrayList<Layer> layers;
+    private double fitness;
+    private NetView netView;
     private double mutationRate = 0.05;
 
     /**
@@ -44,6 +47,7 @@ public class Net {
             }
             this.layers.get(layerIndex).get(topology[layerIndex]).setValue(1.0);
         }
+        this.createView();
     }
     
     /**
@@ -91,25 +95,33 @@ public class Net {
      * @throws InputsSizeException
      */
     public Double[] feedForward(Double[] inputs) throws InputsSizeException{
-        if(inputs.length != layers.get(0).size()-1){
-            throw new InputsSizeException(inputs.length,layers.get(0).size()-1);
+        if(inputs.length != getLayers().get(0).size()-1){
+            throw new InputsSizeException(inputs.length,getLayers().get(0).size()-1);
         }
-        for (int inputIndex = 0; inputIndex < topology[0]; inputIndex++) {
-            layers.get(0).get(inputIndex).setValue(inputs[inputIndex]);
+        for (int inputIndex = 0; inputIndex < getTopology()[0]; inputIndex++) {
+            getLayers().get(0).get(inputIndex).setValue(inputs[inputIndex]);
         }
         //normalize
-        Double[] outputs = new Double[topology[numLayer-1]];
+        Double[] outputs = new Double[getTopology()[numLayer-1]];
         Layer previousLayer;
-        for (int layerIndex = 1; layerIndex < layers.size(); layerIndex++)  {
-            previousLayer = layers.get(layerIndex-1);
-            for (int neuronIndex = 0; neuronIndex < topology[layerIndex]; neuronIndex++) {
-                layers.get(layerIndex).get(neuronIndex).feedForward(previousLayer);
-                if(layerIndex == layers.size()-1){
-                    outputs[neuronIndex] = layers.get(layerIndex).get(neuronIndex).getValue();
+        for (int layerIndex = 1; layerIndex < getLayers().size(); layerIndex++)  {
+            previousLayer = getLayers().get(layerIndex-1);
+            for (int neuronIndex = 0; neuronIndex < getTopology()[layerIndex]; neuronIndex++) {
+                getLayers().get(layerIndex).get(neuronIndex).feedForward(previousLayer);
+                if(layerIndex == getLayers().size()-1){
+                    outputs[neuronIndex] = getLayers().get(layerIndex).get(neuronIndex).getValue();
                 }
             }
         }
         return outputs;
+    }
+    
+    private void createView() {
+        this.netView = new NetView(this);
+    }
+    
+    private void show() {
+        
     }
     
     /*public double normalizeInputs() {
@@ -119,5 +131,18 @@ public class Net {
     public double normalizeOutputs() {
         return ;
     }*/
-    
+
+    /**
+     * @return the topology
+     */
+    public int[] getTopology() {
+        return topology;
+    }
+
+    /**
+     * @return the layers
+     */
+    public ArrayList<Layer> getLayers() {
+        return layers;
+    }
 }
