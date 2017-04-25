@@ -18,6 +18,7 @@ import fr.fgdo.life.neuralNetwork.exceptions.InputsSizeException;
 import fr.fgdo.life.neuralNetwork.exceptions.TopologySizeException;
 import fr.fgdo.math.Point;
 import fr.fgdo.util.RandomNameGenerator;
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.util.ArrayList;
@@ -80,6 +81,7 @@ public class Creature extends GameObject {
     
     public void update() throws InputsSizeException {
         this.removeLife(1);
+        System.out.println(visibleFoods[0] + " - " + visibleFoods[1] + " - " + visibleFoods[2]);
         Double netInputs[] = {this.life, Life.rand.nextDouble()*4-2, Life.rand.nextDouble()*4-2};
         Double netOutputs[] = net.feedForward(netInputs);
         Double varDirection = netOutputs[0] * 10;
@@ -149,24 +151,24 @@ public class Creature extends GameObject {
         return visibleCreatures;
     }
 
-    public void setVisibleCreatures(boolean[] visibleCreatures) {
-        this.visibleCreatures = visibleCreatures;
+    public void setVisibleCreatures(int index, boolean value) {
+        this.visibleCreatures[index] = value;
     }
 
     public boolean[] getVisibleFoods() {
         return visibleFoods;
     }
 
-    public void setVisibleFoods(boolean[] visibleFoods) {
-        this.visibleFoods = visibleFoods;
+    public void setVisibleFoods(int index, boolean value) {
+        this.visibleFoods[index] = value;
     }
 
     public boolean[] getVisibleMeteorologicalEvents() {
         return visibleMeteorologicalEvents;
     }
 
-    public void setVisibleMeteorologicalEvents(boolean[] visibleMeteorologicalEvents) {
-        this.visibleMeteorologicalEvents = visibleMeteorologicalEvents;
+    public void setVisibleMeteorologicalEvents(int index, boolean value) {
+        this.visibleMeteorologicalEvents[index] = value;
     }
 
     public void setOverCreature(boolean overCreature) {

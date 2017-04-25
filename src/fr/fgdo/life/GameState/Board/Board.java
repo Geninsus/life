@@ -22,7 +22,6 @@ import java.util.Observable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.Timer;
-import javax.swing.event.EventListenerList;
 
 /**
  *
@@ -122,7 +121,7 @@ public class Board extends Observable implements ActionListener,MeteorologicalEv
         if (creature.getCenter().y - creature.getRadius() < 0) creature.getCenter().y = creature.getRadius();
         for (Creature creatureToTest : creatures) {
             if (creatureToTest != creature && creature.intersect(creatureToTest)) {
-                System.out.println(creature.getName() + " intersect " + creatureToTest.getName());
+                //System.out.println(creature.getName() + " intersect " + creatureToTest.getName());
             }
         }
         for (Food food : foods) {
@@ -169,7 +168,19 @@ public class Board extends Observable implements ActionListener,MeteorologicalEv
                 int lineY = creature.getCenter().y + (int) (Math.sin(Math.toRadians(creature.getDirection())) * 100);
                 
                 if(getCircleLineIntersectionPoint(creature.getCenter(), new Point(lineX, lineY), otherGameObject.getCenter(), otherGameObject.getRadius()).size() > 0) {
-                    System.out.println(creature.getName() + " voit qqch");
+                    
+                    creature.setVisibleFoods(1, false);
+                    creature.setVisibleCreatures(1, false);
+                    
+                    if (otherGameObject instanceof Food) {
+                        creature.setVisibleFoods(1, true);
+                    }
+                    
+                    if (otherGameObject instanceof Food) {
+                        creature.setVisibleCreatures(1, true);
+                    }
+                } else {
+                    
                 }
                 
             }

@@ -11,7 +11,6 @@ import fr.fgdo.life.GameState.Board.Board;
 import fr.fgdo.life.Life;
 import fr.fgdo.math.Point;
 import java.awt.Color;
-import java.util.Observable;
 
 /**
  *
