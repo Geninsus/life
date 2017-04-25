@@ -14,6 +14,7 @@ import fr.fgdo.life.GameState.Board.Board;
 import fr.fgdo.life.GameState.Board.BoardView;
 import fr.fgdo.life.Life;
 import fr.fgdo.life.neuralNetwork.Net;
+import fr.fgdo.life.neuralNetwork.exceptions.ArraySizeException;
 import fr.fgdo.life.neuralNetwork.exceptions.InputsSizeException;
 import fr.fgdo.life.neuralNetwork.exceptions.TopologySizeException;
 import fr.fgdo.math.Point;
@@ -65,6 +66,16 @@ public class Creature extends GameObject {
         setDirection((double)Life.rand.nextInt(360));
         this.fieldOfView = 30;
         //this.fieldOfView = (double)(MIN_FIELD_OF_VIEW + (int)(Math.random() * ((MAX_FIELD_OF_VIEW - MIN_FIELD_OF_VIEW) + 1)));
+    }
+    
+    public Creature(Creature creatureA, Creature creatureB) throws TopologySizeException, ArraySizeException {
+        this.radius = creatureA.radius + Life.rand.nextInt(10) - Life.rand.nextInt(10);
+        this.color = creatureA.color;
+        this.center = creatureA.center;
+        this.net = new Net(creatureA.net,creatureB.net);
+        this.name = RandomNameGenerator.generateName();
+        setDirection((double)Life.rand.nextInt(360));
+        this.fieldOfView = 30;
     }
     
     public Creature(Board board) throws TopologySizeException {
