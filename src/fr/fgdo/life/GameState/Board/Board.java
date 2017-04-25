@@ -14,9 +14,13 @@ import fr.fgdo.life.GameObject.GameObject;
 import fr.fgdo.life.Life;
 import fr.fgdo.life.neuralNetwork.exceptions.InputsSizeException;
 import fr.fgdo.math.Point;
+import java.awt.Color;
+import java.awt.List;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.Observable;
 import java.util.logging.Level;
@@ -163,13 +167,19 @@ public class Board extends Observable implements ActionListener,MeteorologicalEv
         
         for (GameObject otherGameObject : gameObjects) {
             if(otherGameObject != creature) {
-                
+                                        
                 int lineX = creature.getCenter().x + (int) (Math.cos(Math.toRadians(creature.getDirection())) * 100);
-                int lineY = creature.getCenter().y + (int) (Math.sin(Math.toRadians(creature.getDirection())) * 100);
-                
+                int lineY = creature.getCenter().y - (int) (Math.sin(Math.toRadians(creature.getDirection())) * 100);
+                                
                 if(getCircleLineIntersectionPoint(creature.getCenter(), new Point(lineX, lineY), otherGameObject.getCenter(), otherGameObject.getRadius()).size() > 0) {
+                    if((otherGameObject.getCenter().x - creature.getCenter().x)*(otherGameObject.getCenter().x - creature.getCenter().x)+(otherGameObject.getCenter().y - creature.getCenter().y)*(otherGameObject.getCenter().y - creature.getCenter().y) > 100*100) {
+                       otherGameObject.setColor(Color.RED);
+                    } else {
+                       otherGameObject.setColor(Color.GREEN); 
+                    }
                     creature.setVisibleFoods(1, true);
                 } else {
+                    otherGameObject.setColor(Color.BLACK);
                     creature.setVisibleFoods(1, false);
                 }
                 
@@ -177,15 +187,15 @@ public class Board extends Observable implements ActionListener,MeteorologicalEv
         }
     }
     
-    public ArrayList<Point> getCircleLineIntersectionPoint(Point pointA, Point pointB, Point center, int radius) {
-        int baX = pointB.x - pointA.x;
-        int baY = pointB.y - pointA.y;
-        int caX = center.x - pointA.x;
-        int caY = center.y - pointA.y;
+    public ArrayList<Point> getCircleLineIntersectionPoint(Point pointA,Point pointB, Point center, double radius) {
+        double baX = pointB.x - pointA.x;
+        double baY = pointB.y - pointA.y;
+        double caX = center.x - pointA.x;
+        double caY = center.y - pointA.y;
 
-        int a = baX * baX + baY * baY;
-        int bBy2 = baX * caX + baY * caY;
-        int c = caX * caX + caY * caY - radius * radius;
+        double a = baX * baX + baY * baY;
+        double bBy2 = baX * caX + baY * caY;
+        double c = caX * caX + caY * caY - radius * radius;
 
         double pBy2 = bBy2 / a;
         double q = c / a;
@@ -194,7 +204,7 @@ public class Board extends Observable implements ActionListener,MeteorologicalEv
         if (disc < 0) {
             return new ArrayList<>();
         }
-
+        // if disc == 0 ... dealt with later
         double tmpSqrt = Math.sqrt(disc);
         double abScalingFactor1 = -pBy2 + tmpSqrt;
         double abScalingFactor2 = -pBy2 - tmpSqrt;
@@ -217,25 +227,21 @@ public class Board extends Observable implements ActionListener,MeteorologicalEv
            upperY = pointA.y; 
         }
         
-        ArrayList<Point> arrayList = new ArrayList<>();
+        ArrayList toto = new ArrayList<>();
         
-        Point p1 = new Point((int)(pointA.x - baX * abScalingFactor1), (int)(pointA.y
-                - baY * abScalingFactor1));
-        
-        if(p1.x >= lowerX && (int)p1.x <= upperX && (int)p1.y >= lowerY && (int)p1.y <= upperY) {
-            arrayList.add(p1);
-        }
-        
-        if (disc != 0) { 
-        
-            Point p2 = new Point((int)(pointA.x - baX * abScalingFactor2), (int)(pointA.y
-                    - baY * abScalingFactor2));
-
-            if((int)p2.x >= lowerX && (int)p2.x <= upperX && (int)p2.y >= lowerY && (int)p2.y <= upperY) {
-                arrayList.add(p2);
+        Point p1 = new Point((int)(pointA.x - baX * abScalingFactor1),(int)(pointA.y - baY * abScalingFactor1));
+        if (disc == 0) { // abScalingFactor1 == abScalingFactor2
+            if(p1.x >= lowerX && p1.x < upperX && p1.y >= lowerY && p1.y < upperY) {
+                toto.add(p1);
             }
+            toto.add(p1);
+            return toto;
         }
-        return arrayList;     
+        Point p2 = new Point((int)(pointA.x - baX * abScalingFactor2),(int)(pointA.y - baY * abScalingFactor2));
+            if(p2.x >= lowerX && p2.x < upperX && p2.y >= lowerY && p2.y < upperY) {
+                toto.add(p2);
+            }
+            return toto;
     }
     
     public ArrayList<Creature> getCreatures() {

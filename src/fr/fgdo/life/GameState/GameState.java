@@ -74,7 +74,10 @@ public class GameState extends State implements MouseListener,ChangeListener, It
                     }
                     break;
                 case "addFood":
-                    this.board.addFood(new Food());
+                    for (int i = 0; i < 1000; i++) {
+                        this.board.addFood(new Food());
+                    }
+                    
                     break;
                 case "implementCreature":
                     break;

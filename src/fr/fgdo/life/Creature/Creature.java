@@ -75,13 +75,8 @@ public class Creature extends GameObject {
         return name;
     }
 
-    public Color getColor() {
-        return color;
-    }
-    
     public void update() throws InputsSizeException {
         this.removeLife(1);
-        System.out.println(visibleFoods[0] + " - " + visibleFoods[1] + " - " + visibleFoods[2]);
         Double netInputs[] = {this.life, Life.rand.nextDouble()*4-2, Life.rand.nextDouble()*4-2};
         Double netOutputs[] = net.feedForward(netInputs);
         Double varDirection = netOutputs[0] * 10;
@@ -137,8 +132,8 @@ public class Creature extends GameObject {
         int xCenterScreen = BoardView.getLocalX(getCenter().x,screenWidth,boardWidth);
         int yCenterScreen = BoardView.getLocalY(getCenter().y,screenHeight,boardHeight);
         g.drawLine(xCenterScreen, yCenterScreen, xCenterScreen + (int) (Math.cos(Math.toRadians(getDirection())) * 100), yCenterScreen + (int) (Math.sin(Math.toRadians(getDirection())) * 100));
-        g.drawLine(xCenterScreen, yCenterScreen, xCenterScreen + (int) (Math.cos(Math.toRadians(getDirection() + getFieldOfView())) * 100), yCenterScreen + (int) (Math.sin(Math.toRadians(getDirection() + getFieldOfView())) * 100));
-        g.drawLine(xCenterScreen, yCenterScreen, xCenterScreen + (int) (Math.cos(Math.toRadians(getDirection() - getFieldOfView())) * 100), yCenterScreen + (int) (Math.sin(Math.toRadians(getDirection() - getFieldOfView())) * 100));
+        //g.drawLine(xCenterScreen, yCenterScreen, xCenterScreen + (int) (Math.cos(Math.toRadians(getDirection() + getFieldOfView())) * 100), yCenterScreen + (int) (Math.sin(Math.toRadians(getDirection() + getFieldOfView())) * 100));
+        //g.drawLine(xCenterScreen, yCenterScreen, xCenterScreen + (int) (Math.cos(Math.toRadians(getDirection() - getFieldOfView())) * 100), yCenterScreen + (int) (Math.sin(Math.toRadians(getDirection() - getFieldOfView())) * 100));
         g.setColor(Color.BLACK);
         g.drawString(getName(), xCenterScreen, yCenterScreen);
     }
