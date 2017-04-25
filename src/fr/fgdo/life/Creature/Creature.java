@@ -91,14 +91,15 @@ public class Creature extends GameObject {
     public void update() throws InputsSizeException {
         this.color = new Color(255-(int)life, 255, 0);
         this.removeLife(1);
-        double food = (visibleFoods[1])? 1 : 0;
+        double food = (visibleFoods[1])? 1 : -1;
         Double netInputs[] = {food};
         Double netOutputs[] = net.feedForward(netInputs);
         Double varDirection = netOutputs[0] * 10;
         Double varSpeed = Math.abs(netOutputs[1] * 10);
+        System.out.println(netOutputs[1] * 10);
         setDirection(direction + varDirection);
         center.x += (long)(Math.cos(Math.toRadians(direction)) * varSpeed);
-        center.y += (long)(Math.cos(Math.toRadians(direction)) * varSpeed);
+        center.y -= (long)(Math.sin(Math.toRadians(direction)) * varSpeed);
     }
 
     /**
