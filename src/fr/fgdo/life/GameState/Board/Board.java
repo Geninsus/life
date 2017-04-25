@@ -157,9 +157,9 @@ public class Board extends Observable implements ActionListener,MeteorologicalEv
         
         
         ArrayList<GameObject> gameObjects = new ArrayList<>();
-        gameObjects.addAll(creatures);
+        //gameObjects.addAll(creatures);
         gameObjects.addAll(foods);
-        gameObjects.addAll(meteorologicalEvents);
+        //gameObjects.addAll(meteorologicalEvents);
         
         for (GameObject otherGameObject : gameObjects) {
             if(otherGameObject != creature) {
@@ -168,9 +168,7 @@ public class Board extends Observable implements ActionListener,MeteorologicalEv
                 int lineY = creature.getCenter().y + (int) (Math.sin(Math.toRadians(creature.getDirection())) * 100);
                 
                 if(getCircleLineIntersectionPoint(creature.getCenter(), new Point(lineX, lineY), otherGameObject.getCenter(), otherGameObject.getRadius()).size() > 0) {
-                    if (otherGameObject instanceof Food) {
-                        creature.setVisibleFoods(1, true);
-                    }
+                    creature.setVisibleFoods(1, true);
                 } else {
                     creature.setVisibleFoods(1, false);
                 }
