@@ -33,10 +33,11 @@ public class Creature extends GameObject {
     
     private static final int MIN_FIELD_OF_VIEW = 15;
     private static final int MAX_FIELD_OF_VIEW = 50;
+    private static final int MAX_LIFE = 1000;
     
     private Net net;
     //private double life = Life.rand.nextInt(500)+500;
-    private double life = 255;
+    private double life = MAX_LIFE;
     private double direction;
     private double fieldOfView = 25;
     private final String name;
@@ -89,7 +90,7 @@ public class Creature extends GameObject {
     }
 
     public void update() throws InputsSizeException {
-        this.color = new Color(255-(int)life, 255, 0);
+        this.color = new Color(255-(int)(life/MAX_LIFE*255), 255, 0);
         this.removeLife(1);
         double food = (visibleFoods[1])? 1 : -1;
         Double netInputs[] = {food};
@@ -156,7 +157,7 @@ public class Creature extends GameObject {
  
     public void eat(Food food) {
         life += food.getValue();
-        if(life > 255) life = 255;
+        if(life > MAX_LIFE) life = MAX_LIFE;
     }
 
     public boolean[] getVisibleCreatures() {
