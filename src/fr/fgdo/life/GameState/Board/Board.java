@@ -165,6 +165,11 @@ public class Board extends Observable implements ActionListener,MeteorologicalEv
         gameObjects.addAll(foods);
         //gameObjects.addAll(meteorologicalEvents);
         
+        
+        /* RESET capteurs */
+        creature.setVisibleFoods(1, false);
+        
+        
         for (GameObject otherGameObject : gameObjects) {
             if(otherGameObject != creature) {
                                         
@@ -172,15 +177,10 @@ public class Board extends Observable implements ActionListener,MeteorologicalEv
                 int lineY = creature.getCenter().y - (int) (Math.sin(Math.toRadians(creature.getDirection())) * 100);
                                 
                 if(getCircleLineIntersectionPoint(creature.getCenter(), new Point(lineX, lineY), otherGameObject.getCenter(), otherGameObject.getRadius()).size() > 0) {
-                    if((otherGameObject.getCenter().x - creature.getCenter().x)*(otherGameObject.getCenter().x - creature.getCenter().x)+(otherGameObject.getCenter().y - creature.getCenter().y)*(otherGameObject.getCenter().y - creature.getCenter().y) > 100*100) {
-                       otherGameObject.setColor(Color.RED);
-                    } else {
-                       otherGameObject.setColor(Color.GREEN); 
-                    }
+                    otherGameObject.setColor(Color.GREEN); 
                     creature.setVisibleFoods(1, true);
                 } else {
                     otherGameObject.setColor(Color.BLACK);
-                    creature.setVisibleFoods(1, false);
                 }
                 
             }
