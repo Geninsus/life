@@ -168,19 +168,11 @@ public class Board extends Observable implements ActionListener,MeteorologicalEv
                 int lineY = creature.getCenter().y + (int) (Math.sin(Math.toRadians(creature.getDirection())) * 100);
                 
                 if(getCircleLineIntersectionPoint(creature.getCenter(), new Point(lineX, lineY), otherGameObject.getCenter(), otherGameObject.getRadius()).size() > 0) {
-                    
-                    creature.setVisibleFoods(1, false);
-                    creature.setVisibleCreatures(1, false);
-                    
                     if (otherGameObject instanceof Food) {
                         creature.setVisibleFoods(1, true);
                     }
-                    
-                    if (otherGameObject instanceof Food) {
-                        creature.setVisibleCreatures(1, true);
-                    }
                 } else {
-                    
+                    creature.setVisibleFoods(1, false);
                 }
                 
             }
