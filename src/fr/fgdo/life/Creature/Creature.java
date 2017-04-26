@@ -14,6 +14,7 @@ import fr.fgdo.life.GameState.Board.Board;
 import fr.fgdo.life.GameState.Board.BoardView;
 import fr.fgdo.life.Life;
 import fr.fgdo.life.neuralNetwork.Net;
+import fr.fgdo.life.neuralNetwork.exceptions.ArraySizeException;
 import fr.fgdo.life.neuralNetwork.exceptions.InputsSizeException;
 import fr.fgdo.life.neuralNetwork.exceptions.TopologySizeException;
 import fr.fgdo.math.Point;
@@ -32,9 +33,11 @@ public class Creature extends GameObject {
     
     private static final int MIN_FIELD_OF_VIEW = 15;
     private static final int MAX_FIELD_OF_VIEW = 50;
+    private static final int MAX_LIFE = 1000;
     
     private Net net;
-    private double life = Life.rand.nextInt(500)+500;
+    //private double life = Life.rand.nextInt(500)+500;
+    private double life = MAX_LIFE;
     private double direction;
     private double fieldOfView = 25;
     private final String name;
@@ -59,11 +62,22 @@ public class Creature extends GameObject {
         this.radius = Life.rand.nextInt(30)+20;
         this.color = new Color(Life.rand.nextFloat(), Life.rand.nextFloat(), Life.rand.nextFloat());
         this.center = new Point(Life.rand.nextInt(Board.width), Life.rand.nextInt(Board.height));
-        int topology[] = {3, 1, 2};
+        int topology[] = {1, 1, 2};
         this.net = new Net(topology);
         this.name = RandomNameGenerator.generateName();
         setDirection((double)Life.rand.nextInt(360));
-        this.fieldOfView = (double)(MIN_FIELD_OF_VIEW + (int)(Math.random() * ((MAX_FIELD_OF_VIEW - MIN_FIELD_OF_VIEW) + 1)));
+        this.fieldOfView = 30;
+        //this.fieldOfView = (double)(MIN_FIELD_OF_VIEW + (int)(Math.random() * ((MAX_FIELD_OF_VIEW - MIN_FIELD_OF_VIEW) + 1)));
+    }
+    
+    public Creature(Creature creatureA, Creature creatureB) throws TopologySizeException, ArraySizeException {
+        this.radius = creatureA.radius + Life.rand.nextInt(10) - Life.rand.nextInt(10);
+        this.color = creatureA.color;
+        this.center = creatureA.center;
+        this.net = new Net(creatureA.net,creatureB.net);
+        this.name = RandomNameGenerator.generateName();
+        setDirection((double)Life.rand.nextInt(360));
+        this.fieldOfView = 30;
     }
     
     public Creature(Board board) throws TopologySizeException {
@@ -75,20 +89,18 @@ public class Creature extends GameObject {
         return name;
     }
 
-    public Color getColor() {
-        return color;
-    }
-    
     public void update() throws InputsSizeException {
+        this.color = new Color(255-(int)(life/MAX_LIFE*255), 255, 0);
         this.removeLife(1);
-        System.out.println(visibleFoods[0] + " - " + visibleFoods[1] + " - " + visibleFoods[2]);
-        Double netInputs[] = {this.life, Life.rand.nextDouble()*4-2, Life.rand.nextDouble()*4-2};
+        double food = (visibleFoods[1])? 1 : -1;
+        Double netInputs[] = {food};
         Double netOutputs[] = net.feedForward(netInputs);
         Double varDirection = netOutputs[0] * 10;
         Double varSpeed = Math.abs(netOutputs[1] * 10);
+        System.out.println(netOutputs[1] * 10);
         setDirection(direction + varDirection);
         center.x += (long)(Math.cos(Math.toRadians(direction)) * varSpeed);
-        center.y += (long)(Math.cos(Math.toRadians(direction)) * varSpeed);
+        center.y -= (long)(Math.sin(Math.toRadians(direction)) * varSpeed);
     }
 
     /**
@@ -137,14 +149,15 @@ public class Creature extends GameObject {
         int xCenterScreen = BoardView.getLocalX(getCenter().x,screenWidth,boardWidth);
         int yCenterScreen = BoardView.getLocalY(getCenter().y,screenHeight,boardHeight);
         g.drawLine(xCenterScreen, yCenterScreen, xCenterScreen + (int) (Math.cos(Math.toRadians(getDirection())) * 100), yCenterScreen + (int) (Math.sin(Math.toRadians(getDirection())) * 100));
-        g.drawLine(xCenterScreen, yCenterScreen, xCenterScreen + (int) (Math.cos(Math.toRadians(getDirection() + getFieldOfView())) * 100), yCenterScreen + (int) (Math.sin(Math.toRadians(getDirection() + getFieldOfView())) * 100));
-        g.drawLine(xCenterScreen, yCenterScreen, xCenterScreen + (int) (Math.cos(Math.toRadians(getDirection() - getFieldOfView())) * 100), yCenterScreen + (int) (Math.sin(Math.toRadians(getDirection() - getFieldOfView())) * 100));
+        //g.drawLine(xCenterScreen, yCenterScreen, xCenterScreen + (int) (Math.cos(Math.toRadians(getDirection() + getFieldOfView())) * 100), yCenterScreen + (int) (Math.sin(Math.toRadians(getDirection() + getFieldOfView())) * 100));
+        //g.drawLine(xCenterScreen, yCenterScreen, xCenterScreen + (int) (Math.cos(Math.toRadians(getDirection() - getFieldOfView())) * 100), yCenterScreen + (int) (Math.sin(Math.toRadians(getDirection() - getFieldOfView())) * 100));
         g.setColor(Color.BLACK);
         g.drawString(getName(), xCenterScreen, yCenterScreen);
     }
  
     public void eat(Food food) {
         life += food.getValue();
+        if(life > MAX_LIFE) life = MAX_LIFE;
     }
 
     public boolean[] getVisibleCreatures() {

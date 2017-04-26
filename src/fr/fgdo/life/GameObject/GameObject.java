@@ -57,4 +57,11 @@ public abstract class GameObject extends Observable{
         int radiusSum = radius + other.radius;
         return distanceX * distanceX + distanceY * distanceY <= radiusSum * radiusSum;
     }
+
+    /**
+     * @param color the color to set
+     */
+    public void setColor(Color color) {
+        this.color = color;
+    }
 }
