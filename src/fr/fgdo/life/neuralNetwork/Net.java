@@ -29,7 +29,7 @@ public class Net extends Observable{
      * @param topology
      * @throws TopologySizeException
      */
-    public Net(int[] topology) throws TopologySizeException {
+    public Net(int[] topology, String name) throws TopologySizeException {
         if(topology.length < 2){
            throw new TopologySizeException("Net must contain at least 2 layers.");
         }
@@ -47,7 +47,7 @@ public class Net extends Observable{
             }
             this.layers.get(layerIndex).get(topology[layerIndex]).setValue(1.0);
         }
-        this.createView();
+        this.createView(name);
     }
     
     /**
@@ -55,7 +55,7 @@ public class Net extends Observable{
      * @param topology
      * @throws TopologySizeException
      */
-    public Net(Net... parentNets) throws TopologySizeException, ArraySizeException {
+    public Net(String name, Net... parentNets) throws TopologySizeException, ArraySizeException {
         if(parentNets.length == 0) {
             throw new ArraySizeException(parentNets.length);
         }
@@ -86,6 +86,7 @@ public class Net extends Observable{
             }
             this.layers.get(layerIndex).get(topology[layerIndex]).setValue(1.0);
         }
+        this.createView(name);
     }
     
     /**
@@ -116,12 +117,12 @@ public class Net extends Observable{
         return outputs;
     }
     
-    private void createView() {
-        this.netView = new NetView(this);
+    private void createView(String name) {
+        this.netView = new NetView(this, name);
     }
     
-    private void show() {
-        
+    public void show() {
+        this.netView.setVisible(true);
     }
     
     /*public double normalizeInputs() {

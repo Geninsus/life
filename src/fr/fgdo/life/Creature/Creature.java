@@ -67,8 +67,8 @@ public final class Creature extends GameObject {
         this.color = new Color(Life.rand.nextFloat(), Life.rand.nextFloat(), Life.rand.nextFloat());
         this.center = new Point(Life.rand.nextInt(Board.width), Life.rand.nextInt(Board.height));
         int topology[] = {1, 1, 2};
-        this.net = new Net(topology);
         this.name = RandomNameGenerator.generateName();
+        this.net = new Net(topology,this.name);
         setDirection((double)Life.rand.nextInt(360));
         this.fieldOfView = 30;
         //this.fieldOfView = (double)(MIN_FIELD_OF_VIEW + (int)(Math.random() * ((MAX_FIELD_OF_VIEW - MIN_FIELD_OF_VIEW) + 1)));
@@ -88,7 +88,7 @@ public final class Creature extends GameObject {
         for (int i = 0; i < creatures.length; i++) {
             parentsNets[i]=creatures[i].net;
         }
-        this.net = new Net(parentsNets);
+        this.net = new Net(this.name,parentsNets);
         this.board = creatures[0].board;
         this.fieldOfView = creatures[Life.rand.nextInt(creatures.length)].getFieldOfView();
         this.life = MAX_LIFE;
@@ -160,6 +160,10 @@ public final class Creature extends GameObject {
             throw new FieldOfViewOutOfRangeException("Field of view out of range");
         }
         this.fieldOfView = fieldOfView;
+    }
+    
+    public void showNet(){
+        this.net.show();
     }
 
     @Override
