@@ -75,7 +75,7 @@ public class Board extends Observable implements ActionListener,MeteorologicalEv
     
     public void generateFood() {
         if (generateFood) {
-            if (Life.rand.nextFloat() > 0.95) {
+            if (Life.rand.nextFloat() > 0.9) {
                 addFood(new Food());
             }
         }
@@ -83,13 +83,14 @@ public class Board extends Observable implements ActionListener,MeteorologicalEv
     
     public void reproduce() throws TopologySizeException, ArraySizeException {
         
-        if (Life.rand.nextFloat() > 0.99) {
+        if (Life.rand.nextFloat() > 0.999) {
+            
+            for (int i = 0; i < 10; i++) {
+                Creature creature1 = creatures.get((int)(Math.random() * creatures.size()));
+                Creature creature2 = creatures.get((int)(Math.random() * creatures.size())); 
 
-            Creature creature1 = creatures.get((int)(Math.random() * creatures.size()));
-            Creature creature2 = creatures.get((int)(Math.random() * creatures.size())); 
-
-            addCreature(new Creature(creature1, creature2));
-        
+                addCreature(new Creature(creature1, creature2));
+            }
         }
     }
     
