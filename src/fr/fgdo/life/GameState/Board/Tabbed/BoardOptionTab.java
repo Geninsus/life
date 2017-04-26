@@ -3,63 +3,45 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package fr.fgdo.life.GameState.Board;
+package fr.fgdo.life.GameState.Board.Tabbed;
 
 import fr.fgdo.life.GameState.GameState;
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.text.NumberFormat;
 import java.util.Observable;
 import java.util.Observer;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JFormattedTextField;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JSlider;
-import javax.swing.JTabbedPane;
 
 /**
  *
  * @author Olivier
  */
-public class BoardTabbedView extends JTabbedPane implements Observer{
+public class BoardOptionTab extends JPanel implements Observer{
 
-    JPanel addTab;
-    JPanel optionsTab;
-    JPanel eventsTab;
-    
     JButton playButton;
     JButton pauseButton;
     
-    public BoardTabbedView( GameState gameState) {
-        
-        /*Add TAB*/
-        addTab = new JPanel();
-        JButton addCreatureButton = new JButton("Add Creature");
-        addCreatureButton.setName("addCreature");
-        addCreatureButton.addMouseListener(gameState);
-        
-        JButton addFoodButton = new JButton("Add Food");
-        addFoodButton.setName("addFood");
-        addFoodButton.addMouseListener(gameState);
-        
-        JButton implementCreatureButton = new JButton("Implement Creature");
-        implementCreatureButton.setName("implementCreature");
-        implementCreatureButton.addMouseListener(gameState);
-        
-        addTab.add(implementCreatureButton);
-        addTab.add(addCreatureButton);
-        addTab.add(addFoodButton);
-        this.addTab("Add", addTab);
-        
-        
-        
-        /*Option Tab*/
-        /*NORTH*/
-        optionsTab = new JPanel();
-        optionsTab.setLayout(new BorderLayout());
+    JFormattedTextField numberCreatureToGenerateTextField;
+    JFormattedTextField interevalCreatureToGenerateTextField;
+    
+    
+    public BoardOptionTab(GameState gameState) {
+        setLayout(new BorderLayout());
         JPanel controlPanel = new JPanel();
+        
+        NumberFormat numF = NumberFormat.getNumberInstance(); 
+        numF.setMaximumIntegerDigits(7);
         
         JSlider speedSlider = new JSlider(1, 3);
         speedSlider.setMajorTickSpacing(1);
@@ -79,7 +61,7 @@ public class BoardTabbedView extends JTabbedPane implements Observer{
         controlPanel.add(playButton);
         controlPanel.add(pauseButton);
         
-        optionsTab.add(controlPanel, BorderLayout.NORTH);
+        add(controlPanel, BorderLayout.NORTH);
         
         
         /*CENTER*/
@@ -117,21 +99,58 @@ public class BoardTabbedView extends JTabbedPane implements Observer{
         centerPanel.add(showIterationsCheckBox,gbc);
         
         
-        optionsTab.add(centerPanel,BorderLayout.CENTER);
-        this.addTab("Options", optionsTab);
-        
-        
-        /* Events TAB */
-        eventsTab = new JPanel();
-        
-        
-        JButton addFireButton = new JButton("Add Fire");
-        addFireButton.setName("addFire");
-        addFireButton.addMouseListener(gameState);
-        eventsTab.add(addFireButton);
-        this.addTab("Events",eventsTab);
-    }
+        gbc.gridx = 0;
+        gbc.gridy = 3;
+        gbc.gridwidth = 1;
+        centerPanel.add(new JLabel("Add"),gbc);
 
+        gbc.gridx = 1;
+        gbc.gridy = 3;
+        gbc.gridwidth = 1;
+        centerPanel.add(new JLabel("X"),gbc);
+        gbc.gridx = 2;
+        gbc.gridy = 3;
+        centerPanel.add(new JLabel("Creature(s) every"),gbc);
+        gbc.gridx = 3;
+        gbc.gridy = 3;
+        centerPanel.add(new JLabel("Y"),gbc);
+        gbc.gridx = 4;
+        gbc.gridy = 3;
+        centerPanel.add(new JLabel("seconds"),gbc);
+        
+        
+        /*Creature*/
+        gbc.gridx = 0;
+        gbc.gridy = 4;
+        gbc.gridwidth = 1;
+        centerPanel.add(new JLabel("Add"),gbc);
+
+        gbc.gridx = 1;
+        gbc.gridy = 4;
+        gbc.gridwidth = 1;
+        numberCreatureToGenerateTextField = new JFormattedTextField(numF);
+        numberCreatureToGenerateTextField.setValue(50);
+        numberCreatureToGenerateTextField.setPreferredSize(new Dimension(50, 20));
+        numberCreatureToGenerateTextField.setMinimumSize(new Dimension(50, 20));
+        centerPanel.add(numberCreatureToGenerateTextField,gbc);
+        gbc.gridx = 2;
+        gbc.gridy = 4;
+        centerPanel.add(new JLabel("Creature(s) every"),gbc);
+        gbc.gridx = 3;
+        gbc.gridy = 4;
+        interevalCreatureToGenerateTextField = new JFormattedTextField(numF);
+        interevalCreatureToGenerateTextField.setValue(50);
+        interevalCreatureToGenerateTextField.setPreferredSize(new Dimension(50, 20));
+        interevalCreatureToGenerateTextField.setMinimumSize(new Dimension(50, 20));
+        centerPanel.add(interevalCreatureToGenerateTextField,gbc);
+        gbc.gridx = 4;
+        gbc.gridy = 4;
+        centerPanel.add(new JLabel("seconds"),gbc);
+        
+        add(centerPanel,BorderLayout.CENTER);
+        
+    }
+    
     @Override
     public void update(Observable o, Object argO) {
         String arg = (String)argO;

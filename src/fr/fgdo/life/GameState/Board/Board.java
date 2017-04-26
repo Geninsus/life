@@ -12,6 +12,7 @@ import fr.fgdo.life.GameState.Board.Events.MeteorologicalEvent;
 import fr.fgdo.life.GameState.Board.Events.MeteorologicalEventListener;
 import fr.fgdo.life.GameObject.GameObject;
 import fr.fgdo.life.GameState.Board.Events.MeteorologicalEventsTypes;
+import fr.fgdo.life.Life;
 import fr.fgdo.life.neuralNetwork.exceptions.ArraySizeException;
 import fr.fgdo.life.neuralNetwork.exceptions.InputsSizeException;
 import fr.fgdo.life.neuralNetwork.exceptions.TopologySizeException;
@@ -50,6 +51,18 @@ public class Board extends Observable implements ActionListener,MeteorologicalEv
     public long iteration = 0;
     
     
+    /*Config Generate*/
+    public int numberCreatureToGenerate = 10;
+    public int interevalCreatureToGenerate = 1000;
+    public int nextGenerationCreatures = interevalCreatureToGenerate;
+    
+    public int numberFoodToGenerate = 10;
+    public int interevalFoodToGenerate = 1000;
+    public int nextGenerationFoods = interevalFoodToGenerate;
+    
+    public int numberEventToGenerate = 10;
+    public int interevalEventToGenerate = 1000;
+    public int nextGenerationEvents = interevalEventToGenerate;
     
     public Board(BoardParams params) {
         this.timerUpdate = new Timer(20, this);
@@ -75,8 +88,9 @@ public class Board extends Observable implements ActionListener,MeteorologicalEv
     }
     
     public void generateFood() {
-        for (int i = 0; i < 10; i++) {
-            addFood(new Food()); 
+        if (iteration >= nextGenerationFoods) {
+            addFood(numberFoodToGenerate);
+            nextGenerationFoods = (int) (iteration+interevalFoodToGenerate);
         }
     }
     
@@ -85,7 +99,7 @@ public class Board extends Observable implements ActionListener,MeteorologicalEv
     }
     
     public void reproduce() throws TopologySizeException, ArraySizeException {
-        if(creatures.size() < 20) {
+        if (Life.rand.nextFloat() > 0.99) {
           for (int i = 0; i < 30; i++) {
                 Creature creature1 = creatures.get((int)(Math.random() * creatures.size()));
                 Creature creature2 = creatures.get((int)(Math.random() * creatures.size())); 
@@ -157,7 +171,7 @@ public class Board extends Observable implements ActionListener,MeteorologicalEv
                 for (int j = 0; j < gameObjects.size(); j++) {
                     
                     /* CREATURE */
-                    if(gameObjects.get(i) instanceof Creature) {
+                    if(gameObjects.get(j) instanceof Creature) {
                         if(i != j) {
                             Creature otherCreature = (Creature) gameObjects.get(j);
                             
@@ -177,12 +191,12 @@ public class Board extends Observable implements ActionListener,MeteorologicalEv
                         }
                         
                     /* FOOD */
-                    } else if(gameObjects.get(i) instanceof Food) {
-                        Food food = (Food) gameObjects.get(i);
+                    } else if(gameObjects.get(j) instanceof Food) {
+                        Food food = (Food) gameObjects.get(j);
 
                     /* METEOROLOGICALEVENT */
-                    } else if(gameObjects.get(i) instanceof MeteorologicalEvent) {
-                         MeteorologicalEvent meteorologicalEvent = (MeteorologicalEvent) gameObjects.get(i);
+                    } else if(gameObjects.get(j) instanceof MeteorologicalEvent) {
+                         MeteorologicalEvent meteorologicalEvent = (MeteorologicalEvent) gameObjects.get(j);
                     }
             
 
@@ -322,8 +336,19 @@ public class Board extends Observable implements ActionListener,MeteorologicalEv
         gameObjects.add(creature);
     }
 
+    
+    public void addFood() {
+        addFood(new Food());
+    }
+    
     public void addFood(Food food) {
         gameObjects.add(food);
+    }
+    
+    public void addFood(int n) {
+        for (int i = 0; i < n; i++) {
+            addFood();
+        }
     }
     
     public void addEvent(MeteorologicalEvent meteorologicalEvent) {
