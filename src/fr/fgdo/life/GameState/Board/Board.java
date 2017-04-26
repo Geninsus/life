@@ -374,6 +374,6 @@ public class Board extends Observable implements ActionListener,MeteorologicalEv
 
     @Override
     public void creatureIsDead(Creature creature) {
-        toRemoveCreatures.add(creature);
+        creature.toDelete = true;
     }    
 }
