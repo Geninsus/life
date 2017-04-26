@@ -42,6 +42,9 @@ public class Board extends Observable implements ActionListener,MeteorologicalEv
     private final String name;
     ArrayList<GameObject> gameObjects;
     ArrayList<Creature> creatures;
+    
+    public int creatureNumber = 0;
+    
     ArrayList<MeteorologicalEvent> meteorologicalEvents;
     ArrayList<Food> foods;
     ArrayList<MeteorologicalEvent> toRemoveMeteorologicalEvents;
@@ -55,8 +58,8 @@ public class Board extends Observable implements ActionListener,MeteorologicalEv
     public int interevalCreatureToGenerate = 1000;
     public int nextGenerationCreatures = interevalCreatureToGenerate;
     
-    public int numberFoodToGenerate = 10;
-    public int interevalFoodToGenerate = 1000;
+    public int numberFoodToGenerate = 20;
+    public int interevalFoodToGenerate = 60;
     public int nextGenerationFoods = interevalFoodToGenerate;
     
     public int numberEventToGenerate = 10;
@@ -97,11 +100,27 @@ public class Board extends Observable implements ActionListener,MeteorologicalEv
     }
     
     public void reproduce() throws TopologySizeException, ArraySizeException {
-        if (Life.rand.nextFloat() > 0.99) {
+        if (Life.rand.nextFloat() > 0.999) {
           for (int i = 0; i < 30; i++) {
-                Creature creature1 = creatures.get((int)(Math.random() * creatures.size()));
-                Creature creature2 = creatures.get((int)(Math.random() * creatures.size())); 
-
+              
+                int creature1_index = (int)(Math.random() * creatureNumber);
+                int creature2_index = (int)(Math.random() * creatureNumber);
+                
+                
+                Creature creature1 = null;
+                Creature creature2 = null;
+                int index = 0;
+                for (int j = 0; j < gameObjects.size(); j++) {
+                    if(gameObjects.get(j) instanceof Creature) {
+                        if(creature1_index == index) {
+                            creature1 = (Creature)gameObjects.get(j);
+                        }
+                        if(creature2_index == index) {
+                            creature2 = (Creature)gameObjects.get(j);
+                        }
+                        index++;
+                    }
+                }
                 addCreature(new Creature(creature1, creature2));
             }  
         }
@@ -119,7 +138,7 @@ public class Board extends Observable implements ActionListener,MeteorologicalEv
         updateGameObjects();
         removeGameOjects();
         
-        if(creatures.size() > 0) reproduce();
+        if(creatureNumber>0) reproduce();
         
         
         
@@ -215,7 +234,12 @@ public class Board extends Observable implements ActionListener,MeteorologicalEv
         Iterator<GameObject> it = gameObjects.iterator();
         while(it.hasNext()){
             GameObject gameObject = it.next();
-            if(gameObject.toDelete == true)it.remove();
+            if(gameObject.toDelete == true) {
+                if(gameObject instanceof Creature) {
+                    creatureNumber--;
+                }
+                it.remove();
+            }
         }
     }
     
@@ -300,6 +324,7 @@ public class Board extends Observable implements ActionListener,MeteorologicalEv
     
     public void addCreature(Creature creature) {
         gameObjects.add(creature);
+        creatureNumber++;
     }
 
     
