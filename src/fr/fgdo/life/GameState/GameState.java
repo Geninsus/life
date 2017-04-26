@@ -16,6 +16,7 @@ import fr.fgdo.life.GameState.Board.Tabbed.BoardOptionTab;
 import fr.fgdo.life.Life;
 import fr.fgdo.life.State.State;
 import fr.fgdo.life.neuralNetwork.exceptions.ArraySizeException;
+import fr.fgdo.life.neuralNetwork.exceptions.InputsSizeException;
 import java.awt.BorderLayout;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -102,6 +103,8 @@ public class GameState extends State implements MouseListener,ChangeListener, It
                 } catch (TopologySizeException ex) {
                     Logger.getLogger(GameState.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (ArraySizeException ex) {
+                    Logger.getLogger(GameState.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (InputsSizeException ex) {
                     Logger.getLogger(GameState.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
