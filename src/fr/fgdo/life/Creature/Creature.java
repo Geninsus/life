@@ -233,4 +233,14 @@ public final class Creature extends GameObject {
         this.overMeteorologicalEvent = overMeteorologicalEvent;
     }
     
+    
+    public boolean isOverCreature() {
+        return overCreature;
+    }
+
+    public boolean isOverMeteorologicalEvent() {
+        return overMeteorologicalEvent;
+    }
+
+    
 }
