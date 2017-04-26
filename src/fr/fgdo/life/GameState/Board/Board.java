@@ -11,6 +11,7 @@ import fr.fgdo.life.Food.Food;
 import fr.fgdo.life.GameState.Board.Events.MeteorologicalEvent;
 import fr.fgdo.life.GameState.Board.Events.MeteorologicalEventListener;
 import fr.fgdo.life.GameObject.GameObject;
+import fr.fgdo.life.GameState.Board.Events.MeteorologicalEventsTypes;
 import fr.fgdo.life.Life;
 import fr.fgdo.life.neuralNetwork.exceptions.ArraySizeException;
 import fr.fgdo.life.neuralNetwork.exceptions.InputsSizeException;
@@ -74,10 +75,11 @@ public class Board extends Observable implements ActionListener,MeteorologicalEv
     }
     
     public void generateFood() {
-        if(foods.size() < 100) {
-            for (int i = 0; i < 100; i++) {
-               addFood(new Food()); 
-            }
+        if(meteorologicalEvents.size() < 100) {
+            for (int i = 0; i < 10; i++) {
+               //addFood(new Food()); 
+                addEvent(new MeteorologicalEvent(MeteorologicalEventsTypes.FIRE, width, height, this));
+           }
         }
     }
     
@@ -178,11 +180,12 @@ public class Board extends Observable implements ActionListener,MeteorologicalEv
         ArrayList<GameObject> gameObjects = new ArrayList<>();
         //gameObjects.addAll(creatures);
         gameObjects.addAll(foods);
-        //gameObjects.addAll(meteorologicalEvents);
+        gameObjects.addAll(meteorologicalEvents);
         
         
         /* RESET capteurs */
         creature.setVisibleFoods(1, false);
+        creature.setVisibleMeteorologicalEvents(1, false);
         
         
         for (GameObject otherGameObject : gameObjects) {
@@ -192,10 +195,13 @@ public class Board extends Observable implements ActionListener,MeteorologicalEv
                 int lineY = creature.getCenter().y - (int) (Math.sin(Math.toRadians(creature.getDirection())) * 100);
                                 
                 if(getCircleLineIntersectionPoint(creature.getCenter(), new Point(lineX, lineY), otherGameObject.getCenter(), otherGameObject.getRadius()).size() > 0) {
-                    creature.setVisibleFoods(1, true);
-                } else {
-                }
-                
+                    if(otherGameObject instanceof Food) {
+                        creature.setVisibleFoods(1, true);
+                    } else if(otherGameObject instanceof MeteorologicalEvent) {
+                        creature.setVisibleMeteorologicalEvents(1, true);
+                    }
+                    
+                }  
             }
         }
     }

@@ -66,7 +66,7 @@ public final class Creature extends GameObject {
         this.radius = 15;
         this.color = new Color(Life.rand.nextFloat(), Life.rand.nextFloat(), Life.rand.nextFloat());
         this.center = new Point(Life.rand.nextInt(Board.width), Life.rand.nextInt(Board.height));
-        int topology[] = {1, 1, 2};
+        int topology[] = {2, 1, 2};
         this.net = new Net(topology);
         this.name = RandomNameGenerator.generateName();
         setDirection((double)Life.rand.nextInt(360));
@@ -91,7 +91,7 @@ public final class Creature extends GameObject {
         this.net = new Net(parentsNets);
         this.board = creatures[0].board;
         this.fieldOfView = creatures[Life.rand.nextInt(creatures.length)].getFieldOfView();
-        this.life = creatures[Life.rand.nextInt(creatures.length)].getLife();
+        this.life = MAX_LIFE;
         mutate();
     }
     
@@ -105,14 +105,16 @@ public final class Creature extends GameObject {
     }
 
     public void mutate() {
-        
+        //if (Life.rand.nextFloat() < MUTATION_RATE) this.life = MAX_LIFE;
+        if (Life.rand.nextFloat() < MUTATION_RATE) this.radius = Life.rand.nextInt(10)+10;
     }
     
     public void update() throws InputsSizeException {
         this.color = new Color((255-(int)(life/MAX_LIFE*255))%255, 255, 0);
-        this.removeLife(1);
+        //this.removeLife(1);
         double food = (visibleFoods[1])? 1 : -1;
-        Double netInputs[] = {food};
+        double meteorological = (visibleMeteorologicalEvents[1])? 1 : -1;
+        Double netInputs[] = {food, meteorological};
         Double netOutputs[] = net.feedForward(netInputs);
         Double varDirection = netOutputs[0] * 10;
         Double varSpeed = Math.abs(netOutputs[1] * 10);
