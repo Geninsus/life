@@ -41,7 +41,7 @@ public final class Creature extends GameObject {
     private Net net;
     private double direction;
     private double fieldOfView = 25;
-    
+    private double distanceOfView = 100;
     
     /*View*/
     public ArrayList<GameObject> vision;
@@ -71,7 +71,8 @@ public final class Creature extends GameObject {
         int topology[] = {2, 1, 2};
         this.net = new Net(topology);
         this.name = RandomNameGenerator.generateName();
-        setDirection((double)Life.rand.nextInt(360));
+        //setDirection((double)Life.rand.nextInt(360));
+        this.direction = 80;
         this.fieldOfView = 30;
         //this.fieldOfView = (double)(MIN_FIELD_OF_VIEW + (int)(Math.random() * ((MAX_FIELD_OF_VIEW - MIN_FIELD_OF_VIEW) + 1)));
     }
@@ -84,7 +85,7 @@ public final class Creature extends GameObject {
         this.radius = creatures[Life.rand.nextInt(creatures.length)].getRadius();
         this.color = creatures[Life.rand.nextInt(creatures.length)].getColor();
         this.center = new Point(Life.rand.nextInt(Board.width), Life.rand.nextInt(Board.height));
-        this.direction = Life.rand.nextInt(360);
+        this.direction = 0;
         this.name = RandomNameGenerator.generateName();
         Net[] parentsNets = new Net[creatures.length];
         for (int i = 0; i < creatures.length; i++) {
@@ -179,11 +180,12 @@ public final class Creature extends GameObject {
         super.draw(g, screenWidth, screenHeight, boardWidth, boardHeight);
         int xCenterScreen = BoardView.getLocalX(getCenter().x,screenWidth,boardWidth);
         int yCenterScreen = BoardView.getLocalY(getCenter().y,screenHeight,boardHeight);
-        g.drawLine(xCenterScreen, yCenterScreen, xCenterScreen + (int) (Math.cos(Math.toRadians(getDirection())) * 100), yCenterScreen + (int) (Math.sin(Math.toRadians(getDirection())) * 100));
+        if (BoardView.showingCreaturesVisions) g.drawLine(xCenterScreen, yCenterScreen, BoardView.getLocalX(getCenter().x + (int) (Math.cos(-1*Math.toRadians(getDirection())) * distanceOfView),screenHeight,boardHeight), BoardView.getLocalY(getCenter().y + (int) (Math.sin(-1*Math.toRadians(getDirection())) * distanceOfView),screenHeight,boardHeight));
+        //g.drawLine(xCenterScreen, yCenterScreen, xCenterScreen + (int) (Math.cos(Math.toRadians(getDirection())) * 100), yCenterScreen + (int) (Math.sin(Math.toRadians(getDirection())) * 100));
         //g.drawLine(xCenterScreen, yCenterScreen, xCenterScreen + (int) (Math.cos(Math.toRadians(getDirection() + getFieldOfView())) * 100), yCenterScreen + (int) (Math.sin(Math.toRadians(getDirection() + getFieldOfView())) * 100));
         //g.drawLine(xCenterScreen, yCenterScreen, xCenterScreen + (int) (Math.cos(Math.toRadians(getDirection() - getFieldOfView())) * 100), yCenterScreen + (int) (Math.sin(Math.toRadians(getDirection() - getFieldOfView())) * 100));
         g.setColor(Color.BLACK);
-        g.drawString(getName(), xCenterScreen, yCenterScreen);
+        if (BoardView.showingCreaturesNames) g.drawString(getName(), xCenterScreen, yCenterScreen);
     }
  
     public void eat(Food food) {

@@ -375,5 +375,15 @@ public class Board extends Observable implements ActionListener,MeteorologicalEv
     @Override
     public void creatureIsDead(Creature creature) {
         creature.toDelete = true;
-    }    
+
+    }
+
+
+    
+    public void skipFrames(int n) throws TopologySizeException, ArraySizeException, InputsSizeException {
+        for (int i = 0; i < n; i++) {
+            update();
+        }
+    }
+
 }

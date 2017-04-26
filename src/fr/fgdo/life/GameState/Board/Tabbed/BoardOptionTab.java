@@ -8,12 +8,18 @@ package fr.fgdo.life.GameState.Board.Tabbed;
 import fr.fgdo.life.GameState.GameState;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.Panel;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.text.NumberFormat;
 import java.util.Observable;
 import java.util.Observer;
+import javafx.scene.layout.Pane;
+import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -27,19 +33,23 @@ import javax.swing.JSlider;
  *
  * @author Olivier
  */
-public class BoardOptionTab extends JPanel implements Observer{
+public class BoardOptionTab extends JPanel implements Observer, MouseListener{
 
     JButton playButton;
     JButton pauseButton;
+    JButton skipFrameButton;
     
     JFormattedTextField numberCreatureToGenerateTextField;
     JFormattedTextField interevalCreatureToGenerateTextField;
-    
+    static JFormattedTextField numberFramesToSkipTextField;
+
+    public static int getNumberFramesToSkip() {
+        return Integer.parseInt(numberFramesToSkipTextField.getValue().toString());
+    }
     
     public BoardOptionTab(GameState gameState) {
-        setLayout(new BorderLayout());
+        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         JPanel controlPanel = new JPanel();
-        
         NumberFormat numF = NumberFormat.getNumberInstance(); 
         numF.setMaximumIntegerDigits(7);
         
@@ -60,13 +70,26 @@ public class BoardOptionTab extends JPanel implements Observer{
         controlPanel.add(speedSlider);
         controlPanel.add(playButton);
         controlPanel.add(pauseButton);
+        add(controlPanel);
         
-        add(controlPanel, BorderLayout.NORTH);
         
         
-        /*CENTER*/
-        JPanel centerPanel = new JPanel();
-        centerPanel.setLayout(new GridBagLayout());
+        /*SKIP PANEL*/
+        JPanel skipPanel = new JPanel();
+        JButton skipFrameButton = new JButton("Skip Frames");
+        skipFrameButton.addMouseListener(gameState);
+        skipFrameButton.setName("skipFrameButton");
+        numberFramesToSkipTextField = new JFormattedTextField(numF);
+        numberFramesToSkipTextField.setValue(1000);
+        numberFramesToSkipTextField.setPreferredSize(new Dimension(50, 20));
+        numberFramesToSkipTextField.setMinimumSize(new Dimension(50, 20));
+        skipPanel.add(numberFramesToSkipTextField);
+        skipPanel.add(skipFrameButton);
+        add(skipPanel);
+        
+        /*OPTION PANEL*/
+        JPanel optionPanel = new JPanel();
+        optionPanel.setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridwidth = GridBagConstraints.REMAINDER;
         gbc.fill = GridBagConstraints.HORIZONTAL;
@@ -79,7 +102,7 @@ public class BoardOptionTab extends JPanel implements Observer{
         JCheckBox showCreaturesNamesCheckBox = new JCheckBox("Show creatures names");
         showCreaturesNamesCheckBox.setName("showCreaturesNames");
         showCreaturesNamesCheckBox.addItemListener(gameState);
-        centerPanel.add(showCreaturesNamesCheckBox,gbc);
+        optionPanel.add(showCreaturesNamesCheckBox,gbc);
         
         
         gbc.gridx = 0;
@@ -87,7 +110,7 @@ public class BoardOptionTab extends JPanel implements Observer{
         JCheckBox showCreaturesVisionCheckBox = new JCheckBox("Show creatures visions");
         showCreaturesVisionCheckBox.setName("showCreaturesVision");
         showCreaturesVisionCheckBox.addItemListener(gameState);
-        centerPanel.add(showCreaturesVisionCheckBox,gbc);
+        optionPanel.add(showCreaturesVisionCheckBox,gbc);
         
         
         
@@ -96,34 +119,34 @@ public class BoardOptionTab extends JPanel implements Observer{
         JCheckBox showIterationsCheckBox = new JCheckBox("Show iterations");
         showIterationsCheckBox.setName("showIterations");
         showIterationsCheckBox.addItemListener(gameState);
-        centerPanel.add(showIterationsCheckBox,gbc);
+        optionPanel.add(showIterationsCheckBox,gbc);
         
         
         gbc.gridx = 0;
         gbc.gridy = 3;
         gbc.gridwidth = 1;
-        centerPanel.add(new JLabel("Add"),gbc);
+        optionPanel.add(new JLabel("Add"),gbc);
 
         gbc.gridx = 1;
         gbc.gridy = 3;
         gbc.gridwidth = 1;
-        centerPanel.add(new JLabel("X"),gbc);
+        optionPanel.add(new JLabel("X"),gbc);
         gbc.gridx = 2;
         gbc.gridy = 3;
-        centerPanel.add(new JLabel("Creature(s) every"),gbc);
+        optionPanel.add(new JLabel("Creature(s) every"),gbc);
         gbc.gridx = 3;
         gbc.gridy = 3;
-        centerPanel.add(new JLabel("Y"),gbc);
+        optionPanel.add(new JLabel("Y"),gbc);
         gbc.gridx = 4;
         gbc.gridy = 3;
-        centerPanel.add(new JLabel("seconds"),gbc);
+        optionPanel.add(new JLabel("seconds"),gbc);
         
         
         /*Creature*/
         gbc.gridx = 0;
         gbc.gridy = 4;
         gbc.gridwidth = 1;
-        centerPanel.add(new JLabel("Add"),gbc);
+        optionPanel.add(new JLabel("Add"),gbc);
 
         gbc.gridx = 1;
         gbc.gridy = 4;
@@ -132,22 +155,22 @@ public class BoardOptionTab extends JPanel implements Observer{
         numberCreatureToGenerateTextField.setValue(50);
         numberCreatureToGenerateTextField.setPreferredSize(new Dimension(50, 20));
         numberCreatureToGenerateTextField.setMinimumSize(new Dimension(50, 20));
-        centerPanel.add(numberCreatureToGenerateTextField,gbc);
+        optionPanel.add(numberCreatureToGenerateTextField,gbc);
         gbc.gridx = 2;
         gbc.gridy = 4;
-        centerPanel.add(new JLabel("Creature(s) every"),gbc);
+        optionPanel.add(new JLabel("Creature(s) every"),gbc);
         gbc.gridx = 3;
         gbc.gridy = 4;
         interevalCreatureToGenerateTextField = new JFormattedTextField(numF);
         interevalCreatureToGenerateTextField.setValue(50);
         interevalCreatureToGenerateTextField.setPreferredSize(new Dimension(50, 20));
         interevalCreatureToGenerateTextField.setMinimumSize(new Dimension(50, 20));
-        centerPanel.add(interevalCreatureToGenerateTextField,gbc);
+        optionPanel.add(interevalCreatureToGenerateTextField,gbc);
         gbc.gridx = 4;
         gbc.gridy = 4;
-        centerPanel.add(new JLabel("seconds"),gbc);
+        optionPanel.add(new JLabel("seconds"),gbc);
         
-        add(centerPanel,BorderLayout.CENTER);
+        add(optionPanel);
         
     }
     
@@ -164,6 +187,26 @@ public class BoardOptionTab extends JPanel implements Observer{
                 pauseButton.setEnabled(false);
                 break;
         }
+    }
+
+    @Override
+    public void mouseClicked(MouseEvent e) {
+    }
+
+    @Override
+    public void mousePressed(MouseEvent e) {
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent e) {
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e) {
     }
     
 }
