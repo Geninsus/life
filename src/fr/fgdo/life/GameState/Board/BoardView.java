@@ -7,6 +7,7 @@ package fr.fgdo.life.GameState.Board;
 
 import fr.fgdo.life.Creature.Creature;
 import fr.fgdo.life.Food.Food;
+import fr.fgdo.life.GameObject.GameObject;
 import fr.fgdo.life.GameState.Board.Events.MeteorologicalEvent;
 import fr.fgdo.math.Point;
 import fr.fgdo.math.Vector2;
@@ -45,10 +46,6 @@ public class BoardView extends JPanel implements Observer{
         
         int XMaxScreen = getXYMaxScreen().x;
         int YMaxScreen = getXYMaxScreen().y;
-        
-
-        
-        
         
         for (MeteorologicalEvent meteorologicalEvent : board.getMeteorologicalEvents()) {
             meteorologicalEvent.draw(g,XMaxScreen,YMaxScreen,board.getWidth(),board.getHeight());
