@@ -91,7 +91,7 @@ public final class Creature extends GameObject {
         this.net = new Net(parentsNets);
         this.board = creatures[0].board;
         this.fieldOfView = creatures[Life.rand.nextInt(creatures.length)].getFieldOfView();
-        this.life = creatures[Life.rand.nextInt(creatures.length)].getLife();
+        this.life = MAX_LIFE;
         mutate();
     }
     
@@ -105,7 +105,8 @@ public final class Creature extends GameObject {
     }
 
     public void mutate() {
-        
+        //if (Life.rand.nextFloat() < MUTATION_RATE) this.life = MAX_LIFE;
+        if (Life.rand.nextFloat() < MUTATION_RATE) this.radius = Life.rand.nextInt(10)+10;
     }
     
     public void update() throws InputsSizeException {
