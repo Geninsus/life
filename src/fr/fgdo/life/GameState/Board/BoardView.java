@@ -46,16 +46,27 @@ public class BoardView extends JPanel implements Observer{
         
         int XMaxScreen = getXYMaxScreen().x;
         int YMaxScreen = getXYMaxScreen().y;
+              
+        for (int i = 0; i < board.gameObjects.size(); i++) {
+            
+            /* CREATURE */
+            if(board.gameObjects.get(i) instanceof Creature) {
+                Creature creature = (Creature) board.gameObjects.get(i);
+                creature.draw(g,XMaxScreen,YMaxScreen,board.getWidth(),board.getHeight());
+                
+            /* FOOD */
+            } else if(board.gameObjects.get(i) instanceof Food) {
+                Food food = (Food) board.gameObjects.get(i);
+                food.draw(g,XMaxScreen,YMaxScreen,board.getWidth(),board.getHeight());
+                
+            /* METEOROLOGICALEVENT */
+            } else if(board.gameObjects.get(i) instanceof MeteorologicalEvent) {
+                 MeteorologicalEvent meteorologicalEvent = (MeteorologicalEvent) board.gameObjects.get(i);
+                 meteorologicalEvent.draw(g,XMaxScreen,YMaxScreen,board.getWidth(),board.getHeight());
+            }
+        }
         
-        for (MeteorologicalEvent meteorologicalEvent : board.getMeteorologicalEvents()) {
-            meteorologicalEvent.draw(g,XMaxScreen,YMaxScreen,board.getWidth(),board.getHeight());
-        }
-        for (Food food : board.getFoods()) {
-            food.draw(g,XMaxScreen,YMaxScreen,board.getWidth(),board.getHeight());
-        }
-        for (Creature creature : board.getCreatures()) {
-            creature.draw(g,XMaxScreen,YMaxScreen,board.getWidth(),board.getHeight());
-        }
+        
         g.setColor(Color.BLACK);
         if(showingIterations) g.drawString(Long.toString(board.iteration), 0, 10);
         try {
