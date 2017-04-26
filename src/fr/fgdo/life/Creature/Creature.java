@@ -25,23 +25,30 @@ import java.util.ArrayList;
  *
  * @author Olivier
  */
-public class Creature extends GameObject {
+public final class Creature extends GameObject {
     
+    /*CONST*/
     private static final int MIN_FIELD_OF_VIEW = 15;
     private static final int MAX_FIELD_OF_VIEW = 50;
     private static final int MAX_LIFE = 1000;
+    private static final float MUTATION_RATE = (float)0.3;
     
-    private Net net;
-    //private double life = Life.rand.nextInt(500)+500;
+    /*Characteristics*/
+    private final String name;
     private double life = MAX_LIFE;
+    private Net net;
     private double direction;
     private double fieldOfView = 25;
-    private final String name;
+    
+    
+    /*View*/
     public ArrayList<GameObject> vision;
     
     private boolean[] visibleCreatures = new boolean[3];
     private boolean[] visibleFoods = new boolean[3];
     private boolean[] visibleMeteorologicalEvents = new boolean[3];
+    
+    /*Position*/
     private boolean overCreature;
     private boolean overMeteorologicalEvent;
     
@@ -67,15 +74,25 @@ public class Creature extends GameObject {
         //this.fieldOfView = (double)(MIN_FIELD_OF_VIEW + (int)(Math.random() * ((MAX_FIELD_OF_VIEW - MIN_FIELD_OF_VIEW) + 1)));
     }
     
-    public Creature(Creature creatureA, Creature creatureB) throws TopologySizeException, ArraySizeException {
-        this.radius = creatureA.radius + Life.rand.nextInt(10) - Life.rand.nextInt(10);
-        this.color = creatureA.color;
-        this.center = creatureA.center;
-        this.net = new Net(creatureA.net,creatureB.net);
+    public Creature(Creature... creatures) throws TopologySizeException, ArraySizeException {
+        
+        if (creatures.length == 0) {
+            throw new ArraySizeException(creatures.length);
+        }
+        this.radius = creatures[Life.rand.nextInt(creatures.length)].getRadius();
+        this.color = creatures[Life.rand.nextInt(creatures.length)].getColor();
+        this.center = new Point(Life.rand.nextInt(Board.width), Life.rand.nextInt(Board.height));
+        this.direction = Life.rand.nextInt(360);
         this.name = RandomNameGenerator.generateName();
-        setDirection((double)Life.rand.nextInt(360));
-        this.fieldOfView = 30;
-        this.board = creatureA.board;
+        Net[] parentsNets = new Net[creatures.length];
+        for (int i = 0; i < creatures.length; i++) {
+            parentsNets[i]=creatures[i].net;
+        }
+        this.net = new Net(parentsNets);
+        this.board = creatures[0].board;
+        this.fieldOfView = creatures[Life.rand.nextInt(creatures.length)].getFieldOfView();
+        this.life = creatures[Life.rand.nextInt(creatures.length)].getLife();
+        mutate();
     }
     
     public Creature(Board board) throws TopologySizeException {
@@ -87,6 +104,10 @@ public class Creature extends GameObject {
         return name;
     }
 
+    public void mutate() {
+        
+    }
+    
     public void update() throws InputsSizeException {
         this.color = new Color(255-(int)(life/MAX_LIFE*255), 255, 0);
         this.removeLife(1);
@@ -167,6 +188,10 @@ public class Creature extends GameObject {
 
     public boolean[] getVisibleFoods() {
         return visibleFoods;
+    }
+    
+    public double getLife() {
+        return life;
     }
 
     public void setVisibleFoods(int index, boolean value) {
