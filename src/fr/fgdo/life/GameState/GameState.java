@@ -9,7 +9,7 @@ import fr.fgdo.life.Creature.Creature;
 import fr.fgdo.life.Food.Food;
 import fr.fgdo.life.GameState.Board.Board;
 import fr.fgdo.life.GameState.Board.BoardView;
-import fr.fgdo.life.GameState.Board.BoardTabbedView;
+import fr.fgdo.life.GameState.Board.Tabbed.BoardTabbedView;
 import fr.fgdo.life.GameState.Board.Events.MeteorologicalEvent;
 import fr.fgdo.life.GameState.Board.Events.MeteorologicalEventsTypes;
 import fr.fgdo.life.Life;
@@ -57,6 +57,7 @@ public class GameState extends State implements MouseListener,ChangeListener, It
         board.addObserver(boardView);
         add(boardView, BorderLayout.CENTER);
         board.addObserver(boardTabbedPane);
+        board.addObserver(boardTabbedPane.optionsTab);
         board.run();
     }
 

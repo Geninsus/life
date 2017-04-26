@@ -52,6 +52,18 @@ public class Board extends Observable implements ActionListener,MeteorologicalEv
     public long iteration = 0;
     
     
+    /*Config Generate*/
+    public int numberCreatureToGenerate = 10;
+    public int interevalCreatureToGenerate = 1000;
+    public int nextGenerationCreatures = interevalCreatureToGenerate;
+    
+    public int numberFoodToGenerate = 10;
+    public int interevalFoodToGenerate = 1000;
+    public int nextGenerationFoods = interevalFoodToGenerate;
+    
+    public int numberEventToGenerate = 10;
+    public int interevalEventToGenerate = 1000;
+    public int nextGenerationEvents = interevalEventToGenerate;
     
     public Board(BoardParams params) {
         this.timerUpdate = new Timer(20, this);
@@ -74,10 +86,9 @@ public class Board extends Observable implements ActionListener,MeteorologicalEv
     }
     
     public void generateFood() {
-        if (generateFood) {
-            if (Life.rand.nextFloat() > 0.95) {
-                addFood(new Food());
-            }
+        if (iteration >= nextGenerationFoods) {
+            addFood(numberFoodToGenerate);
+            nextGenerationFoods = (int) (iteration+interevalFoodToGenerate);
         }
     }
     
@@ -274,8 +285,19 @@ public class Board extends Observable implements ActionListener,MeteorologicalEv
         creatures.add(creature);
     }
 
+    
+    public void addFood() {
+        addFood(new Food());
+    }
+    
     public void addFood(Food food) {
         foods.add(food);
+    }
+    
+    public void addFood(int n) {
+        for (int i = 0; i < n; i++) {
+            addFood();
+        }
     }
     
     public void addEvent(MeteorologicalEvent meteorologicalEvent) {
