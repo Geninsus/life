@@ -109,7 +109,7 @@ public final class Creature extends GameObject {
     }
     
     public void update() throws InputsSizeException {
-        this.color = new Color(255-(int)(life/MAX_LIFE*255), 255, 0);
+        this.color = new Color((255-(int)(life/MAX_LIFE*255))%255, 255, 0);
         this.removeLife(1);
         double food = (visibleFoods[1])? 1 : -1;
         Double netInputs[] = {food};

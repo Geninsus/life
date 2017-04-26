@@ -59,7 +59,7 @@ public class MeteorologicalEvent extends GameObject{
 
     public void checkCreature(Creature creature) {
         if ( (creature.getCenter().x - center.x)*(creature.getCenter().x - center.x) + (creature.getCenter().y - center.y)*(creature.getCenter().y - center.y) < radius*radius) {
-            creature.removeLife(1);
+            creature.removeLife(50);
         }
     }
 
