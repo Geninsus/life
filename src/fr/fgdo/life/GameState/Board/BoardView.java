@@ -129,14 +129,6 @@ public class BoardView extends JPanel implements Observer, MouseListener{
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        int XMaxScreen = getXYMaxScreen().x;
-        int YMaxScreen = getXYMaxScreen().y;
-        if (e.getX() <= XMaxScreen && e.getY() <= YMaxScreen) {
-            Creature creature = board.getCreatureOnPoint(getBackX(e.getX(), XMaxScreen, board.getWidth()), getBackY(e.getY(), YMaxScreen, board.getHeight()));
-            if (creature != null) {
-                new CreaturePanel(creature,this);
-            }
-        }
     }
 
     @Override
@@ -145,6 +137,14 @@ public class BoardView extends JPanel implements Observer, MouseListener{
 
     @Override
     public void mouseReleased(MouseEvent e) {
+        int XMaxScreen = getXYMaxScreen().x;
+        int YMaxScreen = getXYMaxScreen().y;
+        if (e.getX() <= XMaxScreen && e.getY() <= YMaxScreen) {
+            Creature creature = board.getCreatureOnPoint(getBackX(e.getX(), XMaxScreen, board.getWidth()), getBackY(e.getY(), YMaxScreen, board.getHeight()));
+            if (creature != null) {
+                new CreaturePanel(creature,this);
+            }
+        }
     }
 
     @Override
