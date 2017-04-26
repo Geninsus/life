@@ -41,7 +41,6 @@ public class Board extends Observable implements ActionListener,MeteorologicalEv
     public static int height;
     private final String name;
     ArrayList<GameObject> gameObjects;
-    ArrayList<Integer> gameObjectsToRemove;
     ArrayList<Creature> creatures;
     ArrayList<MeteorologicalEvent> meteorologicalEvents;
     ArrayList<Food> foods;
@@ -67,7 +66,6 @@ public class Board extends Observable implements ActionListener,MeteorologicalEv
     public Board(BoardParams params) {
         this.timerUpdate = new Timer(20, this);
         this.gameObjects = new ArrayList<>();
-        this.gameObjectsToRemove = new ArrayList<>(); 
         Board.width = params.size.x;
         Board.height = params.size.y;
         this.name = params.name;
@@ -119,21 +117,11 @@ public class Board extends Observable implements ActionListener,MeteorologicalEv
         
         // Update des GameObjects
         updateGameObjects();
+        removeGameOjects();
         
-        // Suppression des évènements météo passés 
-        updateMeteorologicalEventsArray();
-        
-        // Suppression des créatures mortes
-        updateCreaturesArray();
-        
-        // Suppression des 
-        updateFoodsArray();
-        
-        // 
-        updateMeteorologicalEvents();
-        
-                
         if(creatures.size() > 0) reproduce();
+        
+        
         
         iteration++;
     }
@@ -167,6 +155,8 @@ public class Board extends Observable implements ActionListener,MeteorologicalEv
             if(gameObjects.get(i) instanceof Creature) {
                 Creature creature = (Creature) gameObjects.get(i);
                 
+                creature.update();
+                
                 /* ITERATE ALL GAMEOBJECTS */
                 for (int j = 0; j < gameObjects.size(); j++) {
                     
@@ -193,26 +183,20 @@ public class Board extends Observable implements ActionListener,MeteorologicalEv
                     /* FOOD */
                     } else if(gameObjects.get(j) instanceof Food) {
                         Food food = (Food) gameObjects.get(j);
+                        
+                        /* Miam miam */
+                        if (food.toDelete == false && creature.intersect(food)) {
+                            creature.eat(food);
+                            food.toDelete = true;
+                        }
 
                     /* METEOROLOGICALEVENT */
                     } else if(gameObjects.get(j) instanceof MeteorologicalEvent) {
                          MeteorologicalEvent meteorologicalEvent = (MeteorologicalEvent) gameObjects.get(j);
-                    }
-            
-
-
-                    for (GameObject otherGameObject : gameObjects) {
-                        if(otherGameObject != creature) {
-
-                              
-                        }
-                    }
-        
-        
-        
+                         meteorologicalEvent.checkCreature(creature);
+                    }        
                 }
-                creature.update();
-                checkBoundsCreature(creature);
+                
                 
             /* FOOD */
             } else if(gameObjects.get(i) instanceof Food) {
@@ -221,38 +205,20 @@ public class Board extends Observable implements ActionListener,MeteorologicalEv
             /* METEOROLOGICALEVENT */
             } else if(gameObjects.get(i) instanceof MeteorologicalEvent) {
                  MeteorologicalEvent meteorologicalEvent = (MeteorologicalEvent) gameObjects.get(i);
+                  meteorologicalEvent.update();
             }
         }
     }
     
-    public void updateMeteorologicalEvents() {
-        for (MeteorologicalEvent meteorologicalEvent : meteorologicalEvents) {
-            creatures.forEach((creature) -> {
-                meteorologicalEvent.checkCreature(creature);
-            });
-            meteorologicalEvent.update();
+    public void removeGameOjects() {
+        
+        Iterator<GameObject> it = gameObjects.iterator();
+        while(it.hasNext()){
+            GameObject gameObject = it.next();
+            if(gameObject.toDelete == true)it.remove();
         }
     }
-        
-    public void checkBoundsCreature(Creature creature) {
-        if (creature.getCenter().x + creature.getRadius() > width) creature.getCenter().x = width-creature.getRadius();
-        if (creature.getCenter().x - creature.getRadius() < 0) creature.getCenter().x = creature.getRadius();
-        if (creature.getCenter().y + creature.getRadius() > height) creature.getCenter().y = height-creature.getRadius();
-        if (creature.getCenter().y - creature.getRadius() < 0) creature.getCenter().y = creature.getRadius();
-        for (Creature creatureToTest : creatures) {
-            if (creatureToTest != creature && creature.intersect(creatureToTest)) {
-                //System.out.println(creature.getName() + " intersect " + creatureToTest.getName());
-            }
-        }
-        for (Food food : foods) {
-            if (creature.intersect(food)) {
-                creature.eat(food);
-                toRemoveFoods.add(food);
-            }
-        }
-        updateFoodsArray();
-    }
-        
+    
     public void updateMeteorologicalEventsIntersects(Creature creature) {
         for (MeteorologicalEvent meteorologicalEvent : meteorologicalEvents) {
             if (creature.intersect(meteorologicalEvent)) {
@@ -409,30 +375,5 @@ public class Board extends Observable implements ActionListener,MeteorologicalEv
     @Override
     public void creatureIsDead(Creature creature) {
         toRemoveCreatures.add(creature);
-    }
-
-    public void updateFoodsArray() {
-        for (Iterator<Food> iterator = toRemoveFoods.iterator(); iterator.hasNext();) {
-            Food next = iterator.next();
-            foods.remove(next);
-            iterator.remove();
-        }
-    }
-    
-    public void updateMeteorologicalEventsArray() {
-        for (Iterator<MeteorologicalEvent> iterator = toRemoveMeteorologicalEvents.iterator(); iterator.hasNext();) {
-            MeteorologicalEvent next = iterator.next();
-            meteorologicalEvents.remove(next);
-            iterator.remove();
-        }
-    }
-    
-    public void updateCreaturesArray() {
-        for (Iterator<Creature> iterator = toRemoveCreatures.iterator(); iterator.hasNext();) {
-            Creature next = iterator.next();
-            creatures.remove(next);
-            iterator.remove();
-        }
-    }
-    
+    }    
 }

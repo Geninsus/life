@@ -9,6 +9,8 @@ import fr.fgdo.life.Creature.exceptions.FieldOfViewOutOfRangeException;
 import fr.fgdo.life.Food.Food;
 import fr.fgdo.life.GameObject.GameObject;
 import fr.fgdo.life.GameState.Board.Board;
+import static fr.fgdo.life.GameState.Board.Board.height;
+import static fr.fgdo.life.GameState.Board.Board.width;
 import fr.fgdo.life.GameState.Board.BoardView;
 import fr.fgdo.life.Life;
 import fr.fgdo.life.neuralNetwork.Net;
@@ -118,9 +120,18 @@ public final class Creature extends GameObject {
         Double netOutputs[] = net.feedForward(netInputs);
         Double varDirection = netOutputs[0] * 10;
         Double varSpeed = Math.abs(netOutputs[1] * 10);
+        this.updatePosition(varDirection, varSpeed);  
+    }
+    
+    private void updatePosition(double varDirection, double varSpeed) {
         setDirection(direction + varDirection);
         center.x += (long)(Math.cos(Math.toRadians(direction)) * varSpeed);
         center.y -= (long)(Math.sin(Math.toRadians(direction)) * varSpeed);
+        
+        if (getCenter().x + getRadius() > width) getCenter().x = width-getRadius();
+        if (getCenter().x - getRadius() < 0) getCenter().x = getRadius();
+        if (getCenter().y + getRadius() > height) getCenter().y = height-getRadius();
+        if (getCenter().y - getRadius() < 0) getCenter().y = getRadius();
     }
 
     /**

@@ -22,6 +22,7 @@ public abstract class GameObject extends Observable{
     protected Point center;
     protected Color color;
     protected Board board;
+    public boolean toDelete = false;
     
     public int getRadius() {
         return radius;
