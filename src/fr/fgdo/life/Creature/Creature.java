@@ -5,8 +5,6 @@
  */
 package fr.fgdo.life.Creature;
 
-import com.sun.javafx.geom.Area;
-import com.sun.javafx.geom.Ellipse2D;
 import fr.fgdo.life.Creature.exceptions.FieldOfViewOutOfRangeException;
 import fr.fgdo.life.Food.Food;
 import fr.fgdo.life.GameObject.GameObject;
@@ -19,11 +17,9 @@ import fr.fgdo.life.neuralNetwork.exceptions.InputsSizeException;
 import fr.fgdo.life.neuralNetwork.exceptions.TopologySizeException;
 import fr.fgdo.math.Point;
 import fr.fgdo.util.RandomNameGenerator;
-import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.util.ArrayList;
-import javafx.scene.shape.Circle;
 
 /**
  *
@@ -59,7 +55,8 @@ public class Creature extends GameObject {
     }
 
     public Creature() throws TopologySizeException {
-        this.radius = Life.rand.nextInt(30)+20;
+        //this.radius = Life.rand.nextInt(30)+20;
+        this.radius = 15;
         this.color = new Color(Life.rand.nextFloat(), Life.rand.nextFloat(), Life.rand.nextFloat());
         this.center = new Point(Life.rand.nextInt(Board.width), Life.rand.nextInt(Board.height));
         int topology[] = {1, 1, 2};
@@ -78,6 +75,7 @@ public class Creature extends GameObject {
         this.name = RandomNameGenerator.generateName();
         setDirection((double)Life.rand.nextInt(360));
         this.fieldOfView = 30;
+        this.board = creatureA.board;
     }
     
     public Creature(Board board) throws TopologySizeException {
@@ -97,7 +95,6 @@ public class Creature extends GameObject {
         Double netOutputs[] = net.feedForward(netInputs);
         Double varDirection = netOutputs[0] * 10;
         Double varSpeed = Math.abs(netOutputs[1] * 10);
-        System.out.println(netOutputs[1] * 10);
         setDirection(direction + varDirection);
         center.x += (long)(Math.cos(Math.toRadians(direction)) * varSpeed);
         center.y -= (long)(Math.sin(Math.toRadians(direction)) * varSpeed);
