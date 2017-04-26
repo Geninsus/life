@@ -382,4 +382,10 @@ public class Board extends Observable implements ActionListener,MeteorologicalEv
         }
     }
     
+    public void skipFrames(int n) throws TopologySizeException, ArraySizeException {
+        for (int i = 0; i < n; i++) {
+            update();
+        }
+    }
+    
 }
