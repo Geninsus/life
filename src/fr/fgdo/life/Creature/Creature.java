@@ -92,16 +92,11 @@ public final class Creature extends GameObject {
             parentsNets[i]=creatures[i].net;
         }
         this.net = new Net(parentsNets);
-        this.board = creatures[0].board;
         this.fieldOfView = creatures[Life.rand.nextInt(creatures.length)].getFieldOfView();
         this.life = MAX_LIFE;
         mutate();
     }
     
-    public Creature(Board board) throws TopologySizeException {
-        this();
-        this.board = board;
-    }
 
     public String getName() {
         return name;

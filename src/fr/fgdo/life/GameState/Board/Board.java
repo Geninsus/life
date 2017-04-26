@@ -187,7 +187,7 @@ public class Board extends Observable implements ActionListener,MeteorologicalEv
                             /* Si une créature rencontre une autre créature */
                             if(creature.intersect(otherCreature)) {
                                 creature.setOverCreature(true);
-                           }
+                            }
                             
                            /* Si une créature voit une autre créature */
                            
@@ -324,6 +324,7 @@ public class Board extends Observable implements ActionListener,MeteorologicalEv
     
     public void addCreature(Creature creature) {
         gameObjects.add(creature);
+        creature.setBoard(this);
         creatureNumber++;
     }
 
