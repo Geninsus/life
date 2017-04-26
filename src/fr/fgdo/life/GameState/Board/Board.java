@@ -12,7 +12,9 @@ import fr.fgdo.life.GameState.Board.Events.MeteorologicalEvent;
 import fr.fgdo.life.GameState.Board.Events.MeteorologicalEventListener;
 import fr.fgdo.life.GameObject.GameObject;
 import fr.fgdo.life.Life;
+import fr.fgdo.life.neuralNetwork.exceptions.ArraySizeException;
 import fr.fgdo.life.neuralNetwork.exceptions.InputsSizeException;
+import fr.fgdo.life.neuralNetwork.exceptions.TopologySizeException;
 import fr.fgdo.math.Point;
 import java.awt.Color;
 import java.awt.List;
@@ -79,6 +81,18 @@ public class Board extends Observable implements ActionListener,MeteorologicalEv
         }
     }
     
+    public void reproduce() throws TopologySizeException, ArraySizeException {
+        
+        if (Life.rand.nextFloat() > 0.99) {
+
+            Creature creature1 = creatures.get((int)(Math.random() * creatures.size()));
+            Creature creature2 = creatures.get((int)(Math.random() * creatures.size())); 
+
+            addCreature(new Creature(creature1, creature2));
+        
+        }
+    }
+    
     public void generateEvent() {
         /*To Implement*/
     }
@@ -105,7 +119,7 @@ public class Board extends Observable implements ActionListener,MeteorologicalEv
         });
     }
     
-    public void update() {
+    public void update() throws TopologySizeException, ArraySizeException {
         generateFood();
         
         updateMeteorologicalEventsArray();
@@ -114,6 +128,8 @@ public class Board extends Observable implements ActionListener,MeteorologicalEv
         
         updateMeteorologicalEvents();
         updateCreatures();
+        
+        if(creatures.size() > 0) reproduce();
         
         iteration++;
     }
@@ -269,7 +285,13 @@ public class Board extends Observable implements ActionListener,MeteorologicalEv
     @Override
     public void actionPerformed(ActionEvent e) {
         if(runningGame && e.getSource() == timerUpdate){
-            update();
+            try {
+                update();
+            } catch (TopologySizeException ex) {
+                Logger.getLogger(Board.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ArraySizeException ex) {
+                Logger.getLogger(Board.class.getName()).log(Level.SEVERE, null, ex);
+            }
             if (System.nanoTime()- lastUpdate > 20000000) {
                 updateView("View:update");
                 lastUpdate = System.nanoTime();

@@ -46,7 +46,7 @@ public class Neuron {
             if(parentNeurons.length == 0) {
                 throw new ArraySizeException(parentNeurons.length);
             } 
-            int randIndex = (int)(Math.random() * (parentNeurons.length + 1));
+            int randIndex = (int)(Math.random() * parentNeurons.length);
             this.outputWeights.add(parentNeurons[randIndex].outputWeights.get(outputIndex));
             // TODO: Mutation
         }
