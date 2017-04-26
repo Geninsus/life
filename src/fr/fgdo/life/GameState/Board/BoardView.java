@@ -6,6 +6,7 @@
 package fr.fgdo.life.GameState.Board;
 
 import fr.fgdo.life.Creature.Creature;
+import fr.fgdo.life.Creature.CreaturePanel;
 import fr.fgdo.life.Food.Food;
 import fr.fgdo.life.GameObject.GameObject;
 import fr.fgdo.life.GameState.Board.Events.MeteorologicalEvent;
@@ -14,6 +15,8 @@ import fr.fgdo.math.Vector2;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.HeadlessException;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.Observable;
 import java.util.Observer;
 import javax.swing.JPanel;
@@ -22,7 +25,7 @@ import javax.swing.JPanel;
  *
  * @author Olivier
  */
-public class BoardView extends JPanel implements Observer{
+public class BoardView extends JPanel implements Observer, MouseListener{
     
     private final Board board;
     private int scale = 1;
@@ -33,6 +36,7 @@ public class BoardView extends JPanel implements Observer{
             
     public BoardView(Board board) throws HeadlessException {
         this.board = board;
+        this.addMouseListener(this);
     }
     
     @Override
@@ -84,7 +88,7 @@ public class BoardView extends JPanel implements Observer{
     }
     
     public static int getBackY(int localY, int maxScreenY, int height) {
-        return (height+((localY+maxScreenY)*height)/(-1*maxScreenY))*-1;
+        return (2*height+((localY+maxScreenY)*height)/(-1*maxScreenY));
     }
     
     public static int getLocalX(int x, int maxScreenX, int width) {
@@ -121,5 +125,33 @@ public class BoardView extends JPanel implements Observer{
 
         }
         return new Vector2<>(maxScreenX-1, maxScreenY-1);
+    }
+
+    @Override
+    public void mouseClicked(MouseEvent e) {
+        int XMaxScreen = getXYMaxScreen().x;
+        int YMaxScreen = getXYMaxScreen().y;
+        if (e.getX() <= XMaxScreen && e.getY() <= YMaxScreen) {
+            Creature creature = board.getCreatureOnPoint(getBackX(e.getX(), XMaxScreen, board.getWidth()), getBackY(e.getY(), YMaxScreen, board.getHeight()));
+            if (creature != null) {
+                new CreaturePanel(creature,this);
+            }
+        }
+    }
+
+    @Override
+    public void mousePressed(MouseEvent e) {
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent e) {
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e) {
     }
 }

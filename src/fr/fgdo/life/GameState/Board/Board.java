@@ -385,5 +385,15 @@ public class Board extends Observable implements ActionListener,MeteorologicalEv
             update();
         }
     }
-
+    
+    public Creature getCreatureOnPoint(int x,int y) {
+        for (GameObject gameObject : gameObjects) {
+            if (gameObject instanceof Creature) {
+                if(gameObject.isPointInside(x, y)) return (Creature)gameObject;
+            }
+        }
+        return null;
+    }
+    
+    
 }

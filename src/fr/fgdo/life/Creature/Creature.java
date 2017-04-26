@@ -121,7 +121,11 @@ public final class Creature extends GameObject {
         Double netOutputs[] = net.feedForward(netInputs);
         Double varDirection = netOutputs[0] * 10;
         Double varSpeed = Math.abs(netOutputs[1] * 10);
-        this.updatePosition(varDirection, varSpeed);  
+        this.updatePosition(varDirection, varSpeed);
+        
+        setChanged();
+        notifyObservers();
+        clearChanged();
     }
     
     private void updatePosition(double varDirection, double varSpeed) {
