@@ -12,13 +12,14 @@ import fr.fgdo.life.GameState.Board.BoardView;
 import fr.fgdo.math.Point;
 import java.awt.Color;
 import java.awt.Graphics;
+import java.io.Serializable;
 import java.util.Observable;
 
 /**
  *
  * @author fabien
  */
-public abstract class GameObject extends Observable{
+public abstract class GameObject extends Observable implements Serializable{
     protected int radius;
     protected Point center;
     protected Color color;
@@ -70,5 +71,18 @@ public abstract class GameObject extends Observable{
     public void setColor(Color color) {
         this.color = color;
     }
+
+    public void setRadius(int radius) {
+        this.radius = radius;
+    }
+
+    public void setCenter(Point center) {
+        this.center = center;
+    }
+
+    public void setToDelete(boolean toDelete) {
+        this.toDelete = toDelete;
+    }
+    
     
 }

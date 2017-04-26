@@ -9,6 +9,8 @@ import java.awt.Component;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.Arrays;
 import java.util.Observable;
 import java.util.Observer;
@@ -21,7 +23,7 @@ import javax.swing.JPanel;
  *
  * @author Olivier
  */
-public class CreaturePanel extends JDialog implements Observer{
+public class CreaturePanel extends JDialog implements Observer, MouseListener{
 
     JLabel name = new JLabel();
     JLabel color = new JLabel("llll");
@@ -35,9 +37,12 @@ public class CreaturePanel extends JDialog implements Observer{
     JLabel visibleCreatures = new JLabel();
     JLabel visibleFoods = new JLabel();
     JLabel visibleMeteorologicalEvents = new JLabel();
+    
+    JButton saveButton = new JButton("SaveIt");
             
+    Creature creature;
     public CreaturePanel(Creature creature, Component c) {
-        
+        this.creature = creature;
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridwidth = GridBagConstraints.REMAINDER;
@@ -141,10 +146,15 @@ public class CreaturePanel extends JDialog implements Observer{
         gbc.gridy = 11;
         add(visibleMeteorologicalEvents,gbc);
         
+        gbc.gridx = 0;
+        gbc.gridy = 12;
+        gbc.gridwidth = 2;
+        saveButton.addMouseListener(this);
+        add(saveButton,gbc);
         
         creature.addObserver(this);
         setTitle(creature.getName());
-        setSize(300,400);
+        setSize(550,500);
         setLocationRelativeTo(c);
         setVisible(true);
         
@@ -167,6 +177,27 @@ public class CreaturePanel extends JDialog implements Observer{
         visibleCreatures.setText(Arrays.toString(creature.getVisibleCreatures()));
         visibleFoods.setText(Arrays.toString(creature.getVisibleFoods()));
         visibleMeteorologicalEvents.setText(Arrays.toString(creature.getVisibleMeteorologicalEvents()));
+    }
+
+    @Override
+    public void mouseClicked(MouseEvent e) {
+        creature.save();
+    }
+
+    @Override
+    public void mousePressed(MouseEvent e) {
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent e) {
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e) {
     }
     
 }

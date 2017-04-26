@@ -5,11 +5,13 @@
  */
 package fr.fgdo.life.GameState.Board.Events;
 
+import java.io.Serializable;
+
 /**
  *
  * @author olivbau
  */
-public enum MeteorologicalEventsTypes {
+public enum MeteorologicalEventsTypes implements Serializable{
     FIRE,
     STORM;
 }

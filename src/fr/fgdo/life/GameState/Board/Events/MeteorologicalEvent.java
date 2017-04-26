@@ -11,12 +11,13 @@ import fr.fgdo.life.GameState.Board.Board;
 import fr.fgdo.life.Life;
 import fr.fgdo.math.Point;
 import java.awt.Color;
+import java.io.Serializable;
 
 /**
  *
  * @author olivbau
  */
-public class MeteorologicalEvent extends GameObject{
+public class MeteorologicalEvent extends GameObject implements Serializable{
     private final MeteorologicalEventsTypes type;
     private int duration = Life.rand.nextInt(400)+100;
 

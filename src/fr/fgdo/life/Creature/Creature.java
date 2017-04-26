@@ -21,13 +21,21 @@ import fr.fgdo.math.Point;
 import fr.fgdo.util.RandomNameGenerator;
 import java.awt.Color;
 import java.awt.Graphics;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
  * @author Olivier
  */
-public final class Creature extends GameObject {
+public final class Creature extends GameObject implements Serializable {
     
     /*CONST*/
     private static final int MIN_FIELD_OF_VIEW = 15;
@@ -36,7 +44,7 @@ public final class Creature extends GameObject {
     private static final float MUTATION_RATE = (float)0.3;
     
     /*Characteristics*/
-    private final String name;
+    private String name;
     private double life = MAX_LIFE;
     private Net net;
     private double direction;
@@ -192,6 +200,73 @@ public final class Creature extends GameObject {
         if(life > MAX_LIFE) life = MAX_LIFE;
     }
 
+    @Override
+    public String toString() {
+        return getName()+"\n"+getCenter().x+" , "+getCenter().y+"\n"+getRadius();
+    }
+
+    
+    public void save() {
+        try{
+            ObjectOutputStream objectOutputStream = new ObjectOutputStream(
+            new FileOutputStream("savedCreatures/"+getName()+".ser"));
+            objectOutputStream.writeObject(this);
+            System.out.println("Saved !");
+        }
+        catch(IOException ioException){
+            System.err.println(ioException);
+        }
+    }
+    
+    public static Creature open(String name) {
+        Creature creature = null;
+        try{
+            ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream(name));
+            creature = (Creature) objectInputStream.readObject();
+        }
+        catch(IOException ioException){
+            System.err.println(ioException);
+        }
+        catch(ClassNotFoundException classNotFoundException){
+            System.err.println(classNotFoundException);
+        }
+        return creature;
+    }
+
+    public Creature clone() {
+        try {
+            Creature creature = new Creature();
+            creature.setName(name);
+            creature.setNet(net);
+            creature.setLife(life);
+            creature.setDistanceOfView(distanceOfView);
+            creature.setRadius(radius);
+            creature.setColor(color);
+            return creature;
+        } catch (TopologySizeException ex) {
+            Logger.getLogger(Creature.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+
+    public void setLife(double life) {
+        this.life = life;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setNet(Net net) {
+        this.net = net;
+    }
+
+    public void setDistanceOfView(double distanceOfView) {
+        this.distanceOfView = distanceOfView;
+    }
+    
+    
+    
     public boolean[] getVisibleCreatures() {
         return visibleCreatures;
     }
@@ -206,6 +281,14 @@ public final class Creature extends GameObject {
     
     public double getLife() {
         return life;
+    }
+
+    public Net getNet() {
+        return net;
+    }
+
+    public double getDistanceOfView() {
+        return distanceOfView;
     }
 
     public void setVisibleFoods(int index, boolean value) {

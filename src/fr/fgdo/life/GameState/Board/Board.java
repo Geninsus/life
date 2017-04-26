@@ -19,6 +19,7 @@ import fr.fgdo.life.neuralNetwork.exceptions.TopologySizeException;
 import fr.fgdo.math.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Observable;
@@ -30,7 +31,7 @@ import javax.swing.Timer;
  *
  * @author Olivier
  */
-public class Board extends Observable implements ActionListener,MeteorologicalEventListener,CreatureListener{
+public class Board extends Observable implements ActionListener,MeteorologicalEventListener,CreatureListener, Serializable{
     
     private boolean generateFood = true;
     private float speed = 1;
@@ -323,8 +324,8 @@ public class Board extends Observable implements ActionListener,MeteorologicalEv
     }
     
     public void addCreature(Creature creature) {
-        gameObjects.add(creature);
         creature.setBoard(this);
+        gameObjects.add(creature);
         creatureNumber++;
     }
 
