@@ -33,8 +33,8 @@ public class NetView extends JFrame implements Observer {
     private JPanel outputPanel;
     private Dimension d = new Dimension(20,20);
     
-    public NetView(Net net) {
-        super("NetView");
+    public NetView(Net net, String name) {
+        super(name);
         this.setSize(400, 400);
         this.net = net;
         this.globalPanel = new JPanel();
@@ -42,8 +42,7 @@ public class NetView extends JFrame implements Observer {
         this.addInputNeuron();
         this.addLayerNeuron();
         this.addOutputNeuron();
-        this.add(globalPanel);
-        
+        this.add(globalPanel);        
     }
     
     public void addInputNeuron() {

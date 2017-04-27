@@ -156,6 +156,7 @@ public class Board extends Observable implements ActionListener,MeteorologicalEv
                 Creature creature = (Creature) gameObjects.get(i);
                 creature.setOverCreature(false);
                 creature.setVisibleFoods(1, false);
+                creature.setVisibleCreatures(1, false);
                 creature.setVisibleMeteorologicalEvents(1, false);
                 
             /* FOOD */
@@ -174,8 +175,6 @@ public class Board extends Observable implements ActionListener,MeteorologicalEv
             /* CREATURE */
             if(gameObjects.get(i) instanceof Creature) {
                 Creature creature = (Creature) gameObjects.get(i);
-                
-                creature.update();
                 
                 /* ITERATE ALL GAMEOBJECTS */
                 for (int j = 0; j < gameObjects.size(); j++) {
@@ -209,6 +208,16 @@ public class Board extends Observable implements ActionListener,MeteorologicalEv
                             creature.eat(food);
                             food.toDelete = true;
                         }
+                        
+                        /* Si une créature voit une food */
+                           
+                        int lineX = creature.getCenter().x + (int) (Math.cos(Math.toRadians(creature.getDirection())) * 100);
+                        int lineY = creature.getCenter().y - (int) (Math.sin(Math.toRadians(creature.getDirection())) * 100);
+
+                         if(getCircleLineIntersectionPoint(creature.getCenter(), new Point(lineX, lineY), food.getCenter(), food.getRadius()).size() > 0) {
+                             creature.setVisibleFoods(1, true);
+                         }
+                        
 
                     /* METEOROLOGICALEVENT */
                     } else if(gameObjects.get(j) instanceof MeteorologicalEvent) {
@@ -217,6 +226,7 @@ public class Board extends Observable implements ActionListener,MeteorologicalEv
                     }        
                 }
                 
+                creature.update();
                 
             /* FOOD */
             } else if(gameObjects.get(i) instanceof Food) {
