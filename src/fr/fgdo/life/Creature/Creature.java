@@ -76,7 +76,7 @@ public final class Creature extends GameObject implements Serializable {
         this.radius = 15;
         this.color = new Color(Life.rand.nextFloat(), Life.rand.nextFloat(), Life.rand.nextFloat());
         this.center = new Point(Life.rand.nextInt(Board.width), Life.rand.nextInt(Board.height));
-        int topology[] = {1, 1, 2};
+        int topology[] = {6, 4, 2};
         this.name = RandomNameGenerator.generateName();
         this.net = new Net(topology,this.name);
         setDirection((double)Life.rand.nextInt(360));
@@ -120,9 +120,14 @@ public final class Creature extends GameObject implements Serializable {
     public void update() throws InputsSizeException {
         this.color = new Color((255-(int)(life/MAX_LIFE*255))%255, 255, 0);
         this.removeLife(1);
-        double food = (visibleFoods[1])? 1 : -1;
+        double food_0 = (visibleFoods[0])? 1 : -1;
+        double food_1 = (visibleFoods[1])? 1 : -1;
+        double food_2 = (visibleFoods[2])? 1 : -1;
+        double creature_0 = (visibleCreatures[0])? 1 : -1;
+        double creature_1 = (visibleCreatures[1])? 1 : -1;
+        double creature_2 = (visibleCreatures[2])? 1 : -1;
         //double meteorological = (visibleMeteorologicalEvents[1])? 1 : -1;
-        Double netInputs[] = {food};
+        Double netInputs[] = {food_0, food_1, food_2, creature_0, creature_1, creature_2};
         Double netOutputs[] = net.feedForward(netInputs);
         Double varDirection = netOutputs[0] * 10;
         Double varSpeed = Math.abs(netOutputs[1] * 10);
