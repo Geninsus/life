@@ -9,9 +9,7 @@ import fr.fgdo.life.Creature.Creature;
 import fr.fgdo.life.Creature.CreatureListener;
 import fr.fgdo.life.Food.Food;
 import fr.fgdo.life.GameState.Board.Events.MeteorologicalEvent;
-import fr.fgdo.life.GameState.Board.Events.MeteorologicalEventListener;
 import fr.fgdo.life.GameObject.GameObject;
-import fr.fgdo.life.GameState.Board.Events.MeteorologicalEventsTypes;
 import fr.fgdo.life.Life;
 import fr.fgdo.life.neuralNetwork.exceptions.ArraySizeException;
 import fr.fgdo.life.neuralNetwork.exceptions.InputsSizeException;
@@ -31,7 +29,7 @@ import javax.swing.Timer;
  *
  * @author Olivier
  */
-public class Board extends Observable implements ActionListener,MeteorologicalEventListener,CreatureListener, Serializable{
+public class Board extends Observable implements ActionListener,CreatureListener, Serializable{
     
     private boolean generateFood = true;
     private float speed = 1;
@@ -92,6 +90,9 @@ public class Board extends Observable implements ActionListener,MeteorologicalEv
         
         // Update des créatures
         updateCreatures();
+        
+        // Update des créatures
+        updateGameObjects();
         
         // On supprime les games objects dépréciés
         removeGameOjects();
@@ -218,6 +219,15 @@ public class Board extends Observable implements ActionListener,MeteorologicalEv
             }
             
             creature.update();
+        }
+    }
+    
+    public void updateGameObjects() {
+        for (GameObject gameObject : gameObjects) {
+            if(gameObject instanceof MeteorologicalEvent) {
+                 MeteorologicalEvent meteorologicalEvent = (MeteorologicalEvent) gameObject;
+                 meteorologicalEvent.update();
+            }
         }
     }
          
@@ -400,10 +410,5 @@ public class Board extends Observable implements ActionListener,MeteorologicalEv
             }
         }
         return null;
-    }
-
-    @Override
-    public void meteorologicalEventOver(MeteorologicalEvent me) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }
