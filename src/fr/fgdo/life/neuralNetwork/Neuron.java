@@ -5,6 +5,8 @@
  */
 package fr.fgdo.life.neuralNetwork;
 
+import fr.fgdo.life.Food.Food;
+import fr.fgdo.life.Life;
 import fr.fgdo.life.neuralNetwork.exceptions.ArraySizeException;
 import java.util.ArrayList;
 import java.util.Random;
@@ -46,9 +48,13 @@ public class Neuron {
             if(parentNeurons.length == 0) {
                 throw new ArraySizeException(parentNeurons.length);
             } 
-            int randIndex = (int)(Math.random() * parentNeurons.length);
+            
+            if (Life.rand.nextFloat() > mutationRate) {
+                int randIndex = (int)(Math.random() * parentNeurons.length);
             this.outputWeights.add(parentNeurons[randIndex].outputWeights.get(outputIndex));
-            // TODO: Mutation
+            } else {
+                this.outputWeights.add(randomizeWeight());
+            }
         }
     }
     

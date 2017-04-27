@@ -9,6 +9,8 @@ import fr.fgdo.life.Creature.exceptions.FieldOfViewOutOfRangeException;
 import fr.fgdo.life.Food.Food;
 import fr.fgdo.life.GameObject.GameObject;
 import fr.fgdo.life.GameState.Board.Board;
+import static fr.fgdo.life.GameState.Board.Board.height;
+import static fr.fgdo.life.GameState.Board.Board.width;
 import fr.fgdo.life.GameState.Board.BoardView;
 import fr.fgdo.life.Life;
 import fr.fgdo.life.neuralNetwork.Net;
@@ -39,7 +41,7 @@ public final class Creature extends GameObject {
     private Net net;
     private double direction;
     private double fieldOfView = 25;
-    
+    private double distanceOfView = 200;
     
     /*View*/
     public ArrayList<GameObject> vision;
@@ -70,6 +72,8 @@ public final class Creature extends GameObject {
         this.name = RandomNameGenerator.generateName();
         this.net = new Net(topology,this.name);
         setDirection((double)Life.rand.nextInt(360));
+        //setDirection((double)Life.rand.nextInt(360));
+        this.direction = 80;
         this.fieldOfView = 30;
         //this.fieldOfView = (double)(MIN_FIELD_OF_VIEW + (int)(Math.random() * ((MAX_FIELD_OF_VIEW - MIN_FIELD_OF_VIEW) + 1)));
     }
@@ -82,7 +86,7 @@ public final class Creature extends GameObject {
         this.radius = creatures[Life.rand.nextInt(creatures.length)].getRadius();
         this.color = creatures[Life.rand.nextInt(creatures.length)].getColor();
         this.center = new Point(Life.rand.nextInt(Board.width), Life.rand.nextInt(Board.height));
-        this.direction = Life.rand.nextInt(360);
+        this.direction = 0;
         this.name = RandomNameGenerator.generateName();
         Net[] parentsNets = new Net[creatures.length];
         for (int i = 0; i < creatures.length; i++) {
@@ -110,16 +114,30 @@ public final class Creature extends GameObject {
     }
     
     public void update() throws InputsSizeException {
-        this.color = new Color(255-(int)(life/MAX_LIFE*255), 255, 0);
+        this.color = new Color((255-(int)(life/MAX_LIFE*255))%255, 255, 0);
         this.removeLife(1);
         double food = (visibleFoods[1])? 1 : -1;
+        //double meteorological = (visibleMeteorologicalEvents[1])? 1 : -1;
         Double netInputs[] = {food};
         Double netOutputs[] = net.feedForward(netInputs);
         Double varDirection = netOutputs[0] * 10;
         Double varSpeed = Math.abs(netOutputs[1] * 10);
+        this.updatePosition(varDirection, varSpeed);
+        
+        setChanged();
+        notifyObservers();
+        clearChanged();
+    }
+    
+    private void updatePosition(double varDirection, double varSpeed) {
         setDirection(direction + varDirection);
         center.x += (long)(Math.cos(Math.toRadians(direction)) * varSpeed);
         center.y -= (long)(Math.sin(Math.toRadians(direction)) * varSpeed);
+        
+        if (getCenter().x + getRadius() > width) getCenter().x = width-getRadius();
+        if (getCenter().x - getRadius() < 0) getCenter().x = getRadius();
+        if (getCenter().y + getRadius() > height) getCenter().y = height-getRadius();
+        if (getCenter().y - getRadius() < 0) getCenter().y = getRadius();
     }
 
     /**
@@ -171,11 +189,12 @@ public final class Creature extends GameObject {
         super.draw(g, screenWidth, screenHeight, boardWidth, boardHeight);
         int xCenterScreen = BoardView.getLocalX(getCenter().x,screenWidth,boardWidth);
         int yCenterScreen = BoardView.getLocalY(getCenter().y,screenHeight,boardHeight);
-        g.drawLine(xCenterScreen, yCenterScreen, xCenterScreen + (int) (Math.cos(Math.toRadians(getDirection())) * 100), yCenterScreen + (int) (Math.sin(Math.toRadians(getDirection())) * 100));
+        if (BoardView.showingCreaturesVisions) g.drawLine(xCenterScreen, yCenterScreen, BoardView.getLocalX(getCenter().x + (int) (Math.cos(-1*Math.toRadians(getDirection())) * distanceOfView),screenHeight,boardHeight), BoardView.getLocalY(getCenter().y + (int) (Math.sin(-1*Math.toRadians(getDirection())) * distanceOfView),screenHeight,boardHeight));
+        //g.drawLine(xCenterScreen, yCenterScreen, xCenterScreen + (int) (Math.cos(Math.toRadians(getDirection())) * 100), yCenterScreen + (int) (Math.sin(Math.toRadians(getDirection())) * 100));
         //g.drawLine(xCenterScreen, yCenterScreen, xCenterScreen + (int) (Math.cos(Math.toRadians(getDirection() + getFieldOfView())) * 100), yCenterScreen + (int) (Math.sin(Math.toRadians(getDirection() + getFieldOfView())) * 100));
         //g.drawLine(xCenterScreen, yCenterScreen, xCenterScreen + (int) (Math.cos(Math.toRadians(getDirection() - getFieldOfView())) * 100), yCenterScreen + (int) (Math.sin(Math.toRadians(getDirection() - getFieldOfView())) * 100));
         g.setColor(Color.BLACK);
-        g.drawString(getName(), xCenterScreen, yCenterScreen);
+        if (BoardView.showingCreaturesNames) g.drawString(getName(), xCenterScreen, yCenterScreen);
     }
  
     public void eat(Food food) {
@@ -218,5 +237,15 @@ public final class Creature extends GameObject {
     public void setOverMeteorologicalEvent(boolean overMeteorologicalEvent) {
         this.overMeteorologicalEvent = overMeteorologicalEvent;
     }
+    
+    
+    public boolean isOverCreature() {
+        return overCreature;
+    }
+
+    public boolean isOverMeteorologicalEvent() {
+        return overMeteorologicalEvent;
+    }
+
     
 }

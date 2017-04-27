@@ -23,14 +23,16 @@ public class MeteorologicalEvent extends GameObject{
     public MeteorologicalEvent(MeteorologicalEventsTypes type) {
         this.type = type;
         this.color = new Color((float)1.0,(float)0.0,(float)0.0,(float)0.5);
-        radius = Life.rand.nextInt(100)+100;
+        //radius = Life.rand.nextInt(100)+100;
+        radius = 20;
         center = new Point(0,0);
     }
     
     public MeteorologicalEvent(MeteorologicalEventsTypes type, int maxX, int maxY) {
         this.type = type;
         this.color = new Color((float)1.0,(float)0.0,(float)0.0,(float)0.5);
-        radius = Life.rand.nextInt(30)+30;
+        //radius = Life.rand.nextInt(30)+30;
+        radius = 20;
         center = new Point(Life.rand.nextInt(maxX),Life.rand.nextInt(maxY));
     }
 
@@ -58,8 +60,9 @@ public class MeteorologicalEvent extends GameObject{
     }
 
     public void checkCreature(Creature creature) {
-        if ( (creature.getCenter().x - center.x)*(creature.getCenter().x - center.x) + (creature.getCenter().y - center.y)*(creature.getCenter().y - center.y) < radius*radius) {
-            creature.removeLife(1);
+        if ( (creature.getCenter().x - center.x)*(creature.getCenter().x - center.x) + (creature.getCenter().y - center.y)*(creature.getCenter().y - center.y) < radius*radius + creature.getRadius()*creature.getRadius()) {
+            creature.removeLife(50);
+            //creature.//totot
         }
     }
 

@@ -6,6 +6,7 @@
 package fr.fgdo.life.GameObject;
 
 import com.sun.javafx.geom.Area;
+import fr.fgdo.life.Creature.Creature;
 import fr.fgdo.life.GameState.Board.Board;
 import fr.fgdo.life.GameState.Board.BoardView;
 import fr.fgdo.math.Point;
@@ -22,6 +23,7 @@ public abstract class GameObject extends Observable{
     protected Point center;
     protected Color color;
     protected Board board;
+    public boolean toDelete = false;
     
     public int getRadius() {
         return radius;
@@ -58,10 +60,15 @@ public abstract class GameObject extends Observable{
         return distanceX * distanceX + distanceY * distanceY <= radiusSum * radiusSum;
     }
 
+    public boolean isPointInside(int x,int y) {
+        return (x - center.x)*(x - center.x) + (y - center.y)*(y - center.y) < radius*radius;
+    }
+    
     /**
      * @param color the color to set
      */
     public void setColor(Color color) {
         this.color = color;
     }
+    
 }

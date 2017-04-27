@@ -6,6 +6,7 @@
 package fr.fgdo.life.GameState.Board;
 
 import fr.fgdo.life.Creature.Creature;
+import fr.fgdo.life.Creature.CreaturePanel;
 import fr.fgdo.life.Food.Food;
 import fr.fgdo.life.GameObject.GameObject;
 import fr.fgdo.life.GameState.Board.Events.MeteorologicalEvent;
@@ -14,6 +15,8 @@ import fr.fgdo.math.Vector2;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.HeadlessException;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.Observable;
 import java.util.Observer;
 import javax.swing.JPanel;
@@ -22,17 +25,18 @@ import javax.swing.JPanel;
  *
  * @author Olivier
  */
-public class BoardView extends JPanel implements Observer{
+public class BoardView extends JPanel implements Observer, MouseListener{
     
     private final Board board;
     private int scale = 1;
     private Point center = new Point(0,0);
-    private boolean showingCreaturesNames = true;
-    private boolean showingCreaturesVisions = true;
-    private boolean showingIterations = true;
+    public static boolean showingCreaturesNames = true;
+    public static boolean showingCreaturesVisions = true;
+    public static boolean showingIterations = true;
             
     public BoardView(Board board) throws HeadlessException {
         this.board = board;
+        this.addMouseListener(this);
     }
     
     @Override
@@ -46,16 +50,27 @@ public class BoardView extends JPanel implements Observer{
         
         int XMaxScreen = getXYMaxScreen().x;
         int YMaxScreen = getXYMaxScreen().y;
+              
+        for (int i = 0; i < board.gameObjects.size(); i++) {
+            
+            /* CREATURE */
+            if(board.gameObjects.get(i) instanceof Creature) {
+                Creature creature = (Creature) board.gameObjects.get(i);
+                creature.draw(g,XMaxScreen,YMaxScreen,board.getWidth(),board.getHeight());
+                
+            /* FOOD */
+            } else if(board.gameObjects.get(i) instanceof Food) {
+                Food food = (Food) board.gameObjects.get(i);
+                food.draw(g,XMaxScreen,YMaxScreen,board.getWidth(),board.getHeight());
+                
+            /* METEOROLOGICALEVENT */
+            } else if(board.gameObjects.get(i) instanceof MeteorologicalEvent) {
+                 MeteorologicalEvent meteorologicalEvent = (MeteorologicalEvent) board.gameObjects.get(i);
+                 meteorologicalEvent.draw(g,XMaxScreen,YMaxScreen,board.getWidth(),board.getHeight());
+            }
+        }
         
-        for (MeteorologicalEvent meteorologicalEvent : board.getMeteorologicalEvents()) {
-            meteorologicalEvent.draw(g,XMaxScreen,YMaxScreen,board.getWidth(),board.getHeight());
-        }
-        for (Food food : board.getFoods()) {
-            food.draw(g,XMaxScreen,YMaxScreen,board.getWidth(),board.getHeight());
-        }
-        for (Creature creature : board.getCreatures()) {
-            creature.draw(g,XMaxScreen,YMaxScreen,board.getWidth(),board.getHeight());
-        }
+        
         g.setColor(Color.BLACK);
         if(showingIterations) g.drawString(Long.toString(board.iteration), 0, 10);
         try {
@@ -73,7 +88,7 @@ public class BoardView extends JPanel implements Observer{
     }
     
     public static int getBackY(int localY, int maxScreenY, int height) {
-        return (height+((localY+maxScreenY)*height)/(-1*maxScreenY))*-1;
+        return (2*height+((localY+maxScreenY)*height)/(-1*maxScreenY));
     }
     
     public static int getLocalX(int x, int maxScreenX, int width) {
@@ -110,5 +125,33 @@ public class BoardView extends JPanel implements Observer{
 
         }
         return new Vector2<>(maxScreenX-1, maxScreenY-1);
+    }
+
+    @Override
+    public void mouseClicked(MouseEvent e) {
+    }
+
+    @Override
+    public void mousePressed(MouseEvent e) {
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
+        int XMaxScreen = getXYMaxScreen().x;
+        int YMaxScreen = getXYMaxScreen().y;
+        if (e.getX() <= XMaxScreen && e.getY() <= YMaxScreen) {
+            Creature creature = board.getCreatureOnPoint(getBackX(e.getX(), XMaxScreen, board.getWidth()), getBackY(e.getY(), YMaxScreen, board.getHeight()));
+            if (creature != null) {
+                new CreaturePanel(creature,this);
+            }
+        }
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent e) {
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e) {
     }
 }

@@ -11,18 +11,15 @@ import fr.fgdo.life.Food.Food;
 import fr.fgdo.life.GameState.Board.Events.MeteorologicalEvent;
 import fr.fgdo.life.GameState.Board.Events.MeteorologicalEventListener;
 import fr.fgdo.life.GameObject.GameObject;
+import fr.fgdo.life.GameState.Board.Events.MeteorologicalEventsTypes;
 import fr.fgdo.life.Life;
 import fr.fgdo.life.neuralNetwork.exceptions.ArraySizeException;
 import fr.fgdo.life.neuralNetwork.exceptions.InputsSizeException;
 import fr.fgdo.life.neuralNetwork.exceptions.TopologySizeException;
 import fr.fgdo.math.Point;
-import java.awt.Color;
-import java.awt.List;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.Observable;
 import java.util.logging.Level;
@@ -43,7 +40,11 @@ public class Board extends Observable implements ActionListener,MeteorologicalEv
     public static int width;
     public static int height;
     private final String name;
+    ArrayList<GameObject> gameObjects;
     ArrayList<Creature> creatures;
+    
+    public int creatureNumber = 0;
+    
     ArrayList<MeteorologicalEvent> meteorologicalEvents;
     ArrayList<Food> foods;
     ArrayList<MeteorologicalEvent> toRemoveMeteorologicalEvents;
@@ -52,19 +53,33 @@ public class Board extends Observable implements ActionListener,MeteorologicalEv
     public long iteration = 0;
     
     
+    /*Config Generate*/
+    public int numberCreatureToGenerate = 10;
+    public int interevalCreatureToGenerate = 1000;
+    public int nextGenerationCreatures = interevalCreatureToGenerate;
+    
+    public int numberFoodToGenerate = 20;
+    public int interevalFoodToGenerate = 60;
+    public int nextGenerationFoods = interevalFoodToGenerate;
+    
+    public int numberEventToGenerate = 10;
+    public int interevalEventToGenerate = 1000;
+    public int nextGenerationEvents = interevalEventToGenerate;
     
     public Board(BoardParams params) {
         this.timerUpdate = new Timer(20, this);
+        this.gameObjects = new ArrayList<>();
+        Board.width = params.size.x;
+        Board.height = params.size.y;
+        this.name = params.name;
+        timerUpdate.start();
+        
         this.creatures = new ArrayList<>();
         this.meteorologicalEvents = new ArrayList<>();
         this.foods = new ArrayList<>();
         this.toRemoveMeteorologicalEvents = new ArrayList<>();
         this.toRemoveCreatures = new ArrayList<>();
         this.toRemoveFoods = new ArrayList<>();
-        Board.width = params.size.x;
-        Board.height = params.size.y;
-        this.name = params.name;
-        timerUpdate.start();
     }
     
     public void updateView(String arg) {
@@ -74,22 +89,9 @@ public class Board extends Observable implements ActionListener,MeteorologicalEv
     }
     
     public void generateFood() {
-        if (generateFood) {
-            if (Life.rand.nextFloat() > 0.95) {
-                addFood(new Food());
-            }
-        }
-    }
-    
-    public void reproduce() throws TopologySizeException, ArraySizeException {
-        
-        if (Life.rand.nextFloat() > 0.99) {
-
-            Creature creature1 = creatures.get((int)(Math.random() * creatures.size()));
-            Creature creature2 = creatures.get((int)(Math.random() * creatures.size())); 
-
-            addCreature(new Creature(creature1, creature2));
-        
+        if (iteration >= nextGenerationFoods) {
+            addFood(numberFoodToGenerate);
+            nextGenerationFoods = (int) (iteration+interevalFoodToGenerate);
         }
     }
     
@@ -97,70 +99,158 @@ public class Board extends Observable implements ActionListener,MeteorologicalEv
         /*To Implement*/
     }
     
-    public void updateMeteorologicalEvents() {
-        for (MeteorologicalEvent meteorologicalEvent : meteorologicalEvents) {
-            creatures.forEach((creature) -> {
-                meteorologicalEvent.checkCreature(creature);
-            });
-            meteorologicalEvent.update();
+    public void reproduce() throws TopologySizeException, ArraySizeException {
+        if (Life.rand.nextFloat() > 0.999) {
+          for (int i = 0; i < 30; i++) {
+              
+                int creature1_index = (int)(Math.random() * creatureNumber);
+                int creature2_index = (int)(Math.random() * creatureNumber);
+                
+                
+                Creature creature1 = null;
+                Creature creature2 = null;
+                int index = 0;
+                for (int j = 0; j < gameObjects.size(); j++) {
+                    if(gameObjects.get(j) instanceof Creature) {
+                        if(creature1_index == index) {
+                            creature1 = (Creature)gameObjects.get(j);
+                        }
+                        if(creature2_index == index) {
+                            creature2 = (Creature)gameObjects.get(j);
+                        }
+                        index++;
+                    }
+                }
+                addCreature(new Creature(creature1, creature2));
+            }  
         }
     }
     
-    public void updateCreatures() {
-        creatures.forEach((creature) -> {
-            try {
-                updateCreaturesIntersects(creature);
-                updateCreaturesViews(creature);
-                creature.update();
-                checkBoundsCreature(creature);
-            } catch (InputsSizeException ex) {
-                Logger.getLogger(Board.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        });
-    }
-    
-    public void update() throws TopologySizeException, ArraySizeException {
+    public void update() throws TopologySizeException, ArraySizeException, InputsSizeException {
+                
+        // Génération food
         generateFood();
         
-        updateMeteorologicalEventsArray();
-        updateCreaturesArray();
-        updateFoodsArray();
+        // Génération event
+        //generateEvent();
         
-        updateMeteorologicalEvents();
-        updateCreatures();
+        // Update des GameObjects
+        updateGameObjects();
+        removeGameOjects();
         
-        if(creatures.size() > 0) reproduce();
+        if(creatureNumber>0) reproduce();
+        
+        
         
         iteration++;
     }
     
-    public void checkBoundsCreature(Creature creature) {
-        if (creature.getCenter().x + creature.getRadius() > width) creature.getCenter().x = width-creature.getRadius();
-        if (creature.getCenter().x - creature.getRadius() < 0) creature.getCenter().x = creature.getRadius();
-        if (creature.getCenter().y + creature.getRadius() > height) creature.getCenter().y = height-creature.getRadius();
-        if (creature.getCenter().y - creature.getRadius() < 0) creature.getCenter().y = creature.getRadius();
-        for (Creature creatureToTest : creatures) {
-            if (creatureToTest != creature && creature.intersect(creatureToTest)) {
-                //System.out.println(creature.getName() + " intersect " + creatureToTest.getName());
+    public void updateGameObjects() throws InputsSizeException {
+        
+        /* RESET OBJECTS */
+        for (int i = 0; i < gameObjects.size(); i++) {
+            
+            /* CREATURE */
+            if(gameObjects.get(i) instanceof Creature) {
+                Creature creature = (Creature) gameObjects.get(i);
+                creature.setOverCreature(false);
+                creature.setVisibleFoods(1, false);
+                creature.setVisibleCreatures(1, false);
+                creature.setVisibleMeteorologicalEvents(1, false);
+                
+            /* FOOD */
+            } else if(gameObjects.get(i) instanceof Food) {
+                Food food = (Food) gameObjects.get(i);
+                
+            /* METEOROLOGICALEVENT */
+            } else if(gameObjects.get(i) instanceof MeteorologicalEvent) {
+                 MeteorologicalEvent meteorologicalEvent = (MeteorologicalEvent) gameObjects.get(i);
             }
         }
-        for (Food food : foods) {
-            if (creature.intersect(food)) {
-                creature.eat(food);
-                toRemoveFoods.add(food);
+        
+        /* DO STUFF WITH OBJECTS */
+        for (int i = 0; i < gameObjects.size(); i++) {
+            
+            /* CREATURE */
+            if(gameObjects.get(i) instanceof Creature) {
+                Creature creature = (Creature) gameObjects.get(i);
+                
+                /* ITERATE ALL GAMEOBJECTS */
+                for (int j = 0; j < gameObjects.size(); j++) {
+                    
+                    /* CREATURE */
+                    if(gameObjects.get(j) instanceof Creature) {
+                        if(i != j) {
+                            Creature otherCreature = (Creature) gameObjects.get(j);
+                            
+                            /* Si une créature rencontre une autre créature */
+                            if(creature.intersect(otherCreature)) {
+                                creature.setOverCreature(true);
+                           }
+                            
+                           /* Si une créature voit une autre créature */
+                           
+                           int lineX = creature.getCenter().x + (int) (Math.cos(Math.toRadians(creature.getDirection())) * 100);
+                           int lineY = creature.getCenter().y - (int) (Math.sin(Math.toRadians(creature.getDirection())) * 100);
+
+                            if(getCircleLineIntersectionPoint(creature.getCenter(), new Point(lineX, lineY), otherCreature.getCenter(), otherCreature.getRadius()).size() > 0) {
+                                creature.setVisibleCreatures(1, true);
+                            }
+                        }
+                        
+                    /* FOOD */
+                    } else if(gameObjects.get(j) instanceof Food) {
+                        Food food = (Food) gameObjects.get(j);
+                        
+                        /* Miam miam */
+                        if (food.toDelete == false && creature.intersect(food)) {
+                            creature.eat(food);
+                            food.toDelete = true;
+                        }
+                        
+                        /* Si une créature voit une food */
+                           
+                        int lineX = creature.getCenter().x + (int) (Math.cos(Math.toRadians(creature.getDirection())) * 100);
+                        int lineY = creature.getCenter().y - (int) (Math.sin(Math.toRadians(creature.getDirection())) * 100);
+
+                         if(getCircleLineIntersectionPoint(creature.getCenter(), new Point(lineX, lineY), food.getCenter(), food.getRadius()).size() > 0) {
+                             creature.setVisibleFoods(1, true);
+                         }
+                        
+
+                    /* METEOROLOGICALEVENT */
+                    } else if(gameObjects.get(j) instanceof MeteorologicalEvent) {
+                         MeteorologicalEvent meteorologicalEvent = (MeteorologicalEvent) gameObjects.get(j);
+                         meteorologicalEvent.checkCreature(creature);
+                    }        
+                }
+                
+                creature.update();
+                
+            /* FOOD */
+            } else if(gameObjects.get(i) instanceof Food) {
+                Food food = (Food) gameObjects.get(i);
+            
+            /* METEOROLOGICALEVENT */
+            } else if(gameObjects.get(i) instanceof MeteorologicalEvent) {
+                 MeteorologicalEvent meteorologicalEvent = (MeteorologicalEvent) gameObjects.get(i);
+                  meteorologicalEvent.update();
             }
         }
-        updateFoodsArray();
     }
     
-    public void updateCreaturesIntersects(Creature creature) {
-        for (Creature creatureToTest : creatures) {
-            if (creature != creatureToTest && creature.intersect(creatureToTest)) {
-                creature.setOverCreature(true);
-                return;
+    public void removeGameOjects() {
+        
+        Iterator<GameObject> it = gameObjects.iterator();
+        while(it.hasNext()){
+            GameObject gameObject = it.next();
+            if(gameObject.toDelete == true) {
+                if(gameObject instanceof Creature) {
+                    creatureNumber--;
+                }
+                it.remove();
             }
         }
-        creature.setOverCreature(false);
     }
     
     public void updateMeteorologicalEventsIntersects(Creature creature) {
@@ -172,35 +262,7 @@ public class Board extends Observable implements ActionListener,MeteorologicalEv
         }
         creature.setOverMeteorologicalEvent(false);
     }
-    
-    public void updateCreaturesViews(Creature creature) {
         
-        
-        ArrayList<GameObject> gameObjects = new ArrayList<>();
-        //gameObjects.addAll(creatures);
-        gameObjects.addAll(foods);
-        //gameObjects.addAll(meteorologicalEvents);
-        
-        
-        /* RESET capteurs */
-        creature.setVisibleFoods(1, false);
-        
-        
-        for (GameObject otherGameObject : gameObjects) {
-            if(otherGameObject != creature) {
-                                        
-                int lineX = creature.getCenter().x + (int) (Math.cos(Math.toRadians(creature.getDirection())) * 100);
-                int lineY = creature.getCenter().y - (int) (Math.sin(Math.toRadians(creature.getDirection())) * 100);
-                                
-                if(getCircleLineIntersectionPoint(creature.getCenter(), new Point(lineX, lineY), otherGameObject.getCenter(), otherGameObject.getRadius()).size() > 0) {
-                    creature.setVisibleFoods(1, true);
-                } else {
-                }
-                
-            }
-        }
-    }
-    
     public ArrayList<Point> getCircleLineIntersectionPoint(Point pointA,Point pointB, Point center, double radius) {
         double baX = pointB.x - pointA.x;
         double baY = pointB.y - pointA.y;
@@ -271,15 +333,27 @@ public class Board extends Observable implements ActionListener,MeteorologicalEv
     }
     
     public void addCreature(Creature creature) {
-        creatures.add(creature);
+        gameObjects.add(creature);
+        creatureNumber++;
     }
 
+    
+    public void addFood() {
+        addFood(new Food());
+    }
+    
     public void addFood(Food food) {
-        foods.add(food);
+        gameObjects.add(food);
+    }
+    
+    public void addFood(int n) {
+        for (int i = 0; i < n; i++) {
+            addFood();
+        }
     }
     
     public void addEvent(MeteorologicalEvent meteorologicalEvent) {
-        meteorologicalEvents.add(meteorologicalEvent);
+        gameObjects.add(meteorologicalEvent);
     }
     
     @Override
@@ -290,6 +364,8 @@ public class Board extends Observable implements ActionListener,MeteorologicalEv
             } catch (TopologySizeException ex) {
                 Logger.getLogger(Board.class.getName()).log(Level.SEVERE, null, ex);
             } catch (ArraySizeException ex) {
+                Logger.getLogger(Board.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (InputsSizeException ex) {
                 Logger.getLogger(Board.class.getName()).log(Level.SEVERE, null, ex);
             }
             if (System.nanoTime()- lastUpdate > 20000000) {
@@ -333,31 +409,26 @@ public class Board extends Observable implements ActionListener,MeteorologicalEv
 
     @Override
     public void creatureIsDead(Creature creature) {
-        toRemoveCreatures.add(creature);
+        creature.toDelete = true;
+
     }
 
-    public void updateFoodsArray() {
-        for (Iterator<Food> iterator = toRemoveFoods.iterator(); iterator.hasNext();) {
-            Food next = iterator.next();
-            foods.remove(next);
-            iterator.remove();
+
+    
+    public void skipFrames(int n) throws TopologySizeException, ArraySizeException, InputsSizeException {
+        for (int i = 0; i < n; i++) {
+            update();
         }
     }
     
-    public void updateMeteorologicalEventsArray() {
-        for (Iterator<MeteorologicalEvent> iterator = toRemoveMeteorologicalEvents.iterator(); iterator.hasNext();) {
-            MeteorologicalEvent next = iterator.next();
-            meteorologicalEvents.remove(next);
-            iterator.remove();
+    public Creature getCreatureOnPoint(int x,int y) {
+        for (GameObject gameObject : gameObjects) {
+            if (gameObject instanceof Creature) {
+                if(gameObject.isPointInside(x, y)) return (Creature)gameObject;
+            }
         }
+        return null;
     }
     
-    public void updateCreaturesArray() {
-        for (Iterator<Creature> iterator = toRemoveCreatures.iterator(); iterator.hasNext();) {
-            Creature next = iterator.next();
-            creatures.remove(next);
-            iterator.remove();
-        }
-    }
     
 }

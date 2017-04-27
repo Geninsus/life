@@ -9,11 +9,14 @@ import fr.fgdo.life.Creature.Creature;
 import fr.fgdo.life.Food.Food;
 import fr.fgdo.life.GameState.Board.Board;
 import fr.fgdo.life.GameState.Board.BoardView;
-import fr.fgdo.life.GameState.Board.BoardTabbedView;
+import fr.fgdo.life.GameState.Board.Tabbed.BoardTabbedView;
 import fr.fgdo.life.GameState.Board.Events.MeteorologicalEvent;
 import fr.fgdo.life.GameState.Board.Events.MeteorologicalEventsTypes;
+import fr.fgdo.life.GameState.Board.Tabbed.BoardOptionTab;
 import fr.fgdo.life.Life;
 import fr.fgdo.life.State.State;
+import fr.fgdo.life.neuralNetwork.exceptions.ArraySizeException;
+import fr.fgdo.life.neuralNetwork.exceptions.InputsSizeException;
 import java.awt.BorderLayout;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -57,6 +60,7 @@ public class GameState extends State implements MouseListener,ChangeListener, It
         board.addObserver(boardView);
         add(boardView, BorderLayout.CENTER);
         board.addObserver(boardTabbedPane);
+        board.addObserver(boardTabbedPane.optionsTab);
         board.run();
     }
 
@@ -68,7 +72,7 @@ public class GameState extends State implements MouseListener,ChangeListener, It
             switch(button.getName()) {
                 case "addCreature":
                     try {
-                        //for (int i = 0; i < 30; i++) {
+                        //for (int i = 0; i < 100; i++) {
                             this.board.addCreature(new Creature(board));
                         //}
                     } catch (TopologySizeException ex) {
@@ -91,6 +95,19 @@ public class GameState extends State implements MouseListener,ChangeListener, It
                     break;
                 case "addFire":
                     board.addEvent(new MeteorologicalEvent(MeteorologicalEventsTypes.FIRE,board.getWidth(),board.getHeight(), board));
+                    break;
+                case "skipFrameButton":
+            {
+                try {
+                    board.skipFrames(BoardOptionTab.getNumberFramesToSkip());
+                } catch (TopologySizeException ex) {
+                    Logger.getLogger(GameState.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (ArraySizeException ex) {
+                    Logger.getLogger(GameState.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (InputsSizeException ex) {
+                    Logger.getLogger(GameState.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
                     break;
                 default:
                     break;
