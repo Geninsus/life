@@ -38,7 +38,7 @@ public class CreaturePanel extends JDialog implements Observer, MouseListener{
     JLabel visibleFoods = new JLabel();
     JLabel visibleMeteorologicalEvents = new JLabel();
     
-    JButton saveButton = new JButton("SaveIt");
+    JButton saveButton = new JButton("Save It");
             
     Creature creature;
     public CreaturePanel(Creature creature, Component c) {

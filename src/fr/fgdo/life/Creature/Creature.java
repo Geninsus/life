@@ -127,7 +127,6 @@ public final class Creature extends GameObject implements Serializable {
         Double varDirection = netOutputs[0] * 10;
         Double varSpeed = Math.abs(netOutputs[1] * 10);
         this.updatePosition(varDirection, varSpeed);
-        
         setChanged();
         notifyObservers();
         clearChanged();
