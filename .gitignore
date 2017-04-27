@@ -4,3 +4,4 @@ build/built-jar.properties
 build/*
 savedCreatures/*
 **/savedCreatures
+**/build
