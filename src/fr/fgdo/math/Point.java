@@ -5,11 +5,13 @@
  */
 package fr.fgdo.math;
 
+import java.io.Serializable;
+
 /**
  *
  * @author Olivier
  */
-public class Point {
+public class Point implements Serializable{
     public int x;
     public int y;
 

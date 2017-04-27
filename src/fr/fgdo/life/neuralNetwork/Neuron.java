@@ -8,6 +8,7 @@ package fr.fgdo.life.neuralNetwork;
 import fr.fgdo.life.Food.Food;
 import fr.fgdo.life.Life;
 import fr.fgdo.life.neuralNetwork.exceptions.ArraySizeException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -15,7 +16,7 @@ import java.util.Random;
  *
  * @author guillaume
  */
-public class Neuron {
+public class Neuron implements Serializable{
     private int index;
     private double value;
     private ArrayList<Double> outputWeights;

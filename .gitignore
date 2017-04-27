@@ -1,4 +1,6 @@
 /dist/
 nbproject/private*
 build/built-jar.properties
-build/*
+build/
+savedCreatures/*.ser
+**/build

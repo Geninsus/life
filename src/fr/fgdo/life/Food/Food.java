@@ -10,12 +10,13 @@ import fr.fgdo.life.GameState.Board.Board;
 import fr.fgdo.life.Life;
 import fr.fgdo.math.Point;
 import java.awt.Color;
+import java.io.Serializable;
 
 /**
  *
  * @author Olivier
  */
-public class Food extends GameObject{
+public class Food extends GameObject implements Serializable{
 
     private int value = Life.rand.nextInt(30)+20;
     

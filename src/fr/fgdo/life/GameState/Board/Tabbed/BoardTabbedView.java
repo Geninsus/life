@@ -27,6 +27,7 @@ public class BoardTabbedView extends JTabbedPane implements Observer{
 
     JPanel addTab;
     public BoardOptionTab optionsTab;
+    public BoardSavedCreaturesTab savedCreaturesTab;
     JPanel eventsTab;
     
     JButton playButton;
@@ -56,9 +57,13 @@ public class BoardTabbedView extends JTabbedPane implements Observer{
         
         
         /*Option Tab*/
-        /*NORTH*/
         optionsTab = new BoardOptionTab(gameState);
         this.addTab("Options", optionsTab);
+        
+        
+        /*SavedCreatures Tab*/
+        savedCreaturesTab = new BoardSavedCreaturesTab(gameState);
+        this.addTab("Saved Creatures", savedCreaturesTab);
         
         /* Events TAB */
         eventsTab = new JPanel();

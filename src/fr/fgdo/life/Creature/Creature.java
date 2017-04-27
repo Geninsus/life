@@ -21,13 +21,21 @@ import fr.fgdo.math.Point;
 import fr.fgdo.util.RandomNameGenerator;
 import java.awt.Color;
 import java.awt.Graphics;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
  * @author Olivier
  */
-public final class Creature extends GameObject {
+public final class Creature extends GameObject implements Serializable {
     
     /*CONST*/
     private static final int MIN_FIELD_OF_VIEW = 15;
@@ -36,7 +44,7 @@ public final class Creature extends GameObject {
     private static final float MUTATION_RATE = (float)0.3;
     
     /*Characteristics*/
-    private final String name;
+    private String name;
     private double life = MAX_LIFE;
     public Net net;
     private double direction;
@@ -68,7 +76,7 @@ public final class Creature extends GameObject {
         this.radius = 15;
         this.color = new Color(Life.rand.nextFloat(), Life.rand.nextFloat(), Life.rand.nextFloat());
         this.center = new Point(Life.rand.nextInt(Board.width), Life.rand.nextInt(Board.height));
-        int topology[] = {1, 1, 2};
+        int topology[] = {6, 4, 2};
         this.name = RandomNameGenerator.generateName();
         this.net = new Net(topology);
         setDirection((double)Life.rand.nextInt(360));
@@ -99,10 +107,6 @@ public final class Creature extends GameObject {
         mutate();
     }
     
-    public Creature(Board board) throws TopologySizeException {
-        this();
-        this.board = board;
-    }
 
     public String getName() {
         return name;
@@ -116,14 +120,18 @@ public final class Creature extends GameObject {
     public void update() throws InputsSizeException {
         this.color = new Color((255-(int)(life/MAX_LIFE*255))%255, 255, 0);
         this.removeLife(1);
-        double food = (visibleFoods[1])? 1 : -1;
+        double food_0 = (visibleFoods[0])? 1 : -1;
+        double food_1 = (visibleFoods[1])? 1 : -1;
+        double food_2 = (visibleFoods[2])? 1 : -1;
+        double creature_0 = (visibleCreatures[0])? 1 : -1;
+        double creature_1 = (visibleCreatures[1])? 1 : -1;
+        double creature_2 = (visibleCreatures[2])? 1 : -1;
         //double meteorological = (visibleMeteorologicalEvents[1])? 1 : -1;
-        Double netInputs[] = {food};
+        Double netInputs[] = {food_0, food_1, food_2, creature_0, creature_1, creature_2};
         Double netOutputs[] = net.feedForward(netInputs);
         Double varDirection = netOutputs[0] * 10;
         Double varSpeed = Math.abs(netOutputs[1] * 10);
         this.updatePosition(varDirection, varSpeed);
-        
         setChanged();
         notifyObservers();
         clearChanged();
@@ -185,10 +193,11 @@ public final class Creature extends GameObject {
         super.draw(g, screenWidth, screenHeight, boardWidth, boardHeight);
         int xCenterScreen = BoardView.getLocalX(getCenter().x,screenWidth,boardWidth);
         int yCenterScreen = BoardView.getLocalY(getCenter().y,screenHeight,boardHeight);
-        if (BoardView.showingCreaturesVisions) g.drawLine(xCenterScreen, yCenterScreen, BoardView.getLocalX(getCenter().x + (int) (Math.cos(-1*Math.toRadians(getDirection())) * distanceOfView),screenHeight,boardHeight), BoardView.getLocalY(getCenter().y + (int) (Math.sin(-1*Math.toRadians(getDirection())) * distanceOfView),screenHeight,boardHeight));
-        //g.drawLine(xCenterScreen, yCenterScreen, xCenterScreen + (int) (Math.cos(Math.toRadians(getDirection())) * 100), yCenterScreen + (int) (Math.sin(Math.toRadians(getDirection())) * 100));
-        //g.drawLine(xCenterScreen, yCenterScreen, xCenterScreen + (int) (Math.cos(Math.toRadians(getDirection() + getFieldOfView())) * 100), yCenterScreen + (int) (Math.sin(Math.toRadians(getDirection() + getFieldOfView())) * 100));
-        //g.drawLine(xCenterScreen, yCenterScreen, xCenterScreen + (int) (Math.cos(Math.toRadians(getDirection() - getFieldOfView())) * 100), yCenterScreen + (int) (Math.sin(Math.toRadians(getDirection() - getFieldOfView())) * 100));
+        if (BoardView.showingCreaturesVisions) {
+            g.drawLine(xCenterScreen, yCenterScreen, BoardView.getLocalX(getCenter().x + (int) (Math.cos(-1*Math.toRadians(getDirection())) * distanceOfView),screenHeight,boardHeight), BoardView.getLocalY(getCenter().y + (int) (Math.sin(-1*Math.toRadians(getDirection())) * distanceOfView),screenHeight,boardHeight));
+            g.drawLine(xCenterScreen, yCenterScreen, BoardView.getLocalX(getCenter().x + (int) (Math.cos(-1*Math.toRadians(getDirection() + getFieldOfView())) * distanceOfView),screenHeight,boardHeight), BoardView.getLocalY(getCenter().y + (int) (Math.sin(-1*Math.toRadians(getDirection() + getFieldOfView())) * distanceOfView),screenHeight,boardHeight));
+            g.drawLine(xCenterScreen, yCenterScreen, BoardView.getLocalX(getCenter().x + (int) (Math.cos(-1*Math.toRadians(getDirection() - getFieldOfView())) * distanceOfView),screenHeight,boardHeight), BoardView.getLocalY(getCenter().y + (int) (Math.sin(-1*Math.toRadians(getDirection() - getFieldOfView())) * distanceOfView),screenHeight,boardHeight));
+        }
         g.setColor(Color.BLACK);
         if (BoardView.showingCreaturesNames) g.drawString(getName(), xCenterScreen, yCenterScreen);
     }
@@ -198,6 +207,73 @@ public final class Creature extends GameObject {
         if(life > MAX_LIFE) life = MAX_LIFE;
     }
 
+    @Override
+    public String toString() {
+        return getName()+"\n"+getCenter().x+" , "+getCenter().y+"\n"+getRadius();
+    }
+
+    
+    public void save() {
+        try{
+            ObjectOutputStream objectOutputStream = new ObjectOutputStream(
+            new FileOutputStream("savedCreatures/"+getName()+".ser"));
+            objectOutputStream.writeObject(this);
+            System.out.println("Saved !");
+        }
+        catch(IOException ioException){
+            System.err.println(ioException);
+        }
+    }
+    
+    public static Creature open(String name) {
+        Creature creature = null;
+        try{
+            ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream(name));
+            creature = (Creature) objectInputStream.readObject();
+        }
+        catch(IOException ioException){
+            System.err.println(ioException);
+        }
+        catch(ClassNotFoundException classNotFoundException){
+            System.err.println(classNotFoundException);
+        }
+        return creature;
+    }
+
+    public Creature clone() {
+        try {
+            Creature creature = new Creature();
+            creature.setName(name);
+            creature.setNet(net);
+            creature.setLife(life);
+            creature.setDistanceOfView(distanceOfView);
+            creature.setRadius(radius);
+            creature.setColor(color);
+            return creature;
+        } catch (TopologySizeException ex) {
+            Logger.getLogger(Creature.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+
+    public void setLife(double life) {
+        this.life = life;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setNet(Net net) {
+        this.net = net;
+    }
+
+    public void setDistanceOfView(double distanceOfView) {
+        this.distanceOfView = distanceOfView;
+    }
+    
+    
+    
     public boolean[] getVisibleCreatures() {
         return visibleCreatures;
     }
@@ -212,6 +288,14 @@ public final class Creature extends GameObject {
     
     public double getLife() {
         return life;
+    }
+
+    public Net getNet() {
+        return net;
+    }
+
+    public double getDistanceOfView() {
+        return distanceOfView;
     }
 
     public void setVisibleFoods(int index, boolean value) {

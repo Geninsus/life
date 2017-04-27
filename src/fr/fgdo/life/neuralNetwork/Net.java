@@ -9,6 +9,7 @@ import fr.fgdo.life.neuralNetwork.exceptions.ArraySizeException;
 import java.util.ArrayList;
 import fr.fgdo.life.neuralNetwork.exceptions.InputsSizeException;
 import fr.fgdo.life.neuralNetwork.exceptions.TopologySizeException;
+import java.io.Serializable;
 import java.util.Observable;
 import java.util.Arrays;
 import javax.swing.JPanel;
@@ -17,7 +18,7 @@ import javax.swing.JPanel;
  *
  * @author guillaume
  */
-public class Net extends Observable{
+public class Net extends Observable implements Serializable{
     private int[] topology;
     private int numLayer;
     private ArrayList<Layer> layers;
