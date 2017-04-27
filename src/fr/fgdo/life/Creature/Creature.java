@@ -215,9 +215,10 @@ public final class Creature extends GameObject implements Serializable {
     
     public void save() {
         try{
+            //Pire technique
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(
             new FileOutputStream("savedCreatures/"+getName()+".ser"));
-            objectOutputStream.writeObject(this);
+            objectOutputStream.writeObject(this.clone());
             System.out.println("Saved !");
         }
         catch(IOException ioException){
