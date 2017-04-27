@@ -24,7 +24,7 @@ import javax.swing.JPanel;
  *
  * @author Guillaume
  */
-public class NetView extends JFrame implements Observer {
+public class NetView extends JPanel implements Observer {
     
     private Net net;
     private JPanel globalPanel;
@@ -33,81 +33,88 @@ public class NetView extends JFrame implements Observer {
     private JPanel outputPanel;
     private Dimension d = new Dimension(20,20);
     
-    public NetView(Net net, String name) {
-        super(name);
-        this.setSize(400, 400);
+    public NetView(Net net) {
         this.net = net;
         this.globalPanel = new JPanel();
-        this.globalPanel.setLayout(new GridLayout(1,3,50,50));
+        this.globalPanel.setLayout(new GridLayout(1,3,30,30));
         this.addInputNeuron();
         this.addLayerNeuron();
         this.addOutputNeuron();
-        this.add(globalPanel);        
+        this.add(globalPanel);
     }
     
-    public void addInputNeuron() {
+    private void addInputNeuron() {
         
         this.inputPanel = new JPanel();
-        this.inputPanel.setLayout(new GridLayout(0,1,50,50));
         
-        int inputNumber = this.net.getTopology()[0];
-        JButton neuron;
-        for (int i = 0; i < inputNumber; i++) {
-            neuron = new JButton("");
-            neuron.setName(""+i);
-            neuron.setSize(this.d);
-            this.inputPanel.add(neuron);
+        Layer layerInput =  this.net.getLayers().get(0);
+        this.inputPanel.setLayout(new GridLayout(0,1,20,20));
+        
+        
+        JButton neuronView;
+        for(Neuron neuron : layerInput) {
+            neuronView = new JButton(Double.toString(neuron.getValue()));
+            neuronView.setName("");
+            neuronView.setSize(10, 10);
+            this.inputPanel.add(neuronView);
         }
         
         this.globalPanel.add(this.inputPanel);
     }
     
-    public void addLayerNeuron() {
+    private void addLayerNeuron() {
         
         this.layersPanel = new JPanel();
         JPanel layerPanel;
-        int layerNumber = this.net.getTopology().length - 2;
-        this.layersPanel.setLayout(new GridLayout(1,layerNumber,50,50));
         
-        JButton neuron = new JButton();
+        int hiddenLayerNumber = this.net.getTopology().length - 2;
+        this.layersPanel.setLayout(new GridLayout(1,hiddenLayerNumber,20,20));
         
-        for (int i = 0; i < layerNumber ; i++) {
-            layerPanel = new JPanel(new GridLayout(this.net.getTopology()[i+1],1,50,50));
-            for (int j = 0; j < this.net.getTopology()[i+1]; j++) {
-                
-                neuron = new JButton();
-                neuron.setName(""+i+"/"+j);
-                neuron.setSize(this.d);
-                layerPanel.add(neuron);
+        JButton neuronView = new JButton();
+        
+        for (int i = 0; i < hiddenLayerNumber ; i++) {
+            Layer hiddenLayer = this.net.getLayers().get(i+1);
+            layerPanel = new JPanel(new GridLayout(hiddenLayer.size(),1,50,50));
+            for (Neuron neuron : hiddenLayer) {
+                neuronView = new JButton(Double.toString(neuron.getValue()));
+                neuronView.setName("");
+                neuronView.setSize(10,10);
+                layerPanel.add(neuronView);
             }
             this.layersPanel.add(layerPanel);
         }
         this.globalPanel.add(layersPanel);
     }
     
-    public void addOutputNeuron() {
+    private void addOutputNeuron() {
         
         this.outputPanel = new JPanel();
-        this.outputPanel.setLayout(new GridLayout(0,1,50,50));
+        this.outputPanel.setLayout(new GridLayout(0,1,20,20));
         
-        int inputNumber = this.net.getTopology()[this.net.getTopology().length - 1];
-        JButton neuron = new JButton();
-        for (int i = 0; i < inputNumber; i++) {
-            neuron = new JButton("");
-            neuron.setName(""+i);
-            neuron.setSize(this.d);
-            this.outputPanel.add(neuron);
+        Layer outputLayer = this.net.getLayers().get(this.net.getLayers().size() -1);
+       
+        JButton neuronView = new JButton();
+        for (Neuron neuron : outputLayer) {
+            neuronView = new JButton(Double.toString(neuron.getValue()));
+            neuronView.setName("");
+            neuronView.setSize(10,10);
+            this.outputPanel.add(neuronView);
         }
         
         this.globalPanel.add(this.outputPanel);
     }
     
-    public void visible(Boolean b) {
-        this.setVisible(b);
+    public void refresh(){
+        this.globalPanel = new JPanel();
+        this.globalPanel.setLayout(new GridLayout(1,3,50,50));
+        this.addInputNeuron();
+        this.addLayerNeuron();
+        this.addOutputNeuron();
+        this.add(globalPanel);
     }
 
+   
     @Override
     public void update(Observable o, Object arg) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }
