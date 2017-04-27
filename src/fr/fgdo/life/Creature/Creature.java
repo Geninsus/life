@@ -46,7 +46,7 @@ public final class Creature extends GameObject implements Serializable {
     /*Characteristics*/
     private String name;
     private double life = MAX_LIFE;
-    private Net net;
+    public Net net;
     private double direction;
     private double fieldOfView = 25;
     private double distanceOfView = 200;
@@ -78,7 +78,7 @@ public final class Creature extends GameObject implements Serializable {
         this.center = new Point(Life.rand.nextInt(Board.width), Life.rand.nextInt(Board.height));
         int topology[] = {6, 4, 2};
         this.name = RandomNameGenerator.generateName();
-        this.net = new Net(topology,this.name);
+        this.net = new Net(topology);
         setDirection((double)Life.rand.nextInt(360));
         //setDirection((double)Life.rand.nextInt(360));
         this.direction = 80;
@@ -100,7 +100,7 @@ public final class Creature extends GameObject implements Serializable {
         for (int i = 0; i < creatures.length; i++) {
             parentsNets[i]=creatures[i].net;
         }
-        this.net = new Net(this.name,parentsNets);
+        this.net = new Net(parentsNets);
         this.board = creatures[0].board;
         this.fieldOfView = creatures[Life.rand.nextInt(creatures.length)].getFieldOfView();
         this.life = MAX_LIFE;
@@ -186,10 +186,6 @@ public final class Creature extends GameObject implements Serializable {
             throw new FieldOfViewOutOfRangeException("Field of view out of range");
         }
         this.fieldOfView = fieldOfView;
-    }
-    
-    public void showNet(){
-        this.net.show();
     }
 
     @Override

@@ -12,6 +12,7 @@ import fr.fgdo.life.neuralNetwork.exceptions.TopologySizeException;
 import java.io.Serializable;
 import java.util.Observable;
 import java.util.Arrays;
+import javax.swing.JPanel;
 
 /**
  *
@@ -30,7 +31,7 @@ public class Net extends Observable implements Serializable{
      * @param topology
      * @throws TopologySizeException
      */
-    public Net(int[] topology, String name) throws TopologySizeException {
+    public Net(int[] topology) throws TopologySizeException {
         if(topology.length < 2){
            throw new TopologySizeException("Net must contain at least 2 layers.");
         }
@@ -48,7 +49,7 @@ public class Net extends Observable implements Serializable{
             }
             this.layers.get(layerIndex).get(topology[layerIndex]).setValue(1.0);
         }
-        this.createView(name);
+        this.createView();
     }
     
     /**
@@ -56,7 +57,7 @@ public class Net extends Observable implements Serializable{
      * @param topology
      * @throws TopologySizeException
      */
-    public Net(String name, Net... parentNets) throws TopologySizeException, ArraySizeException {
+    public Net(Net... parentNets) throws TopologySizeException, ArraySizeException {
         if(parentNets.length == 0) {
             throw new ArraySizeException(parentNets.length);
         }
@@ -87,7 +88,7 @@ public class Net extends Observable implements Serializable{
             }
             this.layers.get(layerIndex).get(topology[layerIndex]).setValue(1.0);
         }
-        this.createView(name);
+        this.createView();
     }
     
     /**
@@ -118,12 +119,12 @@ public class Net extends Observable implements Serializable{
         return outputs;
     }
     
-    private void createView(String name) {
-        this.netView = new NetView(this, name);
+    private void createView() {
+        this.netView = new NetView(this);
     }
     
-    public void show() {
-        this.netView.setVisible(true);
+    public JPanel getNetView() {
+        return this.netView;
     }
     
     /*public double normalizeInputs() {

@@ -5,6 +5,7 @@
  */
 package fr.fgdo.life.Creature;
 
+import fr.fgdo.life.neuralNetwork.NetView;
 import java.awt.Component;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -37,6 +38,7 @@ public class CreaturePanel extends JDialog implements Observer, MouseListener{
     JLabel visibleCreatures = new JLabel();
     JLabel visibleFoods = new JLabel();
     JLabel visibleMeteorologicalEvents = new JLabel();
+    JPanel netView = new JPanel();
     
     JButton saveButton = new JButton("Save It");
             
@@ -149,6 +151,9 @@ public class CreaturePanel extends JDialog implements Observer, MouseListener{
         gbc.gridx = 0;
         gbc.gridy = 12;
         gbc.gridwidth = 2;
+        gbc.gridheight = 3;
+        add(creature.net.getNetView(),gbc);
+        
         saveButton.addMouseListener(this);
         add(saveButton,gbc);
         
