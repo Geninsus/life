@@ -96,7 +96,7 @@ public class Board extends Observable implements ActionListener,MeteorologicalEv
         // On supprime les games objects dépréciés
         removeGameOjects();
         
-        if(creatures.size()>0) reproduce();
+        //if(creatures.size()>0) reproduce();
         
         iteration++;
     }
@@ -115,8 +115,12 @@ public class Board extends Observable implements ActionListener,MeteorologicalEv
     public void resetCreaturesInputs() {       
         for (Creature creature : creatures) {
             creature.setOverCreature(false);
+            creature.setVisibleFoods(0, false);
             creature.setVisibleFoods(1, false);
+            creature.setVisibleFoods(2, false);
+            creature.setVisibleCreatures(0, false);
             creature.setVisibleCreatures(1, false);
+            creature.setVisibleCreatures(2, false);
             creature.setVisibleMeteorologicalEvents(1, false);  
         }
     }
@@ -124,6 +128,7 @@ public class Board extends Observable implements ActionListener,MeteorologicalEv
     public void updateCreatures() throws InputsSizeException {
         for (Creature creature : creatures) {
             for (GameObject gameObject : gameObjects) {
+                if(creature == gameObject) continue;
                 
                 /* S'il y a une intersection */
                 if(creature.intersect(gameObject)) {
@@ -162,6 +167,45 @@ public class Board extends Observable implements ActionListener,MeteorologicalEv
                         /* METEOROLOGICALEVENT */
                         } else if(gameObject instanceof MeteorologicalEvent) {
                             creature.setVisibleMeteorologicalEvents(1, true);
+                        }
+                 }
+                 
+                int lineX_1 = creature.getCenter().x + (int) (Math.cos(Math.toRadians(creature.getDirection() + creature.getFieldOfView())) * creature.getDistanceOfView());
+                int lineY_1 = creature.getCenter().y - (int) (Math.sin(Math.toRadians(creature.getDirection() + creature.getFieldOfView())) * creature.getDistanceOfView());
+
+                 if(getCircleLineIntersectionPoint(creature.getCenter(), new Point(lineX_1, lineY_1), gameObject.getCenter(), gameObject.getRadius()).size() > 0) {
+                    
+                        /* CREATURE */
+                        if(gameObject instanceof Creature) {
+                            creature.setVisibleCreatures(0, true);
+
+                        /* FOOD */
+                        } else if(gameObject instanceof Food) {
+                            creature.setVisibleFoods(0, true);
+
+                        /* METEOROLOGICALEVENT */
+                        } else if(gameObject instanceof MeteorologicalEvent) {
+                            creature.setVisibleMeteorologicalEvents(0, true);
+
+                        }
+                 }
+                 
+                int lineX_2 = creature.getCenter().x + (int) (Math.cos(Math.toRadians(creature.getDirection() - creature.getFieldOfView())) * creature.getDistanceOfView());
+                int lineY_2 = creature.getCenter().y - (int) (Math.sin(Math.toRadians(creature.getDirection() - creature.getFieldOfView())) * creature.getDistanceOfView());
+
+                 if(getCircleLineIntersectionPoint(creature.getCenter(), new Point(lineX_2, lineY_2), gameObject.getCenter(), gameObject.getRadius()).size() > 0) {
+                    
+                        /* CREATURE */
+                        if(gameObject instanceof Creature) {
+                            creature.setVisibleCreatures(2, true);
+
+                        /* FOOD */
+                        } else if(gameObject instanceof Food) {
+                            creature.setVisibleFoods(2, true);
+
+                        /* METEOROLOGICALEVENT */
+                        } else if(gameObject instanceof MeteorologicalEvent) {
+                            creature.setVisibleMeteorologicalEvents(2, true);
 
                         }
                  }

@@ -192,10 +192,11 @@ public final class Creature extends GameObject implements Serializable {
         super.draw(g, screenWidth, screenHeight, boardWidth, boardHeight);
         int xCenterScreen = BoardView.getLocalX(getCenter().x,screenWidth,boardWidth);
         int yCenterScreen = BoardView.getLocalY(getCenter().y,screenHeight,boardHeight);
-        if (BoardView.showingCreaturesVisions) g.drawLine(xCenterScreen, yCenterScreen, BoardView.getLocalX(getCenter().x + (int) (Math.cos(-1*Math.toRadians(getDirection())) * distanceOfView),screenHeight,boardHeight), BoardView.getLocalY(getCenter().y + (int) (Math.sin(-1*Math.toRadians(getDirection())) * distanceOfView),screenHeight,boardHeight));
-        //g.drawLine(xCenterScreen, yCenterScreen, xCenterScreen + (int) (Math.cos(Math.toRadians(getDirection())) * 100), yCenterScreen + (int) (Math.sin(Math.toRadians(getDirection())) * 100));
-        //g.drawLine(xCenterScreen, yCenterScreen, xCenterScreen + (int) (Math.cos(Math.toRadians(getDirection() + getFieldOfView())) * 100), yCenterScreen + (int) (Math.sin(Math.toRadians(getDirection() + getFieldOfView())) * 100));
-        //g.drawLine(xCenterScreen, yCenterScreen, xCenterScreen + (int) (Math.cos(Math.toRadians(getDirection() - getFieldOfView())) * 100), yCenterScreen + (int) (Math.sin(Math.toRadians(getDirection() - getFieldOfView())) * 100));
+        if (BoardView.showingCreaturesVisions) {
+            g.drawLine(xCenterScreen, yCenterScreen, BoardView.getLocalX(getCenter().x + (int) (Math.cos(-1*Math.toRadians(getDirection())) * distanceOfView),screenHeight,boardHeight), BoardView.getLocalY(getCenter().y + (int) (Math.sin(-1*Math.toRadians(getDirection())) * distanceOfView),screenHeight,boardHeight));
+            g.drawLine(xCenterScreen, yCenterScreen, BoardView.getLocalX(getCenter().x + (int) (Math.cos(-1*Math.toRadians(getDirection() + getFieldOfView())) * distanceOfView),screenHeight,boardHeight), BoardView.getLocalY(getCenter().y + (int) (Math.sin(-1*Math.toRadians(getDirection() + getFieldOfView())) * distanceOfView),screenHeight,boardHeight));
+            g.drawLine(xCenterScreen, yCenterScreen, BoardView.getLocalX(getCenter().x + (int) (Math.cos(-1*Math.toRadians(getDirection() - getFieldOfView())) * distanceOfView),screenHeight,boardHeight), BoardView.getLocalY(getCenter().y + (int) (Math.sin(-1*Math.toRadians(getDirection() - getFieldOfView())) * distanceOfView),screenHeight,boardHeight));
+        }
         g.setColor(Color.BLACK);
         if (BoardView.showingCreaturesNames) g.drawString(getName(), xCenterScreen, yCenterScreen);
     }
