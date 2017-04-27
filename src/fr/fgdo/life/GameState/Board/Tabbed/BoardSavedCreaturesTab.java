@@ -50,9 +50,13 @@ public class BoardSavedCreaturesTab extends JPanel implements MouseListener{
         
         savedCreatures = new ArrayList<>();
         File folder = new File("savedCreatures");
-        for (File file : folder.listFiles()) {
-            savedCreatures.add(Creature.open(file.getPath()));
+        try {
+            for (File file : folder.listFiles()) {
+                savedCreatures.add(Creature.open(file.getPath()));
+            }
+        } catch (Exception e) {
         }
+        
         
         String[] listNameSavedCreatures = new String[savedCreatures.size()];
         for (int i = 0; i < savedCreatures.size(); i++) {
