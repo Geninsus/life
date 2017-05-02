@@ -10,6 +10,7 @@ import fr.fgdo.life.Creature.CreatureListener;
 import fr.fgdo.life.Food.Food;
 import fr.fgdo.life.GameState.Board.Events.MeteorologicalEvent;
 import fr.fgdo.life.GameObject.GameObject;
+import fr.fgdo.life.GameState.Board.Events.MeteorologicalEventsTypes;
 import fr.fgdo.life.Life;
 import fr.fgdo.life.neuralNetwork.exceptions.ArraySizeException;
 import fr.fgdo.life.neuralNetwork.exceptions.InputsSizeException;
@@ -39,9 +40,12 @@ public class Board extends Observable implements ActionListener,CreatureListener
     public static int width;
     public static int height;
     private final String name;
+    public int generation = 0;
     
     ArrayList<GameObject> gameObjects;
     ArrayList<Creature> creatures;
+    ArrayList<Creature> deadCreatures;
+
     
     public long iteration = 0;
     
@@ -69,6 +73,12 @@ public class Board extends Observable implements ActionListener,CreatureListener
         
         this.gameObjects = new ArrayList<>();
         this.creatures = new ArrayList<>();
+        
+        
+        
+        /**FIRE PATH*/
+        boolean firePath = true;
+        if (firePath) addFirePath();
     }
     
     public void updateView(String arg) {
@@ -78,7 +88,9 @@ public class Board extends Observable implements ActionListener,CreatureListener
     }
     
     public void update() throws TopologySizeException, ArraySizeException, InputsSizeException {
-                
+        
+        boolean autoGen = true;
+        if (autoGen && creatures.size() == 0) generateGeneration();
         // Génération food
         generateFood();
         
@@ -100,6 +112,47 @@ public class Board extends Observable implements ActionListener,CreatureListener
         //if(creatures.size()>0) reproduce();
         
         iteration++;
+    }
+    
+    public void generateGeneration() throws TopologySizeException, ArraySizeException {
+        int nbCreatureToGanerate = 100;
+        if (generation == 1) {
+            for (int i = 0; i < nbCreatureToGanerate; i++) {
+                addCreature();
+            }
+        }
+        else {
+            for (int j = 0; j < nbCreatureToGanerate; j++) {
+                double totalFitness = 0;
+                for (Creature deadCreature : deadCreatures) {
+                    totalFitness += deadCreature.fitness;
+                }
+                double selectA = Life.rand.nextDouble()*totalFitness;
+                double selectB = Life.rand.nextDouble()*totalFitness;
+                Creature creatureA =null;
+                Creature creatureB =null;
+                double sumFitness = 0;
+                for (int i = 0; i < deadCreatures.size(); i++) {
+                    sumFitness+= deadCreatures.get(i).fitness;
+                    if (sumFitness>selectA) {
+                        creatureA = deadCreatures.get(i);
+                        break;
+                    }
+                }
+                for (int i = 0; i < deadCreatures.size(); i++) {
+                    sumFitness+= deadCreatures.get(i).fitness;
+                    if (sumFitness>selectB) {
+                        creatureB = deadCreatures.get(i);
+                        break;
+                    }
+                }
+                addCreature(new Creature(creatureA,creatureB));
+            }
+            
+        }
+        
+        this.deadCreatures = new ArrayList<>();
+        generation++;
     }
     
     public void generateFood() {
@@ -248,12 +301,14 @@ public class Board extends Observable implements ActionListener,CreatureListener
         /* Remove Creatures */
         Iterator<Creature> it = creatures.iterator();
         while(it.hasNext()){
-            if(it.next().toDelete == true) {
+            Creature creature = it.next();
+            if(creature.toDelete == true) {
+                addToDeadCreatures(creature);
                 it.remove();
             }
         }
         
-        /* Remove other Creatures */
+        /* Remove other Object */
         Iterator<GameObject> it2 = gameObjects.iterator();
         while(it2.hasNext()){
             if(it2.next().toDelete == true) {
@@ -261,7 +316,17 @@ public class Board extends Observable implements ActionListener,CreatureListener
             }
         }
     }
-        
+    
+    public void addToDeadCreatures(Creature creature) {
+        for (int i = 0; i < deadCreatures.size(); i++) {
+            if (creature.fitness>deadCreatures.get(i).fitness) {
+                deadCreatures.add(i, creature);
+                return;
+            }
+        }
+        deadCreatures.add(creature);
+    }
+    
     public ArrayList<Point> getCircleLineIntersectionPoint(Point pointA,Point pointB, Point center, double radius) {
         double baX = pointB.x - pointA.x;
         double baY = pointB.y - pointA.y;
@@ -329,6 +394,10 @@ public class Board extends Observable implements ActionListener,CreatureListener
         gameObjects.add(creature);
     }
 
+    public void addCreature() throws TopologySizeException {
+        Creature newCreature = new Creature();
+        addCreature(newCreature);
+    }
     
     public void addFood() {
         addFood(new Food());
@@ -410,5 +479,12 @@ public class Board extends Observable implements ActionListener,CreatureListener
             }
         }
         return null;
+    }
+    
+    public void addFirePath() {
+        MeteorologicalEvent me = new MeteorologicalEvent((this.width>this.height)?this.height/4:this.width/4, new Point(this.width/2, this.height/2), MeteorologicalEventsTypes.FIRE);
+        System.out.println(me);
+        addEvent(me);
+        
     }
 }
