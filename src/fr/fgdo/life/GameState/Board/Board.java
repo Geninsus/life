@@ -41,6 +41,8 @@ public class Board extends Observable implements ActionListener,CreatureListener
     public static int height;
     private final String name;
     public int generation = 0;
+    public long maxIterationsGeneration = 1000;
+    public long nextGeneration = maxIterationsGeneration;
     
     ArrayList<GameObject> gameObjects;
     ArrayList<Creature> creatures;
@@ -90,7 +92,7 @@ public class Board extends Observable implements ActionListener,CreatureListener
     public void update() throws TopologySizeException, ArraySizeException, InputsSizeException {
         
         boolean autoGen = true;
-        if (autoGen && creatures.size() == 0) generateGeneration();
+        if (autoGen && (creatures.size() == 0 || iteration>nextGeneration)) generateGeneration();
         // Génération food
         generateFood();
         
@@ -114,14 +116,36 @@ public class Board extends Observable implements ActionListener,CreatureListener
         iteration++;
     }
     
+    public void killAllCreatures() {
+        for (GameObject gameObject : gameObjects) {
+            if (gameObject instanceof Creature) {
+                Creature creature = (Creature) gameObject;
+                creature.toDelete = true;
+            }
+        }
+        removeGameOjects();
+    }
+    
     public void generateGeneration() throws TopologySizeException, ArraySizeException {
+        nextGeneration = maxIterationsGeneration+iteration;
         int nbCreatureToGanerate = 100;
-        if (generation == 1) {
+        if (generation == 0) {
             for (int i = 0; i < nbCreatureToGanerate; i++) {
-                addCreature();
+                Creature newC = new Creature();
+                MeteorologicalEvent me = null;
+                for (GameObject gameObject : gameObjects) {
+                    if (gameObject instanceof MeteorologicalEvent) {
+                        me = (MeteorologicalEvent)gameObject;
+                    }
+                }
+                while (newC.intersect(me)) {                    
+                    newC.setCenter(new Point(Life.rand.nextInt(this.width), Life.rand.nextInt(this.height)));
+                }
+                addCreature(newC);
             }
         }
         else {
+            killAllCreatures();
             for (int j = 0; j < nbCreatureToGanerate; j++) {
                 double totalFitness = 0;
                 for (Creature deadCreature : deadCreatures) {
@@ -146,7 +170,17 @@ public class Board extends Observable implements ActionListener,CreatureListener
                         break;
                     }
                 }
-                addCreature(new Creature(creatureA,creatureB));
+                Creature newCreature = new Creature(creatureA,creatureB);
+                MeteorologicalEvent me = null;
+                for (GameObject gameObject : gameObjects) {
+                    if (gameObject instanceof MeteorologicalEvent) {
+                        me = (MeteorologicalEvent)gameObject;
+                    }
+                }
+                while (newCreature.intersect(me)) {                    
+                    newCreature.setCenter(new Point(Life.rand.nextInt(this.width), Life.rand.nextInt(this.height)));
+                }
+                addCreature(newCreature);
             }
             
         }
