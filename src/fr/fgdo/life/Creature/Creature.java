@@ -50,6 +50,7 @@ public final class Creature extends GameObject implements Serializable {
     private double direction;
     private double fieldOfView = 25;
     private double distanceOfView = 200;
+    public double fitness = 1;
     
     /*View*/
     public ArrayList<GameObject> vision;
@@ -91,6 +92,7 @@ public final class Creature extends GameObject implements Serializable {
         if (creatures.length == 0) {
             throw new ArraySizeException(creatures.length);
         }
+        
         this.radius = creatures[Life.rand.nextInt(creatures.length)].getRadius();
         this.color = creatures[Life.rand.nextInt(creatures.length)].getColor();
         this.center = new Point(Life.rand.nextInt(Board.width), Life.rand.nextInt(Board.height));
@@ -205,6 +207,7 @@ public final class Creature extends GameObject implements Serializable {
     public void eat(Food food) {
         life += food.getValue();
         if(life > MAX_LIFE) life = MAX_LIFE;
+        fitness++;
     }
 
     @Override
@@ -328,5 +331,4 @@ public final class Creature extends GameObject implements Serializable {
         return overMeteorologicalEvent;
     }
 
-    
 }
