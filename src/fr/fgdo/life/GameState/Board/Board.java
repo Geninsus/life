@@ -40,7 +40,7 @@ public class Board extends Observable implements ActionListener,CreatureListener
     public static int width;
     public static int height;
     private final String name;
-    public int generation = 1;
+    public int generation = 0;
     
     ArrayList<GameObject> gameObjects;
     ArrayList<Creature> creatures;
