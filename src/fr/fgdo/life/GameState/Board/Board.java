@@ -10,6 +10,7 @@ import fr.fgdo.life.Creature.CreatureListener;
 import fr.fgdo.life.Food.Food;
 import fr.fgdo.life.GameState.Board.Events.MeteorologicalEvent;
 import fr.fgdo.life.GameObject.GameObject;
+import fr.fgdo.life.GameState.Board.Events.MeteorologicalEventsTypes;
 import fr.fgdo.life.Life;
 import fr.fgdo.life.neuralNetwork.exceptions.ArraySizeException;
 import fr.fgdo.life.neuralNetwork.exceptions.InputsSizeException;
@@ -39,9 +40,14 @@ public class Board extends Observable implements ActionListener,CreatureListener
     public static int width;
     public static int height;
     private final String name;
+    public int generation = 0;
+    public long maxIterationsGeneration = 1000;
+    public long nextGeneration = maxIterationsGeneration;
     
     ArrayList<GameObject> gameObjects;
     ArrayList<Creature> creatures;
+    ArrayList<Creature> deadCreatures;
+
     
     public long iteration = 0;
     
@@ -69,6 +75,12 @@ public class Board extends Observable implements ActionListener,CreatureListener
         
         this.gameObjects = new ArrayList<>();
         this.creatures = new ArrayList<>();
+        
+        
+        
+        /**FIRE PATH*/
+        boolean firePath = true;
+        if (firePath) addFirePath();
     }
     
     public void updateView(String arg) {
@@ -78,7 +90,9 @@ public class Board extends Observable implements ActionListener,CreatureListener
     }
     
     public void update() throws TopologySizeException, ArraySizeException, InputsSizeException {
-                
+        
+        boolean autoGen = true;
+        if (autoGen && (creatures.size() == 0 || iteration>nextGeneration)) generateGeneration();
         // Génération food
         generateFood();
         
@@ -102,6 +116,79 @@ public class Board extends Observable implements ActionListener,CreatureListener
         iteration++;
     }
     
+    public void killAllCreatures() {
+        for (GameObject gameObject : gameObjects) {
+            if (gameObject instanceof Creature) {
+                Creature creature = (Creature) gameObject;
+                creature.toDelete = true;
+            }
+        }
+        removeGameOjects();
+    }
+    
+    public void generateGeneration() throws TopologySizeException, ArraySizeException {
+        nextGeneration = maxIterationsGeneration+iteration;
+        int nbCreatureToGanerate = 100;
+        if (generation == 0) {
+            for (int i = 0; i < nbCreatureToGanerate; i++) {
+                Creature newC = new Creature();
+                MeteorologicalEvent me = null;
+                for (GameObject gameObject : gameObjects) {
+                    if (gameObject instanceof MeteorologicalEvent) {
+                        me = (MeteorologicalEvent)gameObject;
+                    }
+                }
+                while (newC.intersect(me)) {                    
+                    newC.setCenter(new Point(Life.rand.nextInt(this.width), Life.rand.nextInt(this.height)));
+                }
+                addCreature(newC);
+            }
+        }
+        else {
+            killAllCreatures();
+            for (int j = 0; j < nbCreatureToGanerate; j++) {
+                double totalFitness = 0;
+                for (Creature deadCreature : deadCreatures) {
+                    totalFitness += deadCreature.fitness;
+                }
+                double selectA = Life.rand.nextDouble()*totalFitness;
+                double selectB = Life.rand.nextDouble()*totalFitness;
+                Creature creatureA =null;
+                Creature creatureB =null;
+                double sumFitness = 0;
+                for (int i = 0; i < deadCreatures.size(); i++) {
+                    sumFitness+= deadCreatures.get(i).fitness;
+                    if (sumFitness>selectA) {
+                        creatureA = deadCreatures.get(i);
+                        break;
+                    }
+                }
+                for (int i = 0; i < deadCreatures.size(); i++) {
+                    sumFitness+= deadCreatures.get(i).fitness;
+                    if (sumFitness>selectB) {
+                        creatureB = deadCreatures.get(i);
+                        break;
+                    }
+                }
+                Creature newCreature = new Creature(creatureA,creatureB);
+                MeteorologicalEvent me = null;
+                for (GameObject gameObject : gameObjects) {
+                    if (gameObject instanceof MeteorologicalEvent) {
+                        me = (MeteorologicalEvent)gameObject;
+                    }
+                }
+                while (newCreature.intersect(me)) {                    
+                    newCreature.setCenter(new Point(Life.rand.nextInt(this.width), Life.rand.nextInt(this.height)));
+                }
+                addCreature(newCreature);
+            }
+            
+        }
+        
+        this.deadCreatures = new ArrayList<>();
+        generation++;
+    }
+    
     public void generateFood() {
         if (iteration >= nextGenerationFoods) {
             addFood(numberFoodToGenerate);
@@ -116,13 +203,16 @@ public class Board extends Observable implements ActionListener,CreatureListener
     public void resetCreaturesInputs() {       
         for (Creature creature : creatures) {
             creature.setOverCreature(false);
+            creature.setOverMeteorologicalEvent(false);
             creature.setVisibleFoods(0, false);
             creature.setVisibleFoods(1, false);
             creature.setVisibleFoods(2, false);
             creature.setVisibleCreatures(0, false);
             creature.setVisibleCreatures(1, false);
             creature.setVisibleCreatures(2, false);
-            creature.setVisibleMeteorologicalEvents(1, false);  
+            creature.setVisibleMeteorologicalEvents(0, false);
+            creature.setVisibleMeteorologicalEvents(1, false);
+            creature.setVisibleMeteorologicalEvents(2, false);  
         }
     }
     
@@ -146,7 +236,7 @@ public class Board extends Observable implements ActionListener,CreatureListener
 
                     /* METEOROLOGICALEVENT */
                     } else if(gameObject instanceof MeteorologicalEvent) {
-                        
+                        creature.setOverMeteorologicalEvent(true);
                     }
                 }
                 
@@ -248,12 +338,14 @@ public class Board extends Observable implements ActionListener,CreatureListener
         /* Remove Creatures */
         Iterator<Creature> it = creatures.iterator();
         while(it.hasNext()){
-            if(it.next().toDelete == true) {
+            Creature creature = it.next();
+            if(creature.toDelete == true) {
+                addToDeadCreatures(creature);
                 it.remove();
             }
         }
         
-        /* Remove other Creatures */
+        /* Remove other Object */
         Iterator<GameObject> it2 = gameObjects.iterator();
         while(it2.hasNext()){
             if(it2.next().toDelete == true) {
@@ -261,7 +353,17 @@ public class Board extends Observable implements ActionListener,CreatureListener
             }
         }
     }
-        
+    
+    public void addToDeadCreatures(Creature creature) {
+        for (int i = 0; i < deadCreatures.size(); i++) {
+            if (creature.fitness>deadCreatures.get(i).fitness) {
+                deadCreatures.add(i, creature);
+                return;
+            }
+        }
+        deadCreatures.add(creature);
+    }
+    
     public ArrayList<Point> getCircleLineIntersectionPoint(Point pointA,Point pointB, Point center, double radius) {
         double baX = pointB.x - pointA.x;
         double baY = pointB.y - pointA.y;
@@ -329,6 +431,10 @@ public class Board extends Observable implements ActionListener,CreatureListener
         gameObjects.add(creature);
     }
 
+    public void addCreature() throws TopologySizeException {
+        Creature newCreature = new Creature();
+        addCreature(newCreature);
+    }
     
     public void addFood() {
         addFood(new Food());
@@ -410,5 +516,12 @@ public class Board extends Observable implements ActionListener,CreatureListener
             }
         }
         return null;
+    }
+    
+    public void addFirePath() {
+        MeteorologicalEvent me = new MeteorologicalEvent((this.width>this.height)?this.height/4:this.width/4, new Point(this.width/2, this.height/2), MeteorologicalEventsTypes.FIRE);
+        System.out.println(me);
+        addEvent(me);
+        
     }
 }

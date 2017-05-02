@@ -50,6 +50,7 @@ public final class Creature extends GameObject implements Serializable {
     private double direction;
     private double fieldOfView = 25;
     private double distanceOfView = 200;
+    public double fitness = 1;
     
     /*View*/
     public ArrayList<GameObject> vision;
@@ -76,7 +77,7 @@ public final class Creature extends GameObject implements Serializable {
         this.radius = 15;
         this.color = new Color(Life.rand.nextFloat(), Life.rand.nextFloat(), Life.rand.nextFloat());
         this.center = new Point(Life.rand.nextInt(Board.width), Life.rand.nextInt(Board.height));
-        int topology[] = {6, 4, 2};
+        int topology[] = {7, 4, 2};
         this.name = RandomNameGenerator.generateName();
         this.net = new Net(topology);
         setDirection((double)Life.rand.nextInt(360));
@@ -91,6 +92,7 @@ public final class Creature extends GameObject implements Serializable {
         if (creatures.length == 0) {
             throw new ArraySizeException(creatures.length);
         }
+        
         this.radius = creatures[Life.rand.nextInt(creatures.length)].getRadius();
         this.color = creatures[Life.rand.nextInt(creatures.length)].getColor();
         this.center = new Point(Life.rand.nextInt(Board.width), Life.rand.nextInt(Board.height));
@@ -123,11 +125,11 @@ public final class Creature extends GameObject implements Serializable {
         double food_0 = (visibleFoods[0])? 1 : -1;
         double food_1 = (visibleFoods[1])? 1 : -1;
         double food_2 = (visibleFoods[2])? 1 : -1;
-        double creature_0 = (visibleCreatures[0])? 1 : -1;
-        double creature_1 = (visibleCreatures[1])? 1 : -1;
-        double creature_2 = (visibleCreatures[2])? 1 : -1;
-        //double meteorological = (visibleMeteorologicalEvents[1])? 1 : -1;
-        Double netInputs[] = {food_0, food_1, food_2, creature_0, creature_1, creature_2};
+        double meteo_0 = (visibleMeteorologicalEvents[0])? 1 : -1;
+        double meteo_1 = (visibleMeteorologicalEvents[1])? 1 : -1;
+        double meteo_2 = (visibleMeteorologicalEvents[2])? 1 : -1;
+        double meteorological = (visibleMeteorologicalEvents[1])? 1 : -1;
+        Double netInputs[] = {food_0, food_1, food_2, meteo_0, meteo_1, meteo_2, meteorological};
         Double netOutputs[] = net.feedForward(netInputs);
         Double varDirection = netOutputs[0] * 10;
         Double varSpeed = Math.abs(netOutputs[1] * 10);
@@ -205,6 +207,7 @@ public final class Creature extends GameObject implements Serializable {
     public void eat(Food food) {
         life += food.getValue();
         if(life > MAX_LIFE) life = MAX_LIFE;
+        fitness++;
     }
 
     @Override
@@ -215,9 +218,10 @@ public final class Creature extends GameObject implements Serializable {
     
     public void save() {
         try{
+            //Pire technique
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(
             new FileOutputStream("savedCreatures/"+getName()+".ser"));
-            objectOutputStream.writeObject(this);
+            objectOutputStream.writeObject(this.clone());
             System.out.println("Saved !");
         }
         catch(IOException ioException){
@@ -327,5 +331,4 @@ public final class Creature extends GameObject implements Serializable {
         return overMeteorologicalEvent;
     }
 
-    
 }

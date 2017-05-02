@@ -73,6 +73,7 @@ public class BoardView extends JPanel implements Observer, MouseListener{
         
         g.setColor(Color.BLACK);
         if(showingIterations) g.drawString(Long.toString(board.iteration), 0, 10);
+        if(showingIterations) g.drawString(Long.toString(board.generation), 0, 20);
         try {
             if (getMousePosition().x <= XMaxScreen && getMousePosition().y <= YMaxScreen) {
                 g.drawString(Integer.toString(getBackX(getMousePosition().x, XMaxScreen, board.getWidth()))+ "," + getBackY(getMousePosition().y, YMaxScreen, board.getHeight()), getMousePosition().x, getMousePosition().y);
