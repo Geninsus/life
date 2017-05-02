@@ -100,6 +100,8 @@ public class NewGameState extends State implements MouseListener{
         params.size = new Vector2<>(Integer.parseInt(mapWidthTextField.getText().replace("\u00A0","").replaceAll(",", "")), Integer.parseInt(mapHeightTextField.getText().replace("\u00A0","").replaceAll(",", "")));
         params.name = mapNameTextField.getText();
         getLifeGame().setGridParams(params);
+        getLifeGame().setSize(1500,1000);
+        getLifeGame().setLocationRelativeTo(null);
         getLifeGame().enterState(2);
         
     }
