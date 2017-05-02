@@ -10,6 +10,7 @@ import fr.fgdo.life.Creature.CreatureListener;
 import fr.fgdo.life.Food.Food;
 import fr.fgdo.life.GameState.Board.Events.MeteorologicalEvent;
 import fr.fgdo.life.GameObject.GameObject;
+import fr.fgdo.life.GameState.Board.Events.MeteorologicalEventsTypes;
 import fr.fgdo.life.Life;
 import fr.fgdo.life.neuralNetwork.exceptions.ArraySizeException;
 import fr.fgdo.life.neuralNetwork.exceptions.InputsSizeException;
@@ -69,6 +70,10 @@ public class Board extends Observable implements ActionListener,CreatureListener
         
         this.gameObjects = new ArrayList<>();
         this.creatures = new ArrayList<>();
+        
+        /**FIRE PATH*/
+        boolean firePath = true;
+        if (firePath) addFirePath();
     }
     
     public void updateView(String arg) {
@@ -410,5 +415,12 @@ public class Board extends Observable implements ActionListener,CreatureListener
             }
         }
         return null;
+    }
+    
+    public void addFirePath() {
+        MeteorologicalEvent me = new MeteorologicalEvent((this.width>this.height)?this.height/4:this.width/4, new Point(this.width/2, this.height/2), MeteorologicalEventsTypes.FIRE);
+        System.out.println(me);
+        addEvent(me);
+        
     }
 }

@@ -54,7 +54,7 @@ public class MeteorologicalEvent extends GameObject implements Serializable{
     }
     
     public void update() {
-        duration--;
+        //duration--;
         if (duration == 0) {
             toDelete = true;
             //board.meteorologicalEventOver(this);
