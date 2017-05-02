@@ -54,7 +54,6 @@ public class NetView extends JPanel implements Observer {
             Double value;
             /* Update Input Button Value */
             Component[] components = this.inputPanel.getComponents();
-            System.err.println(components.length);
             Layer layer = this.net.getLayers().get(0);
             int j = 0;
             for (Neuron neuron : layer) {
@@ -70,7 +69,6 @@ public class NetView extends JPanel implements Observer {
             Component[] componentsIn;
             
             int hiddenLayerNumber = this.net.getTopology().length - 2;
-            System.err.println(hiddenLayerNumber);
             for (int i = 0; i < hiddenLayerNumber ; i++) {
                 j=0;
                 JPanel panel = (JPanel) components[i];
@@ -87,7 +85,6 @@ public class NetView extends JPanel implements Observer {
             }
             /* Update Output Button Value */
             components = this.outputPanel.getComponents();
-            System.err.println(components.length);
             layer = this.net.getLayers().get(this.net.getLayers().size() -1);
             j = 0;
             for (Neuron neuron : layer) {
