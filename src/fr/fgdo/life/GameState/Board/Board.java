@@ -116,7 +116,7 @@ public class Board extends Observable implements ActionListener,CreatureListener
     
     public void generateGeneration() throws TopologySizeException, ArraySizeException {
         int nbCreatureToGanerate = 100;
-        if (generation == 1) {
+        if (generation == 0) {
             for (int i = 0; i < nbCreatureToGanerate; i++) {
                 addCreature();
             }
