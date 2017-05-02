@@ -203,13 +203,16 @@ public class Board extends Observable implements ActionListener,CreatureListener
     public void resetCreaturesInputs() {       
         for (Creature creature : creatures) {
             creature.setOverCreature(false);
+            creature.setOverMeteorologicalEvent(false);
             creature.setVisibleFoods(0, false);
             creature.setVisibleFoods(1, false);
             creature.setVisibleFoods(2, false);
             creature.setVisibleCreatures(0, false);
             creature.setVisibleCreatures(1, false);
             creature.setVisibleCreatures(2, false);
-            creature.setVisibleMeteorologicalEvents(1, false);  
+            creature.setVisibleMeteorologicalEvents(0, false);
+            creature.setVisibleMeteorologicalEvents(1, false);
+            creature.setVisibleMeteorologicalEvents(2, false);  
         }
     }
     
@@ -233,7 +236,7 @@ public class Board extends Observable implements ActionListener,CreatureListener
 
                     /* METEOROLOGICALEVENT */
                     } else if(gameObject instanceof MeteorologicalEvent) {
-                        
+                        creature.setOverMeteorologicalEvent(true);
                     }
                 }
                 
