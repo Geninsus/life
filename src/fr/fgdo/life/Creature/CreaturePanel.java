@@ -45,6 +45,7 @@ public class CreaturePanel extends JDialog implements Observer, MouseListener{
     Creature creature;
     public CreaturePanel(Creature creature, Component c) {
         this.creature = creature;
+        this.netView = new NetView(creature.getNet());
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridwidth = GridBagConstraints.REMAINDER;
@@ -152,8 +153,11 @@ public class CreaturePanel extends JDialog implements Observer, MouseListener{
         gbc.gridy = 12;
         gbc.gridwidth = 2;
         gbc.gridheight = 3;
-        add(creature.net.getNetView(),gbc);
+        add(this.netView,gbc);
         
+        gbc.gridx = 0;
+        gbc.gridy = 15;
+        gbc.gridwidth = 2;
         saveButton.addMouseListener(this);
         add(saveButton,gbc);
         
@@ -182,6 +186,7 @@ public class CreaturePanel extends JDialog implements Observer, MouseListener{
         visibleCreatures.setText(Arrays.toString(creature.getVisibleCreatures()));
         visibleFoods.setText(Arrays.toString(creature.getVisibleFoods()));
         visibleMeteorologicalEvents.setText(Arrays.toString(creature.getVisibleMeteorologicalEvents()));
+        netView.update(this.netView.getGraphics());
     }
 
     @Override
