@@ -92,7 +92,7 @@ public class Board extends Observable implements ActionListener,CreatureListener
     public void update() throws TopologySizeException, ArraySizeException, InputsSizeException {
         
         boolean autoGen = true;
-        if (autoGen && (creatures.size() == 0 || iteration>nextGeneration)) generateGeneration();
+        if (autoGen && (creatures.isEmpty() || iteration>nextGeneration)) generateGeneration();
         // Génération food
         generateFood();
         
@@ -365,6 +365,7 @@ public class Board extends Observable implements ActionListener,CreatureListener
     }
     
     public ArrayList<Point> getCircleLineIntersectionPoint(Point pointA,Point pointB, Point center, double radius) {
+        
         double baX = pointB.x - pointA.x;
         double baY = pointB.y - pointA.y;
         double caX = center.x - pointA.x;
@@ -407,18 +408,21 @@ public class Board extends Observable implements ActionListener,CreatureListener
         ArrayList toto = new ArrayList<>();
         
         Point p1 = new Point((int)(pointA.x - baX * abScalingFactor1),(int)(pointA.y - baY * abScalingFactor1));
-        if (disc == 0) { // abScalingFactor1 == abScalingFactor2
-            if(p1.x >= lowerX && p1.x < upperX && p1.y >= lowerY && p1.y < upperY) {
-                toto.add(p1);
-            }
+        
+        if(p1.x >= lowerX && p1.x < upperX && p1.y >= lowerY && p1.y < upperY) {
             toto.add(p1);
+        }
+        
+        if (disc == 0) {
             return toto;
         }
+        
         Point p2 = new Point((int)(pointA.x - baX * abScalingFactor2),(int)(pointA.y - baY * abScalingFactor2));
-            if(p2.x >= lowerX && p2.x < upperX && p2.y >= lowerY && p2.y < upperY) {
-                toto.add(p2);
-            }
-            return toto;
+        
+        if(p2.x >= lowerX && p2.x < upperX && p2.y >= lowerY && p2.y < upperY) {
+            toto.add(p2);
+        }
+        return toto;
     }
     
     public ArrayList<Creature> getCreatures() {
@@ -520,8 +524,6 @@ public class Board extends Observable implements ActionListener,CreatureListener
     
     public void addFirePath() {
         MeteorologicalEvent me = new MeteorologicalEvent((this.width>this.height)?this.height/4:this.width/4, new Point(this.width/2, this.height/2), MeteorologicalEventsTypes.FIRE);
-        System.out.println(me);
-        addEvent(me);
-        
+        addEvent(me);     
     }
 }
